@@ -1,0 +1,20 @@
+
+
+node_modules/
+
+# Ignore all logfiles and tempfiles
+/log/*
+/tmp/*
+!.keep
+
+# Ignore uploaded files in development.
+/storage/*
+!/storage/.keep
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+.env
+
+# Ignore MacOSX folder cache
+/**/.DS_Store
