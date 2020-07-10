@@ -1,0 +1,2 @@
+class OrderQuantity < ApplicationRecord
+end
