@@ -1,0 +1,2 @@
+class ProductCounty < ApplicationRecord
+end
