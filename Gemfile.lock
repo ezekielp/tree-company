@@ -124,6 +124,7 @@ GEM
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     pg (1.2.3)
+    phonelib (0.6.44)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -224,6 +225,8 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    validates_zipcode (0.3.0)
+      activemodel (>= 4.2.0)
     web-console (4.0.3)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -258,6 +261,7 @@ DEPENDENCIES
   graphql
   listen (~> 3.2)
   pg (>= 0.18, < 2.0)
+  phonelib
   pry-rails
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.2)
@@ -269,6 +273,7 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   turbolinks (~> 5)
   tzinfo-data
+  validates_zipcode
   web-console (>= 3.3.0)
   webdrivers
   webpacker (~> 4.0)

@@ -15,65 +15,13 @@
 #  updated_at   :datetime         not null
 #
 class BillingCustomer < ApplicationRecord
+    include Constants
+
     validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
-    validates :state, inclusion: { in:  }
+    validates :state, inclusion: { in: Constants::STATES }
+    validates :zipcode, zipcode: { country_code: :us }
+    validates :phone_number, phone: { possible: true, countries: :us }
 
+    has_many :orders
 
-
-
-    STATES = [ ["AK"], 
-                ["AL"],
-                ["AR"],
-                ["AS"],
-                ["AZ"],
-                ["CA"],
-                ["CO"],
-                ["CT"],
-                ["DC"],
-                ["DE"],
-                ["FL"],
-                ["GA"],
-                ["GU"],
-                ["HI"],
-                ["IA"],
-                ["ID"],
-                ["IL"],
-                ["IN"],
-                ["KS"],
-                ["KY"],
-                ["LA"],
-                ["MA"],
-                ["MD"],
-                ["ME"],
-                ["MI"],
-                ["MN"],
-                ["MO"],
-                ["MS"],
-                ["MT"],
-                ["NC"],
-                ["ND"],
-                ["NE"],
-                ["NH"],
-                ["NJ"],
-                ["NM"],
-                ["NV"],
-                ["NY"],
-                ["OH"],
-                ["OK"],
-                ["OR"],
-                ["PA"],
-                ["PR"],
-                ["RI"],
-                ["SC"],
-                ["SD"],
-                ["TN"],
-                ["TX"],
-                ["UT"],
-                ["VA"],
-                ["VI"],
-                ["VT"],
-                ["WA"],
-                ["WI"],
-                ["WV"],
-                ["WY"] ]
 end

@@ -14,4 +14,9 @@
 #  updated_at   :datetime         not null
 #
 class ShippingCustomer < ApplicationRecord
+    validates :state, inclusion: { in: Constants::STATES }
+    validates :zipcode, zipcode: { country_code: :us }
+    validates :phone_number, phone: { possible: true, countries: :us }
+
+    has_many :orders
 end

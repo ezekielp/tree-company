@@ -12,4 +12,10 @@
 #  updated_at           :datetime         not null
 #
 class Order < ApplicationRecord
+    validates :shipping_cost, inclusion: { in: [1000, 0] }
+    validates :unit_price, inclusion: { in: [300, 400, 500, 700] }
+
+    belongs_to :shipping_customer
+    belongs_to :billing_customer
+
 end
