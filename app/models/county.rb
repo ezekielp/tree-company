@@ -8,5 +8,9 @@
 #  updated_at :datetime         not null
 #
 class County < ApplicationRecord
+    include Constants
+
+    validates :name, inclusion: { in: Constants::MARYLAND_COUNTIES }
+
     has_many :product_counties
 end

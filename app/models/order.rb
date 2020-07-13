@@ -17,5 +17,6 @@ class Order < ApplicationRecord
 
     belongs_to :shipping_customer
     belongs_to :billing_customer
-
+    has_many :order_quantities
+    has_many :products, through: :order_quantities
 end

@@ -10,4 +10,6 @@
 #  updated_at :datetime         not null
 #
 class OrderQuantity < ApplicationRecord
+    belongs_to :product
+    belongs_to :order
 end
