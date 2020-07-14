@@ -25,6 +25,9 @@ gem 'turbolinks', '~> 5'
 gem 'validates_zipcode'
 gem 'phonelib'
 
+# AWS S3 SDK
+gem "aws-sdk-s3"
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
