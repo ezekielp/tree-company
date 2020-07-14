@@ -8,8 +8,10 @@
 
 require 'open-uri'
 
+# Reset the database if we're ever going to re-seed. If we want to add individual signs, should do it via the command line or a simple admin panel that we can build
 Product.destroy_all
 
+# Seed the products (signs)
 sign_19 = Product.create(name: "Reforestation Project", size: "11x15", material: ".05g HDPE", description: "", style_number: "19")
 
 file_19 = open('https://tree-company-seeds.s3.amazonaws.com/style19.gif')
@@ -113,3 +115,13 @@ sign_61 = Product.create(name: "Forest Conservation Area - Montgomery County", s
 file_61 = open('https://tree-company-seeds.s3.amazonaws.com/style61.jpg')
 
 sign_61.image.attach(io: file_61, filename: 'style61.jpg')
+
+
+# Create all the counties and any relevant associations
+County.destroy_all
+
+Constants::MARYLAND_COUNTIES.each do |c|
+    County.create(name: c)
+end
+
+

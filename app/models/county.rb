@@ -13,4 +13,5 @@ class County < ApplicationRecord
     validates :name, inclusion: { in: Constants::MARYLAND_COUNTIES }
 
     has_many :product_counties
+    has_many :products, through: :product_counties
 end

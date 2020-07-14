@@ -17,6 +17,7 @@ class Product < ApplicationRecord
 
     has_many :product_categories
     has_many :categories, through: :product_categories
+    has_many :product_counties
     has_many :counties, through: :product_counties
     has_many :order_quantities
     has_many :orders, through: :order_quantities
