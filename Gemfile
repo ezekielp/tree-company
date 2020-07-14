@@ -28,6 +28,10 @@ gem 'phonelib'
 # AWS S3 SDK
 gem "aws-sdk-s3"
 
+# For making batch queries in GraphQL (for use with Active Storage)
+gem 'graphql-batch'
+gem 'promise.rb'
+
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.7'
 # Use Redis adapter to run Action Cable in production
