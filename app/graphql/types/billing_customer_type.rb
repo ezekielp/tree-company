@@ -9,8 +9,10 @@ module Types
         field :zip_code, String, null: false
         field :phone_number, String, null: true
         field :tax_exempt, Boolean, null: false
-        # ! null true?
         field :orders, [Types::OrderType], null: true
+
+        def orders
+            AssociationLoader.for(Order, :billing_customer_id).load(object.id)
+        end
     end
 end
-

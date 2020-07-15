@@ -9,6 +9,9 @@ module Types
         field :phone_number, String, null: true
         field :attn, String, null: true
         field :orders, [Types::OrderType], null: true
+
+        def orders
+            AssociationLoader.for(Order, :shipping_customer_id).load(object.id)
+        end
     end
 end
-
