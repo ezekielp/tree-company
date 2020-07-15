@@ -8,7 +8,6 @@ module Types
         field :zip_code, String, null: false
         field :phone_number, String, null: true
         field :attn, String, null: true
-        # ! null true?
         field :orders, [Types::OrderType], null: true
     end
 end

@@ -6,8 +6,7 @@ module Types
         field :shipping_cost, Integer, null: false
         field :tax_cost, Integer, null: false
         field :unit_price, Integer, null: false
-        # ! null true?
-        field :products, [Types::ProductType], null: true
+        field :products, [Types::ProductType], null: false
     end
 end
 
