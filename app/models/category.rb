@@ -8,5 +8,7 @@
 #  updated_at :datetime         not null
 #
 class Category < ApplicationRecord
+    validates inclusion: { in: ["wetland_stream_buffer"] }
+
     has_many :product_categories
 end
