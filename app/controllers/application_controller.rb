@@ -6,16 +6,15 @@ class ApplicationController < ActionController::Base
             session[:session_cart] = []
         end
             
-        renew_session_expiration
+        set_session_expiration
     end
 
     def expired?
-        session[:expires_at] > Time.now ? True : False
+        session[:expires_at] > Time.current ? True : False
     end
 
-    def renew_session_expiration
-        days = 24*60*60
-        session[:expires_at] = Time.now + 7*days
+    def set_session_expiration
+        session[:expires_at] = Time.current + 7.days
     end
 
 end
