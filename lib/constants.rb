@@ -26,6 +26,10 @@ module Constants
         "Worcester County",
     ]
 
+    VIRGINIA_COUNTIES = [
+        "Arlington County"
+    ]
+
     STATES = [
         "AK",
         "AL",

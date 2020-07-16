@@ -10,7 +10,7 @@
 class County < ApplicationRecord
     include Constants
 
-    validates :name, inclusion: { in: Constants::MARYLAND_COUNTIES }
+    validates :name, inclusion: { in: Constants::MARYLAND_COUNTIES.concat(Constants::VIRGINIA_COUNTIES) }
 
     has_many :product_counties
     has_many :products, through: :product_counties
