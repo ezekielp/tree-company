@@ -10,7 +10,7 @@ interface HomePageProps {
     products: ProductInfoFragment[];
 }
 
-export const HomePage: FC<HomePageProps> = () => {
+export const HomePage: FC<HomePageProps> = ({ products }) => {
     return (
         <Header>WELCOME TO THE TREE COMPANY!</Header>
     )

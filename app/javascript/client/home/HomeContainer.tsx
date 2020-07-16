@@ -28,7 +28,7 @@ gql`
         }
         imageUrl
     }
-`
+`;
 
 interface HomeContainerProps {}
 
