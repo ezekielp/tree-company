@@ -1,0 +1,27 @@
+type County {
+  id: ID!
+  name: String!
+  products: [Product!]!
+}
+
+type Mutation {
+  """
+  An example field added by the generator
+  """
+  testField: String!
+}
+
+type Product {
+  counties: [County!]
+  description: String
+  id: ID!
+  imageUrl: String
+  material: String!
+  name: String!
+  size: String!
+  styleNumber: String
+}
+
+type Query {
+  products: [Product!]
+}
