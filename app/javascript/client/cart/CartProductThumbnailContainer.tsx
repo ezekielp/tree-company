@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { useGetProductForCartProductThumbnailContainerQuery, ProductInfoFragmentDoc } from '../graphqlTypes';
+import { CartProductThumbnail } from './CartProductThumbnail';
 import gql from 'graphql-tag';
 
 gql`
@@ -30,8 +31,11 @@ interface CartProductThumbnailContainerProps {
 
 export const CartProductThumbnailContainer: FC<CartProductThumbnailContainerProps> = ({ productId, quantity }) => {
     const { data } = useGetProductForCartProductThumbnailContainerQuery({ variables: { productId }})
+    const product = data?.product;
+
+    if (!product) return null;
 
     return (
-        
+        <CartProductThumbnail product={product} quantity={quantity} />
     );
 };
