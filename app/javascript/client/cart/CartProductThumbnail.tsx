@@ -38,9 +38,10 @@ const ProductNameContainer = styled.div`
 interface CartProductThumbnailProps {
     product: ProductInfoFragment;
     quantity: number;
+    unitPrice: number;
 }
 
-export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, quantity }) => {
+export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, quantity, unitPrice }) => {
     const { id, name, size, material, counties, imageUrl } = product;
     const [currentQuantity, setQuantity] = useState(quantity);
 
