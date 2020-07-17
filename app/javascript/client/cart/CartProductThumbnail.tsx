@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useState, ChangeEvent } from 'react';
 import { ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
+import { range } from 'lodash';
 import styled from 'styled-components';
 
 const FlexContainer = styled.section`
@@ -30,13 +31,38 @@ const CartProductDetails = styled.div`
     max-width: 400px;
 `;
 
+const ProductNameContainer = styled.div`
+    font-weight: 600;
+`;
+
 interface CartProductThumbnailProps {
     product: ProductInfoFragment;
     quantity: number;
 }
 
 export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, quantity }) => {
-    const { name, size, material, counties, imageUrl } = product;
+    const { id, name, size, material, counties, imageUrl } = product;
+    const [currentQuantity, setQuantity] = useState(quantity);
+
+    const countyList = counties?.map(county => county.name).join(", ");
+
+    const quantityOptions = range(1001).map(num => {
+        const selected = num === currentQuantity ? 'selected' : '';
+        return <option key={num} value={num} {...selected}>{num}</option>
+    });
+
+    const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setQuantity(parseInt(event.target.value));
+
+        useUpdateCartMutation({
+            variables: {
+                input: {
+                    productId: id,
+                    quantity: currentQuantity
+                }
+            }
+        })
+    }
 
     return (
         <FlexContainer>
@@ -52,6 +78,18 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                     </ImageStandIn>
                 )}
             </ImageContainer>
+            <CartProductDetails>
+                <ProductNameContainer>
+                    {name}
+                </ProductNameContainer>
+                <div>{size}, {material}</div>
+                {counties && (
+                    <div>Counties: {countyList}</div>
+                )}
+            </CartProductDetails>
+            <select onChange={handleChange}>
+                {quantityOptions}
+            </select>
         </FlexContainer>
     )
 }
