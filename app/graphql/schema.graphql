@@ -1,3 +1,8 @@
+type CartItem {
+  productId: ID!
+  quantity: Int!
+}
+
 type County {
   id: ID!
   name: String!
@@ -23,5 +28,7 @@ type Product {
 }
 
 type Query {
+  cart: [CartItem!]
+  product(productId: String!): Product
   products: [Product!]
 }

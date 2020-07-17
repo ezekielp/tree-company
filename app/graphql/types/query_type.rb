@@ -1,10 +1,18 @@
 module Types
   class QueryType < Types::BaseObject
     field :products, [Types::ProductType], null: true
+    field :product, Types::ProductType, null: true do
+      argument :product_id, String, required: true
+    end
     field :cart, [Types::CartItemType], null: true
 
     def products
       Product.all
+    end
+
+    def product(args)
+      return nil unless args
+      Product.find(args[:product_id])
     end
 
     def cart

@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 gql`
     query GetCartForCartContainer {
         cart {
-            product_id
+            productId
             quantity
         }
     }
