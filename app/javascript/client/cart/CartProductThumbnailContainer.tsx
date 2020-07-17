@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { ProductInfoFragmentDoc } from '../graphqlTypes';
+import { useGetProductForCartProductThumbnailContainerQuery, ProductInfoFragmentDoc } from '../graphqlTypes';
 import gql from 'graphql-tag';
 
 gql`
@@ -23,10 +23,15 @@ gql`
     }
 `;
 
-interface CartProductThumbnailContainerProps {}
+interface CartProductThumbnailContainerProps {
+    productId: string;
+    quantity: number;
+}
 
-export const CartProductThumbnailContainer: FC<CartProductThumbnailContainerProps> = () => {
+export const CartProductThumbnailContainer: FC<CartProductThumbnailContainerProps> = ({ productId, quantity }) => {
+    const { data } = useGetProductForCartProductThumbnailContainerQuery({ variables: { productId }})
+
     return (
-        <></>
+        
     );
 };
