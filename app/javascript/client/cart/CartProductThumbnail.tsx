@@ -1,5 +1,5 @@
 import React, { FC, useState, ChangeEvent } from 'react';
-import { ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
+import { useGetCartForCartContainerQuery, ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
 import { range } from 'lodash';
 import styled from 'styled-components';
 
@@ -62,7 +62,9 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                     quantity: currentQuantity
                 }
             }
-        })
+        });
+
+        useGetCartForCartContainerQuery();
     }
 
     return (

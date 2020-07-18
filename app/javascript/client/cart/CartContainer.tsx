@@ -1,8 +1,9 @@
 import React, { FC, useEffect } from 'react';
 import { RouteComponentProps } from "react-router-dom";
 import { CartProductThumbnailContainer } from './CartProductThumbnailContainer';
-import { useGetCartForCartContainerQuery } from '../graphqlTypes';
+import { useGetCartForCartContainerQuery, GetCartForCartContainerDocument } from '../graphqlTypes';
 import { determinePrice } from './utils';
+import { client } from '../../packs/client';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -15,12 +16,13 @@ gql`
     }
 `;
 
-
-
 interface CartContainerProps {}
 
 export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }) => {
-    const { data } = useGetCartForCartContainerQuery();
+    const { data, refetch } = useGetCartForCartContainerQuery();
+    client().watchQuery({ query: GetCartForCartContainerDocument }).subscribe({
+        next(data) { refetch() }
+    });
     const cart = data?.cart;
 
     if (!cart) return null;
