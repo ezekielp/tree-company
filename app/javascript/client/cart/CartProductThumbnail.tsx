@@ -85,7 +85,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
 					{counties && <div>Counties: {countyList}</div>}
 				</CartProductDetails>
 				<select onChange={handleChange}>{quantityOptions}</select>
-				<div>{totalPrice}</div>
+				<div>${totalPrice}.00</div>
 			</FlexContainer>
 		);
 };
