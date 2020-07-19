@@ -46,6 +46,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     const [currentQuantity, setQuantity] = useState(quantity);
 
     const countyList = counties?.map(county => county.name).join(", ");
+    const totalPrice = unitPrice * quantity;
 
     const quantityOptions = range(1001).map(num => {
         const selected = num === currentQuantity ? 'selected' : '';
@@ -68,31 +69,23 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     }
 
     return (
-        <FlexContainer>
-            <ImageContainer>
-                {imageUrl ? (
-                    <Image
-                        src={imageUrl}
-                        alt={name}
-                    />
-                ) : (
-                    <ImageStandIn>
-                        The Tree Company sign
-                    </ImageStandIn>
-                )}
-            </ImageContainer>
-            <CartProductDetails>
-                <ProductNameContainer>
-                    {name}
-                </ProductNameContainer>
-                <div>{size}, {material}</div>
-                {counties && (
-                    <div>Counties: {countyList}</div>
-                )}
-            </CartProductDetails>
-            <select onChange={handleChange}>
-                {quantityOptions}
-            </select>
-        </FlexContainer>
-    )
-}
+			<FlexContainer>
+				<ImageContainer>
+					{imageUrl ? (
+						<Image src={imageUrl} alt={name} />
+					) : (
+						<ImageStandIn>The Tree Company sign</ImageStandIn>
+					)}
+				</ImageContainer>
+				<CartProductDetails>
+					<ProductNameContainer>{name}</ProductNameContainer>
+					<div>
+						{size}, {material}
+					</div>
+					{counties && <div>Counties: {countyList}</div>}
+				</CartProductDetails>
+				<select onChange={handleChange}>{quantityOptions}</select>
+				<div>{totalPrice}</div>
+			</FlexContainer>
+		);
+};
