@@ -115,6 +115,7 @@ type Query {
   cart: [CartItem!]
   product(productId: String!): Product
   products: [Product!]
+  productsById(productIds: [String!]!): [Product!]
 }
 
 type ShippingCustomer {

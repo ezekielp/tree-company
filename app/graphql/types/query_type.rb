@@ -2,7 +2,7 @@ module Types
   class QueryType < Types::BaseObject
     field :products, [Types::ProductType], null: true
     field :products_by_id, [Types::ProductType], null: true do
-      argument :product_ids, [String], null: false
+      argument :product_ids, [String], required: true
     end
     field :product, Types::ProductType, null: true do
       argument :product_id, String, required: true

@@ -5,6 +5,7 @@ module Types
         argument :shipping_cost, Int, required: false
         argument :tax_cost, Int, required: true
         argument :unit_price, Int, required: true
+        argument :cart, [Types::CartItemType], required: true
     end
 end
 
@@ -25,6 +26,14 @@ module Mutations
                 tax_cost: input.tax_cost,
                 unit_price: input.unit_price
             )
+
+            input.cart.each do |item|
+                OrderQuantity.create(
+                    product_id: item.product_id,
+                    order_id: new_order.id,
+                    quantity: item.quantity
+                )
+            end
 
             {
                 order: new_order,

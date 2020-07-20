@@ -154,11 +154,17 @@ export type Query = {
   cart?: Maybe<Array<CartItem>>;
   product?: Maybe<Product>;
   products?: Maybe<Array<Product>>;
+  productsById?: Maybe<Array<Product>>;
 };
 
 
 export type QueryProductArgs = {
   productId: Scalars['String'];
+};
+
+
+export type QueryProductsByIdArgs = {
+  productIds: Array<Scalars['String']>;
 };
 
 export type ShippingCustomer = {
@@ -223,6 +229,19 @@ export type UpdateCartMutation = (
       & Pick<CartItem, 'productId' | 'quantity'>
     )> }
   ) }
+);
+
+export type GetProductsForCheckoutQueryVariables = Exact<{
+  productIds: Array<Scalars['String']>;
+}>;
+
+
+export type GetProductsForCheckoutQuery = (
+  { __typename?: 'Query' }
+  & { productsById?: Maybe<Array<(
+    { __typename?: 'Product' }
+    & ProductInfoFragment
+  )>> }
 );
 
 export type GetCartForCheckoutContainerQueryVariables = Exact<{ [key: string]: never; }>;
@@ -372,6 +391,39 @@ export function useUpdateCartMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type UpdateCartMutationHookResult = ReturnType<typeof useUpdateCartMutation>;
 export type UpdateCartMutationResult = ApolloReactCommon.MutationResult<UpdateCartMutation>;
 export type UpdateCartMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateCartMutation, UpdateCartMutationVariables>;
+export const GetProductsForCheckoutDocument = gql`
+    query GetProductsForCheckout($productIds: [String!]!) {
+  productsById(productIds: $productIds) {
+    ...ProductInfo
+  }
+}
+    ${ProductInfoFragmentDoc}`;
+
+/**
+ * __useGetProductsForCheckoutQuery__
+ *
+ * To run a query within a React component, call `useGetProductsForCheckoutQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductsForCheckoutQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductsForCheckoutQuery({
+ *   variables: {
+ *      productIds: // value for 'productIds'
+ *   },
+ * });
+ */
+export function useGetProductsForCheckoutQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProductsForCheckoutQuery, GetProductsForCheckoutQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetProductsForCheckoutQuery, GetProductsForCheckoutQueryVariables>(GetProductsForCheckoutDocument, baseOptions);
+      }
+export function useGetProductsForCheckoutLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProductsForCheckoutQuery, GetProductsForCheckoutQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetProductsForCheckoutQuery, GetProductsForCheckoutQueryVariables>(GetProductsForCheckoutDocument, baseOptions);
+        }
+export type GetProductsForCheckoutQueryHookResult = ReturnType<typeof useGetProductsForCheckoutQuery>;
+export type GetProductsForCheckoutLazyQueryHookResult = ReturnType<typeof useGetProductsForCheckoutLazyQuery>;
+export type GetProductsForCheckoutQueryResult = ApolloReactCommon.QueryResult<GetProductsForCheckoutQuery, GetProductsForCheckoutQueryVariables>;
 export const GetCartForCheckoutContainerDocument = gql`
     query GetCartForCheckoutContainer {
   cart {
