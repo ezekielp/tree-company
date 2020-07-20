@@ -1,10 +1,8 @@
 import React from 'react'
 
-
-
-const modal = () => {
+const ProductModal = () => {
     return (
-        <div>Modal Goes here</div>
+        <div>Product Modal Goes here</div>
     )
 }
 

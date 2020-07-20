@@ -1,22 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import ProductModal from '../product/modals/ProductModal'
+import { Modal } from './test';
 
-const Backdrop = styled.h1`
+const DefaultBackdrop = styled.div`
     position: fixed;
     top: 0;
     left: 0;
     height: 100vh;
     width: 100%;
     background: rgba(0,0,0,0.75);
+    overflow-y: auto;
 `;
 
-const modal = () => {
+const Modal = () => {
+
+    const [modalIsShowing, setModalIsShowing] = useState(false);
+
     return (
-        <Backdrop>
-            This is the backdrop
-        </Backdrop>
+        <DefaultBackdrop>
+            <ProductModal />
+        </DefaultBackdrop>
     )
 }
 
-export default modal;
+export default Modal;
 

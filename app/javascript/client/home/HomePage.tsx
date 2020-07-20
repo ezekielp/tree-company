@@ -1,6 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
+import Modal from '../modal/modal'
 
 const Header = styled.h1`
     font-size: 36px;
@@ -12,6 +13,9 @@ interface HomePageProps {
 
 export const HomePage: FC<HomePageProps> = ({ products }) => {
     return (
-        <Header>WELCOME TO THE TREE COMPANY!</Header>
+        <>
+            <Modal />
+            <Header>WELCOME TO THE TREE COMPANY!</Header>
+        </>
     )
 }
