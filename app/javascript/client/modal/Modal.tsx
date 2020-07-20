@@ -1,4 +1,4 @@
-import React, { useState, createContext } from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 import Product from '../product/modals/ProductModal';
 import { Modal } from './test';
@@ -20,10 +20,7 @@ const DefaultBackdrop = styled.div`
 
 const Modal = () => {
 
-    const [modalIsShowing, setModalIsShowing] = useState(true);
-    const closeModal = () => setModalIsShowing(false);
-    const openModal = () => setModalIsShowing(true);
-    const modalActions = {openModal, closeModal};
+    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
 
     if (modalIsShowing){
         return (

@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
+import { ModalContext } from '../../home/HomePage';
 
 const ProductModal = styled.div`
     display: flex;
@@ -19,10 +20,13 @@ const CloseModalButton = styled.button`
 `
 
 const Product = () => {
+
+    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
+
     return (
         <ProductModal>
             <p>Product Modal Goes here</p>
-            <CloseModalButton>Close</CloseModalButton>
+            <CloseModalButton onClick={()=>closeModal()}>Close</CloseModalButton>
         </ProductModal>
     )
 }

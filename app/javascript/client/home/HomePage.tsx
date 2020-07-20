@@ -15,12 +15,17 @@ interface HomePageProps {
 
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
+    const [modalIsShowing, setModalIsShowing] = useState(false);
 
     return (
-        <ModalContext.Provider value={modalActions}>
+        <ModalContext.Provider value={{
+            openModal: ()=>setModalIsShowing(true),
+            closeModal: ()=>setModalIsShowing(false),
+            modalIsShowing: modalIsShowing
+        }}>
             <Modal />
             <Header>WELCOME TO THE TREE COMPANY!</Header>
-            {/* <button>Modal Test</button> */}
+            <button onClick={()=>setModalIsShowing(true)}>Modal Test</button>
         </ModalContext.Provider>
     )
 }
