@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { useGetCartForCheckoutContainerQuery } from '../graphqlTypes';
+import { Checkout } from './Checkout';
 import { determinePrice } from "../cart/utils";
 import gql from 'graphql-tag';
 
@@ -23,19 +24,22 @@ export interface CheckoutContainerProps {
 }
 
 export const CheckoutContainer: FC<CheckoutContainerProps> = ({ unitPrice, cart }) => {
+    let cartProducts;
+
     if (!cart) {
         const { data } = useGetCartForCheckoutContainerQuery();
-        const cart = data?.cart;
+        cartProducts = data?.cart;
+    } else {
+        cartProducts = cart;
     }
 
-    if (!cart) return null;
+    if (!cartProducts) return null;
 
-    if (!unitPrice) {
-        const totalQuantity = cart.reduce((acc, cartItem) => acc + cartItem.quantity, 0);
-        const unitPrice = determinePrice(totalQuantity);
-    }
+    const totalQuantity = cartProducts.reduce((acc, cartItem) => acc + cartItem.quantity, 0);
+    const price = unitPrice ? unitPrice : determinePrice(totalQuantity);
+    const subtotal = totalQuantity * price;
 
     return (
-        <div>Checkout Container</div>
-    )
-}
+        <Checkout unitPrice={price} cart={cartProducts} subtotal={subtotal} />
+    );
+};
