@@ -1,9 +1,18 @@
-import React from 'react'
+import React from 'react';
+import styled from 'styled-components';
 
-const ProductModal = () => {
+const ProductModal = styled.div`
+    display: flex;
+    flex-direction: vertical;
+`;
+
+const Product = () => {
     return (
-        <div>Product Modal Goes here</div>
+        <ProductModal>
+            <p>Product Modal Goes here</p>
+            <button>Close</button>
+        </ProductModal>
     )
 }
 
-export default modal;
+export default Product;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import ProductModal from '../product/modals/ProductModal'
+import Product from '../product/modals/ProductModal'
 import { Modal } from './test';
 
 const DefaultBackdrop = styled.div`
@@ -15,13 +15,19 @@ const DefaultBackdrop = styled.div`
 
 const Modal = () => {
 
-    const [modalIsShowing, setModalIsShowing] = useState(false);
+    const [modalIsShowing, setModalIsShowing] = useState(true);
 
-    return (
-        <DefaultBackdrop>
-            <ProductModal />
-        </DefaultBackdrop>
-    )
+    if (modalIsShowing){
+        return (
+            <DefaultBackdrop>
+                <Product />
+            </DefaultBackdrop>
+        )
+    } else {
+        return null;
+    }
+
+    
 }
 
 export default Modal;

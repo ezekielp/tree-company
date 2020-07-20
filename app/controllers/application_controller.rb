@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
     end
 
     def session_token_expired?
-        session[:expires_at] > Time.current ? True : False
+        session[:expires_at] > Time.current ? true : false
     end
 
     def set_session_expiration
