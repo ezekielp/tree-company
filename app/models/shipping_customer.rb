@@ -15,8 +15,8 @@
 #
 class ShippingCustomer < ApplicationRecord
     validates :state, inclusion: { in: Constants::STATES }
-    validates :zipcode, zipcode: { country_code: :us }
-    validates :phone_number, phone: { possible: true, countries: :us }
+    validates :zip_code, zipcode: { country_code: :us }
+    validates :phone_number, phone: { possible: true, countries: :us, allow_blank: true }
 
     has_many :orders
 end
