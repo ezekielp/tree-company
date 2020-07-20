@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
-import { Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { CheckoutProduct } from './CheckoutContainer';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -26,6 +26,10 @@ const TotalPriceContainer = styled.div`
 	display: flex;
 `;
 
+const BillingAddressHeader = styled.div`
+    font-size: 24px;
+`;
+
 interface CheckoutProps {
     unitPrice: number;
     subtotal: number;
@@ -49,7 +53,6 @@ interface CheckoutFormData {
     shippingPhoneNumber?: string;
     attn?: string;
     shippingCost?: number;
-    taxCost: number;
 }
 
 export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
@@ -79,20 +82,38 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
     const taxCost = subtotal * .06;
 
     return (
-        <>
-            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-                {({ values, isSubmitting }) => (
-                    <BillingFormContainer>
-                        
-                    </BillingFormContainer>
-                )}
-            </Formik>
-            <TaxCostContainer>
-                ${taxCost}.00
-            </TaxCostContainer>
-            <TotalPriceContainer>
-
-            </TotalPriceContainer>
-        </>
-    )
+			<>
+				<Formik initialValues={initialValues} onSubmit={handleSubmit}>
+					{({ values, isSubmitting }) => (
+						<Form>
+							<BillingFormContainer>
+                                <BillingAddressHeader>
+                                    Billing Address
+                                </BillingAddressHeader>
+                                <Field name="billingName"  />
+                            </BillingFormContainer>
+							<TaxCostContainer>${taxCost}.00</TaxCostContainer>
+							<TotalPriceContainer></TotalPriceContainer>
+						</Form>
+					)}
+				</Formik>
+			</>
+		);
 }
+
+    // billingName: string;
+    // billingAddress: string;
+    // billingCity: string;
+    // billingState: string;
+    // billingZipCode: string;
+    // billingPhoneNumber?: string;
+    // email: string;
+    // taxExempt?: string;
+    // shippingName: string;
+    // shippingAddress: string;
+    // shippingCity: string;
+    // shippingState: string;
+    // shippingZipCode: string;
+    // shippingPhoneNumber?: string;
+    // attn?: string;
+    // shippingCost?: number;
