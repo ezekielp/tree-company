@@ -4,6 +4,9 @@ import Product from '../product/modals/ProductModal'
 import { Modal } from './test';
 
 const DefaultBackdrop = styled.div`
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
     position: fixed;
     top: 0;
     left: 0;
@@ -11,6 +14,7 @@ const DefaultBackdrop = styled.div`
     width: 100%;
     background: rgba(0,0,0,0.75);
     overflow-y: auto;
+    z-index: 10;
 `;
 
 const Modal = () => {
