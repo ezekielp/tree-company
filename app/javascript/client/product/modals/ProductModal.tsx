@@ -8,6 +8,8 @@ const ProductModal = styled.div`
     grid-row: 2/3;
     justify-content: center;
     align-items: center;
+    background: white;
+    border-radius: 10px;
 `;
 
 const CloseModalButton = styled.button`

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, createContext } from 'react';
 import styled from 'styled-components';
-import Product from '../product/modals/ProductModal'
+import Product from '../product/modals/ProductModal';
 import { Modal } from './test';
+import { ModalContext} from '../home/HomePage';
 
 const DefaultBackdrop = styled.div`
     display: grid;
@@ -20,12 +21,15 @@ const DefaultBackdrop = styled.div`
 const Modal = () => {
 
     const [modalIsShowing, setModalIsShowing] = useState(true);
+    const closeModal = () => setModalIsShowing(false);
+    const openModal = () => setModalIsShowing(true);
+    const modalActions = {openModal, closeModal};
 
     if (modalIsShowing){
         return (
-            <DefaultBackdrop>
-                <Product />
-            </DefaultBackdrop>
+                <DefaultBackdrop>
+                    <Product />
+                </DefaultBackdrop>
         )
     } else {
         return null;
