@@ -3,5 +3,6 @@ module Types
     field :update_cart, mutation: Mutations::Cart::UpdateCart
     field :create_shipping_customer, mutation: Mutations::CreateShippingCustomer
     field :create_billing_customer, mutation: Mutations::CreateBillingCustomer
+    field :create_order, mutation: Mutations::CreateOrder
   end
 end

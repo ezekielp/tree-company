@@ -1,5 +1,5 @@
 module Types
-    class CreateBillingCustomerInputType
+    class CreateBillingCustomerInputType < Types::BaseInputObject
         argument :name, String, required: true
         argument :address, String, required: true
         argument :city, String, required: true
@@ -23,8 +23,8 @@ module Mutations
                 address: input.address,
                 city: input.city,
                 state: input.state,
-                email: input.email
-                zip_code: input.zip_code,
+                email: input.email,
+                zip_code: input.zip_code
             )
 
             phone_number, tax_exempt = input.values_at(:phone_number, :tax_exempt)

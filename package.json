@@ -14,6 +14,7 @@
 		"@types/react-dom": "^16.9.8",
 		"@types/react-router-dom": "^5.1.5",
 		"@types/styled-components": "^5.1.1",
+		"@types/yup": "^0.29.3",
 		"apollo-cache-inmemory": "^1.6.6",
 		"apollo-client": "^2.6.10",
 		"apollo-link": "^1.2.14",
@@ -33,7 +34,8 @@
 		"styled-components": "^5.1.1",
 		"ts-loader": "^8.0.0",
 		"turbolinks": "^5.2.0",
-		"typescript": "^3.9.6"
+		"typescript": "^3.9.6",
+		"yup": "^0.29.1"
 	},
 	"version": "0.1.0",
 	"devDependencies": {

@@ -1,5 +1,5 @@
 module Types
-    class CreateShippingCustomerInputType
+    class CreateShippingCustomerInputType < Types::BaseInputObject
         argument :company_name, String, required: true
         argument :address, String, required: true
         argument :city, String, required: true
