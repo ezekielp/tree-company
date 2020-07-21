@@ -2,6 +2,7 @@ import React, { FC, useState, createContext } from 'react';
 import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
 import Modal from '../modal/Modal';
+import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 
 export const ModalContext = createContext(null);
 
@@ -25,7 +26,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
         }}>
             <Modal />
             <Header>WELCOME TO THE TREE COMPANY!</Header>
-            <button onClick={()=>setModalIsShowing(true)}>Modal Test</button>
+            <ProductThumbnail />
         </ModalContext.Provider>
     )
 }
