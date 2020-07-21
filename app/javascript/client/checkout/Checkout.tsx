@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useRef } from 'react';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikPhoneNumberInput } from '../form/inputs';
+import { FormikTextInput, FormikPhoneNumberInput } from '../form/inputs';
 import { CheckoutProduct } from './CheckoutContainer';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -78,6 +78,13 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
         
     };
 
+    const formRefs = {
+        'billing-name': useRef(),
+        'billing-address': useRef(),
+        'billing-city': useRef(),
+        email: useRef()
+    };
+
     const { data: productData } = useGetProductsForCheckoutQuery();
 
     const taxCost = subtotal * .06;
@@ -91,7 +98,31 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                 <BillingAddressHeader>
                                     Billing Address
                                 </BillingAddressHeader>
-                                <Field name="billingName"  />
+                                <Field
+                                    name="billingName"
+                                    label="Name"
+                                    component={FormikTextInput}
+                                    innerRef={formRefs['billing-name']}
+                                />
+                                <Field
+                                    name="billingAddress"
+                                    label="Address"
+                                    component={FormikTextInput}
+                                    innerRef={formRefs['billing-address']}
+                                />
+                                <Field
+                                    name="billingCity"
+                                    label="City"
+                                    component={FormikTextInput}
+                                    innerRef={formRefs['billing-city']}
+                                />
+                                <Field
+                                    name="email"
+                                    label="Email"
+                                    component={FormikTextInput}
+                                    type="email"
+                                    innerRef={formRefs.email}
+                                />
                             </BillingFormContainer>
 							<TaxCostContainer>${taxCost}.00</TaxCostContainer>
 							<TotalPriceContainer></TotalPriceContainer>
@@ -102,13 +133,9 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 		);
 }
 
-    // billingName: string;
-    // billingAddress: string;
-    // billingCity: string;
     // billingState: string;
     // billingZipCode: string;
     // billingPhoneNumber?: string;
-    // email: string;
     // taxExempt?: string;
     // shippingName: string;
     // shippingAddress: string;
