@@ -6,8 +6,8 @@ const ProductThumbnailWrapper = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 200px;
-    height: 350px;
+    width: 300px;
+    height: 400px;
     align-items: center;
     background: green;
     border-radius: 10px;
