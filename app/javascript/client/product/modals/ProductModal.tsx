@@ -11,6 +11,7 @@ const ProductModal = styled.div`
     align-items: center;
     background: white;
     border-radius: 10px;
+    padding: 10px;
 `;
 
 const CloseModalButton = styled.button`
