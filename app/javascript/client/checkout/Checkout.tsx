@@ -1,8 +1,9 @@
-import React, { FC, useRef } from 'react';
+import React, { FC, useState, useRef } from 'react';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikTextInput, FormikPhoneNumberInput } from '../form/inputs';
+import { FormikCheckbox, FormikTextInput, FormikPhoneNumberInput } from '../form/inputs';
 import { CheckoutProduct } from './CheckoutContainer';
+import { initialValues } from './utils';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -16,7 +17,10 @@ gql`
 	${ProductInfoFragmentDoc}
 `;
 
-const BillingFormContainer = styled.section`
+const BillingAddressFormContainer = styled.section`
+`;
+
+const ShippingAddressFormContainer = styled.section`
 `;
 
 const TaxCostContainer = styled.div`
@@ -57,19 +61,8 @@ interface CheckoutFormData {
 }
 
 export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
-    const initialValues = {
-        billingName: '',
-        billingAddress: '',
-        billingCity: '',
-        billingState: '',
-        billingZipCode: '',
-        email: '',
-        shippingName: '',
-        shippingAddress: '',
-        shippingCity: '',
-        shippingState: '',
-        shippingZipCode: ''
-    };
+    const [sameAddress, toggleSameAddress] = useState(false);
+    const [localPickup, toggleLocalPickup] = useState(false);
 
     const handleSubmit = async (
 			data: CheckoutFormData,
@@ -82,6 +75,7 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
         'billing-name': useRef(),
         'billing-address': useRef(),
         'billing-city': useRef(),
+        'billing-phone-number': useRef(),
         email: useRef()
     };
 
@@ -94,7 +88,7 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 				<Formik initialValues={initialValues} onSubmit={handleSubmit}>
 					{({ values, isSubmitting }) => (
 						<Form>
-							<BillingFormContainer>
+							<BillingAddressFormContainer>
                                 <BillingAddressHeader>
                                     Billing Address
                                 </BillingAddressHeader>
@@ -117,13 +111,36 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                     innerRef={formRefs['billing-city']}
                                 />
                                 <Field
+                                    name="billingPhoneNumber"
+                                    label="Phone Number"
+                                    component={FormikPhoneNumberInput}
+                                    innerRef={formRefs['billing-phone-number']}
+                                />
+                                <Field
                                     name="email"
                                     label="Email"
                                     component={FormikTextInput}
                                     type="email"
                                     innerRef={formRefs.email}
                                 />
-                            </BillingFormContainer>
+                            </BillingAddressFormContainer>
+                            <Field
+                                label="Check here if you would like to pick up the signs instead of having them shipped to you."
+                                component={FormikCheckbox}
+                                checked={localPickup}
+                                onChange={() => toggleLocalPickup(!localPickup)}
+                            />
+                            <Field 
+                                label="Is the shipping address the same as your billing address?"
+                                component={FormikCheckbox}
+                                checked={sameAddress}
+                                onChange={() => toggleSameAddress(!sameAddress)}
+                            />
+                            {!localPickup && !sameAddress && (
+                                <ShippingAddressFormContainer>
+                                    
+                                </ShippingAddressFormContainer>
+                            )}
 							<TaxCostContainer>${taxCost}.00</TaxCostContainer>
 							<TotalPriceContainer></TotalPriceContainer>
 						</Form>
@@ -135,7 +152,6 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 
     // billingState: string;
     // billingZipCode: string;
-    // billingPhoneNumber?: string;
     // taxExempt?: string;
     // shippingName: string;
     // shippingAddress: string;
