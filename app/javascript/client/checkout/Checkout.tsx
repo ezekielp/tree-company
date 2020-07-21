@@ -3,7 +3,7 @@ import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graph
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CheckoutProduct } from './CheckoutContainer';
-import { initialValues } from './utils';
+import { STATE_OPTIONS, initialValues } from './utils';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -74,12 +74,14 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
         'billing-name': useRef(),
         'billing-address': useRef(),
         'billing-city': useRef(),
+        'billing-state': useRef(),
         'billing-zip-code': useRef(),
         'billing-phone-number': useRef(),
         email: useRef(),
         'shipping-name': useRef(),
         'shipping-address': useRef(),
         'shipping-city': useRef(),
+        'shipping-state': useRef(),
         'shipping-zip-code': useRef(),
         'shipping-phone-number': useRef(),
         attn: useRef()
@@ -113,6 +115,13 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                     innerRef={formRefs['billing-city']}
                                 />
                                 <Field
+                                    name="billingState"
+                                    label="State"
+                                    component={FormikSelectInput}
+                                    options={STATE_OPTIONS}
+                                    innerRef={formRefs['billing-state']}
+                                />
+                                <Field
                                     name="billingZipCode"
                                     label="Zip Code"
                                     component={FormikZipCodeInput}
@@ -133,18 +142,22 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                 />
                             </AddressFormContainer>
                             <Field
+                                name="localPickup"
                                 label="Check here if you would like to pick up the signs instead of having them shipped to you."
                                 component={FormikCheckbox}
                                 checked={localPickup}
                                 onChange={() => toggleLocalPickup(!localPickup)}
                             />
-                            <Field 
-                                label="Is the shipping address the same as your billing address?"
-                                component={FormikCheckbox}
-                                checked={sameAddress}
-                                onChange={() => toggleSameAddress(!sameAddress)}
-                            />
-                            {!localPickup && !sameAddress && (
+                            {localPickup === false && (
+                                <Field
+                                    name="sameAddress"
+                                    label="Is the shipping address the same as your billing address?"
+                                    component={FormikCheckbox}
+                                    checked={sameAddress}
+                                    onChange={() => toggleSameAddress(!sameAddress)}
+                                />
+                            )}
+                            {localPickup === false && sameAddress === false && (
                                 <AddressFormContainer>
                                     <AddressFormHeader>
                                         Shipping Address
@@ -166,6 +179,13 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                         label="City"
                                         component={FormikTextInput}
                                         innerRef={formRefs['shipping-city']}
+                                    />
+                                    <Field 
+                                        name="shippingState"
+                                        label="State"
+                                        component={FormikSelectInput}
+                                        options={STATE_OPTIONS}
+                                        innerRef={formRefs['shipping-state']}
                                     />
                                     <Field 
                                         name="shippingZipCode"
@@ -206,6 +226,4 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 		);
 }
 
-    // billingState: string;
     // taxExempt?: string;
-    // shippingState: string;

@@ -1,3 +1,48 @@
+import * as yup from 'yup';
+
+export const validationSchema = yup.object({
+    billingName: yup
+        .string()
+        .required()
+        .label('Name'),
+    billingAddress: yup
+        .string()
+        .required()
+        .label('Address'),
+    billingCity: yup
+        .string()
+        .required()
+        .label('City'),
+    email: yup
+        .string()
+        .required()
+        .email()
+        .label('Email'),
+    localPickup: yup.boolean(),
+    sameAddress: yup.boolean(),
+    shippingName: yup.string().when(['localPickup', 'sameAddress'], {
+        is: false,
+        then: yup.string().required().label('Name')
+    }),
+    shippingAddress: yup.string().when(['localPickup', 'sameAddress'], {
+        is: false,
+        then: yup.string().required().label('Address')
+    }),
+    shippingCity: yup.string().when(['localPickup', 'sameAddress'], {
+        is: false,
+        then: yup.string().required().label('City')
+    }),
+    attn: yup
+        .string()
+});
+
+// const formRefs = {
+//     'billing-zip-code': useRef(),
+//     'billing-phone-number': useRef(),
+//     'shipping-zip-code': useRef(),
+//     'shipping-phone-number': useRef(),
+// };
+
 export const initialValues = {
     billingName: '',
     billingAddress: '',
@@ -12,7 +57,7 @@ export const initialValues = {
     shippingZipCode: ''
 };
 
-export const STATES = [
+export const STATE_OPTIONS = [
     {
         label: 'Alaska',
         value: 'AK'
