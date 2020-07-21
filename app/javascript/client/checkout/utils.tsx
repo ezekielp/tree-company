@@ -13,6 +13,14 @@ export const validationSchema = yup.object({
         .string()
         .required()
         .label('City'),
+    billingZipCode: yup
+        .string()
+        .required()
+        .test({
+            name: 'isAZipCode1',
+            test: (v: string) => v.length === 5 || v.length === 9,
+            message: 'Please enter either a five-digit or nine-digit zip code'
+        }),
     email: yup
         .string()
         .required()
@@ -32,16 +40,18 @@ export const validationSchema = yup.object({
         is: false,
         then: yup.string().required().label('City')
     }),
+    shippingZipCode: yup.string().when(['localPickup', 'sameAddress'], {
+        is: false,
+        then: yup.string().required()
+        .test({
+            name: 'isAZipCode2',
+            test: (v: string) => v.length === 5 || v.length === 9,
+            message: 'Please enter either a five-digit or nine-digit zip code'
+        })
+    }),
     attn: yup
         .string()
 });
-
-// const formRefs = {
-//     'billing-zip-code': useRef(),
-//     'billing-phone-number': useRef(),
-//     'shipping-zip-code': useRef(),
-//     'shipping-phone-number': useRef(),
-// };
 
 export const initialValues = {
     billingName: '',

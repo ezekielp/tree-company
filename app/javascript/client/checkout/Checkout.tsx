@@ -1,9 +1,10 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState, useEffect, useRef } from 'react';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
+import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct } from './CheckoutContainer';
-import { STATE_OPTIONS, initialValues } from './utils';
+import { STATE_OPTIONS, initialValues, validationSchema } from './utils';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -53,9 +54,18 @@ interface CheckoutFormData {
     shippingCost?: number;
 }
 
+// interface ProductIdToQuantityMap {
+
+// }
+
 export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
     const [sameAddress, toggleSameAddress] = useState(false);
     const [localPickup, toggleLocalPickup] = useState(false);
+    let shippingCost: number;
+
+    useEffect(() => {
+        shippingCost = localPickup ? 0 : 10;
+    });
 
     const handleSubmit = async (
 			data: CheckoutFormData,
@@ -64,11 +74,28 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
         
     };
 
-    const { data: productData } = useGetProductsForCheckoutQuery();
+    const productIds: string[] = [];
+    const productIdToQuantityMap = {} as { [key: string]: number };
+    cart.forEach(item => {
+        const { productId, quantity } = item;
+        productIds.push(productId);
+        productIdToQuantityMap[productId] = quantity;
+    });
+
+    const { data: productDataQueryResult } = useGetProductsForCheckoutQuery({
+        variables: {
+            productIds
+        }
+    });
+    const productData = productDataQueryResult?.productsById;
+
+    if (!productData) return null;
+    const checkoutItems = productData.map(product => ({
+        product,
+        quantity: productIdToQuantityMap[product.id]
+    }));
 
     const taxCost: number = subtotal * .06;
-
-    const shippingCost: number = localPickup ? 0 : 10;
 
     const formRefs = {
         'billing-name': useRef(),
@@ -89,7 +116,7 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 
     return (
 			<>
-				<Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
 					{({ values, isSubmitting }) => (
 						<Form>
 							<AddressFormContainer>
@@ -207,6 +234,7 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                     />
                                 </AddressFormContainer>
                             )}
+                            <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} />
 							<PriceContainer>
                                 <div>Tax</div>
                                 <div>${taxCost}.00</div>

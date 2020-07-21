@@ -27,11 +27,11 @@ const ImageStandIn = styled.div`
     border-radius: 20px;
 `;
 
-const CartProductDetails = styled.div`
+export const CartProductDetails = styled.div`
     max-width: 400px;
 `;
 
-const ProductNameContainer = styled.div`
+export const ProductNameContainer = styled.div`
     font-weight: 600;
 `;
 
