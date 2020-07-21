@@ -1,7 +1,7 @@
 import React, { FC, useState, useRef } from 'react';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikCheckbox, FormikTextInput, FormikPhoneNumberInput } from '../form/inputs';
+import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CheckoutProduct } from './CheckoutContainer';
 import { initialValues } from './utils';
 import gql from 'graphql-tag';
@@ -17,21 +17,14 @@ gql`
 	${ProductInfoFragmentDoc}
 `;
 
-const BillingAddressFormContainer = styled.section`
+const AddressFormContainer = styled.section`
 `;
 
-const ShippingAddressFormContainer = styled.section`
-`;
-
-const TaxCostContainer = styled.div`
+const PriceContainer = styled.div`
 	display: flex;
 `;
 
-const TotalPriceContainer = styled.div`
-	display: flex;
-`;
-
-const BillingAddressHeader = styled.div`
+const AddressFormHeader = styled.div`
     font-size: 24px;
 `;
 
@@ -71,27 +64,36 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
         
     };
 
+    const { data: productData } = useGetProductsForCheckoutQuery();
+
+    const taxCost: number = subtotal * .06;
+
+    const shippingCost: number = localPickup ? 0 : 10;
+
     const formRefs = {
         'billing-name': useRef(),
         'billing-address': useRef(),
         'billing-city': useRef(),
+        'billing-zip-code': useRef(),
         'billing-phone-number': useRef(),
-        email: useRef()
+        email: useRef(),
+        'shipping-name': useRef(),
+        'shipping-address': useRef(),
+        'shipping-city': useRef(),
+        'shipping-zip-code': useRef(),
+        'shipping-phone-number': useRef(),
+        attn: useRef()
     };
-
-    const { data: productData } = useGetProductsForCheckoutQuery();
-
-    const taxCost = subtotal * .06;
 
     return (
 			<>
 				<Formik initialValues={initialValues} onSubmit={handleSubmit}>
 					{({ values, isSubmitting }) => (
 						<Form>
-							<BillingAddressFormContainer>
-                                <BillingAddressHeader>
+							<AddressFormContainer>
+                                <AddressFormHeader>
                                     Billing Address
-                                </BillingAddressHeader>
+                                </AddressFormHeader>
                                 <Field
                                     name="billingName"
                                     label="Name"
@@ -111,6 +113,12 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                     innerRef={formRefs['billing-city']}
                                 />
                                 <Field
+                                    name="billingZipCode"
+                                    label="Zip Code"
+                                    component={FormikZipCodeInput}
+                                    innerRef={formRefs['billing-zip-code']}
+                                />
+                                <Field
                                     name="billingPhoneNumber"
                                     label="Phone Number"
                                     component={FormikPhoneNumberInput}
@@ -123,7 +131,7 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                     type="email"
                                     innerRef={formRefs.email}
                                 />
-                            </BillingAddressFormContainer>
+                            </AddressFormContainer>
                             <Field
                                 label="Check here if you would like to pick up the signs instead of having them shipped to you."
                                 component={FormikCheckbox}
@@ -137,12 +145,60 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                 onChange={() => toggleSameAddress(!sameAddress)}
                             />
                             {!localPickup && !sameAddress && (
-                                <ShippingAddressFormContainer>
-                                    
-                                </ShippingAddressFormContainer>
+                                <AddressFormContainer>
+                                    <AddressFormHeader>
+                                        Shipping Address
+                                    </AddressFormHeader>
+                                    <Field
+                                        name="shippingName"
+                                        label="Company Name"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs['shipping-name']}
+                                    />
+                                    <Field
+                                        name="shippingAddress"
+                                        label="Address"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs['shipping-address']}
+                                    />
+                                    <Field
+                                        name="shippingCity"
+                                        label="City"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs['shipping-city']}
+                                    />
+                                    <Field 
+                                        name="shippingZipCode"
+                                        label="Zip Code"
+                                        component={FormikZipCodeInput}
+                                        innerRef={formRefs['shipping-zip-code']}
+                                    />
+                                    <Field
+                                        name="shippingPhoneNumber"
+                                        label="Phone Number"
+                                        component={FormikPhoneNumberInput}
+                                        innerRef={formRefs['shipping-phone-number']}
+                                    />
+                                    <Field 
+                                        name="attn"
+                                        label="Attn"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs.attn}
+                                    />
+                                </AddressFormContainer>
                             )}
-							<TaxCostContainer>${taxCost}.00</TaxCostContainer>
-							<TotalPriceContainer></TotalPriceContainer>
+							<PriceContainer>
+                                <div>Tax</div>
+                                <div>${taxCost}.00</div>
+                            </PriceContainer>
+							<PriceContainer>
+                                <div>Shipping</div>
+                                <div>${taxCost}.00</div>
+                            </PriceContainer>
+							<PriceContainer>
+                                <div>Total</div>
+                                <div>${subtotal + shippingCost + taxCost}.00</div>
+                            </PriceContainer>
 						</Form>
 					)}
 				</Formik>
@@ -151,13 +207,5 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 }
 
     // billingState: string;
-    // billingZipCode: string;
     // taxExempt?: string;
-    // shippingName: string;
-    // shippingAddress: string;
-    // shippingCity: string;
     // shippingState: string;
-    // shippingZipCode: string;
-    // shippingPhoneNumber?: string;
-    // attn?: string;
-    // shippingCost?: number;
