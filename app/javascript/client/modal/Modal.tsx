@@ -5,9 +5,10 @@ import { Modal } from './test';
 import { ModalContext} from '../home/HomePage';
 
 const DefaultBackdrop = styled.div`
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: fixed;
     top: 0;
     left: 0;
@@ -24,9 +25,9 @@ const Modal = () => {
 
     if (modalIsShowing){
         return (
-                <DefaultBackdrop>
-                    <Product />
-                </DefaultBackdrop>
+            <DefaultBackdrop onClick={()=>closeModal()}>
+                <Product />
+            </DefaultBackdrop>
         )
     } else {
         return null;

@@ -24,7 +24,7 @@ const Product = () => {
     const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
 
     return (
-        <ProductModal>
+        <ProductModal onClick={(e) => e.stopPropagation()}>
             <p>Product Modal Goes here</p>
             <CloseModalButton onClick={()=>closeModal()}>Close</CloseModalButton>
         </ProductModal>
