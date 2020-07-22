@@ -9,20 +9,20 @@ interface ZipCodeInputProps {
 export const ZipCodeInput = React.forwardRef(({ onChange, value, ...rest}: ZipCodeInputProps, ref) => {
     const unmaskValue = (v: string) => v.replace(/[^\d]/g, '');
     const maskValue = (v: string) => unmaskValue(v).replace(/(\d{5})(\d{4})/, '$1-$2');
-    const [inputValue, setInputValue] = useState(value ? maskValue(value) : '');
+    const [zipCodeInputValue, setZipCodeInputValue] = useState(value ? maskValue(value) : '');
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;
         const valToUpdate = newValue ? unmaskValue(newValue) : null;
 
         onChange(valToUpdate);
-        setInputValue(newValue);
+        setZipCodeInputValue(maskValue(newValue));
     };
 
     return (
         <TextInput 
             {...rest}
-            value={inputValue}
+            value={zipCodeInputValue}
             onChange={handleChange}
             inputMode="numeric"
             ref={ref}

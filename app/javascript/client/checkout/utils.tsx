@@ -16,9 +16,17 @@ export const validationSchema = yup.object({
     billingZipCode: yup
         .string()
         .required()
+        .label('Zip code')
+        .nullable()
         .test({
             name: 'isAZipCode1',
-            test: (v: string) => v.length === 5 || v.length === 9,
+            test: (v: string | null) => {
+                if (!v) {
+                    return false;
+                } else {
+                    return v.length === 5 || v.length === 9;
+                };
+            },
             message: 'Please enter either a five-digit or nine-digit zip code'
         }),
     email: yup
@@ -57,13 +65,13 @@ export const initialValues = {
     billingName: '',
     billingAddress: '',
     billingCity: '',
-    billingState: '',
+    billingState: 'MD',
     billingZipCode: '',
     email: '',
     shippingName: '',
     shippingAddress: '',
     shippingCity: '',
-    shippingState: '',
+    shippingState: 'MD',
     shippingZipCode: ''
 };
 

@@ -18,7 +18,8 @@ module Types
         end
 
         def product_counties
-            AssociationLoader.for(ProductCounty, :product_id).load(object.id)
+            # AssociationLoader.for(ProductCounty, :product_id).load(object.id)
+            AssociationLoader.for(ProductCounty, :product).load(object.id)
         end
     end
 end

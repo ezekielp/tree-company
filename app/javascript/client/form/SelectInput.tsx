@@ -3,7 +3,6 @@ import React, { FC } from 'react';
 interface Option {
     label: string;
     value: string;
-    selected?: boolean;
 }
 
 interface SelectInputProps {
@@ -13,7 +12,7 @@ interface SelectInputProps {
 export const SelectInput: FC<SelectInputProps> = ({ options, ...rest }) => (
     <select {...rest}>
         {options.map(option => (
-            <option key={option.value} value={option.value} selected={option.selected ? true : false}>
+            <option key={option.value} value={option.value}>
                 {option.label}
             </option>
         ))}

@@ -11,7 +11,7 @@ const InternalAppContainer: SFC<InternalAppContainerProps> = props => {
 			<Switch>
 				<Route path="/home" component={HomeContainer} />
 				<Route path="/cart" component={CartContainer} />
-				<Route path="/cart" component={CheckoutContainer} />
+				<Route path="/checkout" component={CheckoutContainer} />
 				<Route path="*">
 					<Redirect to="/home" />
 				</Route>
