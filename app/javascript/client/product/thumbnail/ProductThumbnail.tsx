@@ -10,7 +10,7 @@ const ProductThumbnailContainer = styled.div`
     height: 400px;
     align-items: center;
     background: green;
-border-radius: 10px;
+    border-radius: 10px;
     color: white;
     cursor: pointer;
 `;
