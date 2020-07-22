@@ -62,7 +62,6 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
     useEffect(() => {
         shippingCost = localPickup ? 0 : 10;
     }, [localPickup]);
-    // const shippingCost = localPickup ? 0 : 10;
 
     const handleSubmit = async (
 			data: CheckoutFormData,
@@ -90,14 +89,12 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 			"billing-name": useRef(),
 			"billing-address": useRef(),
 			"billing-city": useRef(),
-			"billing-state": useRef(),
 			"billing-zip-code": useRef(),
 			"billing-phone-number": useRef(),
 			email: useRef(),
 			"shipping-name": useRef(),
 			"shipping-address": useRef(),
 			"shipping-city": useRef(),
-			"shipping-state": useRef(),
 			"shipping-zip-code": useRef(),
 			"shipping-phone-number": useRef(),
 			attn: useRef(),
@@ -124,45 +121,44 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                     name="billingName"
                                     label="Name"
                                     component={FormikTextInput}
-                                    // innerRef={formRefs['billing-name']}
+                                    innerRef={formRefs['billing-name']}
                                 />
                                 <Field
                                     name="billingAddress"
                                     label="Address"
                                     component={FormikTextInput}
-                                    // innerRef={formRefs['billing-address']}
+                                    innerRef={formRefs['billing-address']}
                                 />
                                 <Field
                                     name="billingCity"
                                     label="City"
                                     component={FormikTextInput}
-                                    // innerRef={formRefs['billing-city']}
+                                    innerRef={formRefs['billing-city']}
                                 />
                                 <Field
                                     name="billingState"
                                     label="State"
                                     component={FormikSelectInput}
                                     options={STATE_OPTIONS}
-                                    // innerRef={formRefs['billing-state']}
                                 />
                                 <Field
                                     name="billingZipCode"
                                     label="Zip Code"
                                     component={FormikZipCodeInput}
-                                    // innerRef={formRefs['billing-zip-code']}
+                                    innerRef={formRefs['billing-zip-code']}
                                 />
                                 <Field
                                     name="billingPhoneNumber"
                                     label="Phone Number"
                                     component={FormikPhoneNumberInput}
-                                    // innerRef={formRefs['billing-phone-number']}
+                                    innerRef={formRefs['billing-phone-number']}
                                 />
                                 <Field
                                     name="email"
                                     label="Email"
                                     component={FormikTextInput}
                                     type="email"
-                                    // innerRef={formRefs.email}
+                                    innerRef={formRefs.email}
                                 />
                             </AddressFormContainer>
                             <Field
@@ -190,44 +186,43 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                         name="shippingName"
                                         label="Company Name"
                                         component={FormikTextInput}
-                                        // innerRef={formRefs['shipping-name']}
+                                        innerRef={formRefs['shipping-name']}
                                     />
                                     <Field
                                         name="shippingAddress"
                                         label="Address"
                                         component={FormikTextInput}
-                                        // innerRef={formRefs['shipping-address']}
+                                        innerRef={formRefs['shipping-address']}
                                     />
                                     <Field
                                         name="shippingCity"
                                         label="City"
                                         component={FormikTextInput}
-                                        // innerRef={formRefs['shipping-city']}
+                                        innerRef={formRefs['shipping-city']}
                                     />
                                     <Field 
                                         name="shippingState"
                                         label="State"
                                         component={FormikSelectInput}
                                         options={STATE_OPTIONS}
-                                        // innerRef={formRefs['shipping-state']}
                                     />
                                     <Field 
                                         name="shippingZipCode"
                                         label="Zip Code"
                                         component={FormikZipCodeInput}
-                                        // innerRef={formRefs['shipping-zip-code']}
+                                        innerRef={formRefs['shipping-zip-code']}
                                     />
                                     <Field
                                         name="shippingPhoneNumber"
                                         label="Phone Number"
                                         component={FormikPhoneNumberInput}
-                                        // innerRef={formRefs['shipping-phone-number']}
+                                        innerRef={formRefs['shipping-phone-number']}
                                     />
                                     <Field 
                                         name="attn"
                                         label="Attn"
                                         component={FormikTextInput}
-                                        // innerRef={formRefs.attn}
+                                        innerRef={formRefs.attn}
                                     />
                                 </AddressFormContainer>
                             )}
