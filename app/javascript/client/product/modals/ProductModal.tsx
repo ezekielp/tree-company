@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 
-const ProductModal = styled.div`
+const ProductModalContainer = styled.div`
     display: flex;
     flex-direction: column;
     grid-column: 2/3;
@@ -20,16 +20,16 @@ const CloseModalButton = styled.button`
     cursor: pointer;
 `
 
-const Product = () => {
+const ProductModal = () => {
 
     const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
 
     return (
-        <ProductModal onClick={(e) => e.stopPropagation()}>
+        <ProductModalContainer onClick={(e) => e.stopPropagation()}>
             <p>Product Modal Goes here</p>
             <CloseModalButton onClick={()=>closeModal()}>Close</CloseModalButton>
-        </ProductModal>
+        </ProductModalContainer>
     )
 }
 
-export default Product;
+export default ProductModal;

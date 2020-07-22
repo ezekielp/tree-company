@@ -1,8 +1,7 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import Product from '../product/modals/ProductModal';
-import { Modal } from './test';
-import { ModalContext} from '../home/HomePage';
+import ProductModal from '../product/modals/ProductModal';
+import { ModalContext } from '../home/HomePage';
 
 const DefaultBackdrop = styled.div`
     display: flex;
@@ -26,7 +25,7 @@ const Modal = () => {
     if (modalIsShowing){
         return (
             <DefaultBackdrop onClick={()=>closeModal()}>
-                <Product />
+                <ProductModal />
             </DefaultBackdrop>
         )
     } else {
