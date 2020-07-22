@@ -57,12 +57,12 @@ interface CheckoutFormData {
 export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
     const [sameAddress, toggleSameAddress] = useState(false);
     const [localPickup, toggleLocalPickup] = useState(false);
-    // let shippingCost: number;
+    let shippingCost: number = localPickup ? 0 : 10;
 
-    // useEffect(() => {
-    //     shippingCost = localPickup ? 0 : 10;
-    // });
-    const shippingCost = localPickup ? 0 : 10;
+    useEffect(() => {
+        shippingCost = localPickup ? 0 : 10;
+    }, [localPickup]);
+    // const shippingCost = localPickup ? 0 : 10;
 
     const handleSubmit = async (
 			data: CheckoutFormData,
@@ -86,6 +86,23 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
     });
     const productData = productDataQueryResult?.productsById;
 
+    const formRefs = {
+			"billing-name": useRef(),
+			"billing-address": useRef(),
+			"billing-city": useRef(),
+			"billing-state": useRef(),
+			"billing-zip-code": useRef(),
+			"billing-phone-number": useRef(),
+			email: useRef(),
+			"shipping-name": useRef(),
+			"shipping-address": useRef(),
+			"shipping-city": useRef(),
+			"shipping-state": useRef(),
+			"shipping-zip-code": useRef(),
+			"shipping-phone-number": useRef(),
+			attn: useRef(),
+		} as { [key: string]: React.RefObject<HTMLInputElement> };
+
     if (!productData) return null;
     const checkoutItems = productData.map(product => ({
         product,
@@ -93,23 +110,6 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
     }));
 
     const taxCost: number = subtotal * .06;
-
-    // const formRefs = {
-    //     'billing-name': useRef(),
-    //     'billing-address': useRef(),
-    //     'billing-city': useRef(),
-    //     'billing-state': useRef(),
-    //     'billing-zip-code': useRef(),
-    //     'billing-phone-number': useRef(),
-    //     email: useRef(),
-    //     'shipping-name': useRef(),
-    //     'shipping-address': useRef(),
-    //     'shipping-city': useRef(),
-    //     'shipping-state': useRef(),
-    //     'shipping-zip-code': useRef(),
-    //     'shipping-phone-number': useRef(),
-    //     attn: useRef()
-    // } as { [key: string]: React.RefObject<HTMLInputElement> };
 
     return (
 			<>

@@ -34,29 +34,34 @@ export const validationSchema = yup.object({
         .required()
         .email()
         .label('Email'),
-    localPickup: yup.boolean(),
-    sameAddress: yup.boolean(),
-    shippingName: yup.string().when(['localPickup', 'sameAddress'], {
-        is: false,
-        then: yup.string().required().label('Name')
-    }),
-    shippingAddress: yup.string().when(['localPickup', 'sameAddress'], {
-        is: false,
-        then: yup.string().required().label('Address')
-    }),
-    shippingCity: yup.string().when(['localPickup', 'sameAddress'], {
-        is: false,
-        then: yup.string().required().label('City')
-    }),
-    shippingZipCode: yup.string().when(['localPickup', 'sameAddress'], {
-        is: false,
-        then: yup.string().required()
+    shippingName: yup
+        .string()
+        .required()
+        .label('Name'),
+    shippingAddress: yup
+        .string()
+        .required()
+        .label('Address'),
+    shippingCity: yup
+        .string()
+        .required()
+        .label('City'),
+    shippingZipCode: yup
+        .string()
+        .required()
+        .label('Zip code')
+        .nullable()
         .test({
-            name: 'isAZipCode2',
-            test: (v: string) => v.length === 5 || v.length === 9,
+            name: 'isAZipCode1',
+            test: (v: string | null) => {
+                if (!v) {
+                    return false;
+                } else {
+                    return v.length === 5 || v.length === 9;
+                };
+            },
             message: 'Please enter either a five-digit or nine-digit zip code'
-        })
-    }),
+        }),
     attn: yup
         .string()
 });
