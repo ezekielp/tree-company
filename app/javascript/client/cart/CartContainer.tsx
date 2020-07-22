@@ -16,6 +16,14 @@ gql`
     }
 `;
 
+const CartDisplayContainer = styled.div`
+
+`;
+
+const SubtotalContainer = styled.div`
+    display: flex;
+`;
+
 interface CartContainerProps {}
 
 export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }) => {
@@ -34,7 +42,14 @@ export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ hi
         <CartProductThumbnailContainer quantity={quantity} productId={productId} key={productId} unitPrice={unitPrice} />
     ));
 
+    const subtotal = totalQuantity * unitPrice;
+
     return (
-        <>{cartItems}</>
+        <CartDisplayContainer>
+            {cartItems}
+            <SubtotalContainer>
+                ${subtotal}.00
+            </SubtotalContainer>
+        </CartDisplayContainer>
     );
 }

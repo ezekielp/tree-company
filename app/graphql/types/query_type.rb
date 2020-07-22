@@ -1,6 +1,9 @@
 module Types
   class QueryType < Types::BaseObject
     field :products, [Types::ProductType], null: true
+    field :products_by_id, [Types::ProductType], null: true do
+      argument :product_ids, [String], required: true
+    end
     field :product, Types::ProductType, null: true do
       argument :product_id, String, required: true
     end
@@ -8,6 +11,11 @@ module Types
 
     def products
       Product.all
+    end
+
+    def products_by_id(args)
+      return nil unless args
+      Product.find(args[:product_ids])
     end
 
     def product(args)

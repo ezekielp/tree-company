@@ -10,7 +10,7 @@ module Mutations
         class UpdateCart < BaseMutation
             argument :input, Types::UpdateCartInputType, required: true
 
-            field :cart, Types::CartItemType, null: false
+            field :cart, [Types::CartItemType], null: false
             
             def resolve(input:)
                 new_cart = cart.dup
