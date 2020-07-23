@@ -1,11 +1,17 @@
 module Types
+    class CartItemInputType < Types::BaseInputObject
+        argument :product_id, Int, required: true
+        argument :quantity, Int, required: true
+    end
+
     class CreateOrderInputType < Types::BaseInputObject
         argument :billing_customer_id, Int, required: true
         argument :shipping_customer_id, Int, required: true
         argument :shipping_cost, Int, required: false
         argument :tax_cost, Int, required: true
         argument :unit_price, Int, required: true
-        argument :cart, [Types::CartItemType], required: true
+        argument :cart, [Types::CartItemInputType], required: true
+        # argument :cart, [Types::CartItemType], required: true
     end
 end
 
@@ -35,12 +41,7 @@ module Mutations
                 )
             end
 
-            {
-                order: new_order,
-                order_quantities: new_order.order_quantities,
-                shipping_customer: new_order.shipping_customer,
-                billing_customer: new_order.billing_customer
-            }
+            { order: new_order }
         end
     end
 end

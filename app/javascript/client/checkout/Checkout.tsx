@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, CreateBillingCustomerInput, CreateShippingCustomerInput, CreateOrderInput } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CheckoutProducts } from './CheckoutProducts';
@@ -17,6 +17,73 @@ gql`
 	}
 
 	${ProductInfoFragmentDoc}
+`;
+
+gql`
+    mutation CreateBillingCustomer($input: CreateBillingCustomerInput!) {
+        createBillingCustomer(input: $input) {
+            billingCustomer {
+                id
+                name
+                address
+                city
+                state
+                email
+                zipCode
+                phoneNumber
+                taxExempt
+            }
+        }
+    }
+`;
+
+gql`
+    mutation CreateShippingCustomer($input: CreateShippingCustomerInput!) {
+        createShippingCustomer(input: $input) {
+            shippingCustomer {
+                id
+                companyName
+                address
+                city
+                state
+                zipCode
+                phoneNumber
+                attn
+            }
+        }
+    }
+`;
+
+gql`
+    mutation CreateOrder($input: CreateOrderInput!) {
+        createOrder(input: $input) {
+            order {
+                id
+                shippingCost
+                taxCost
+                unitPrice
+                orderQuantities {
+                    id
+                    productId
+                    orderId
+                    quantity
+                }
+                products {
+                    id
+                    name
+                    size
+                    material
+                    description
+                    styleNumber
+                    counties {
+                        id
+                        name
+                    }
+                    imageUrl
+                }
+            }
+        }
+    }
 `;
 
 const AddressFormContainer = styled.section`
@@ -45,6 +112,7 @@ interface CheckoutFormData {
     billingPhoneNumber?: string;
     email: string;
     taxExempt?: string;
+    sameAddress: boolean;
     shippingName: string;
     shippingAddress: string;
     shippingCity: string;
@@ -68,7 +136,11 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 			data: CheckoutFormData,
 			formikHelpers: FormikHelpers<CheckoutFormData>
 		) => {
-        console.log("Success!");
+
+
+
+
+            console.log("Success!");
     };
 
     const productIds: string[] = [];
@@ -112,7 +184,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     return (
 			<>
             <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-					{({ values, isSubmitting }) => (
+					{({ isSubmitting }) => (
 						<Form>
 							<AddressFormContainer>
                                 <AddressFormHeader>
@@ -172,7 +244,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                             {localPickup === false && (
                                 <Field
                                     name="sameAddress"
-                                    label="Is the shipping address the same as your billing address?"
+                                    label="Check here to use your billing address as your shipping address."
                                     component={FormikCheckbox}
                                     checked={sameAddress}
                                     onChange={() => toggleSameAddress(!sameAddress)}

@@ -16,6 +16,11 @@ type CartItem {
   quantity: Int!
 }
 
+input CartItemInput {
+  productId: Int!
+  quantity: Int!
+}
+
 type County {
   id: ID!
   name: String!
@@ -42,6 +47,7 @@ type CreateBillingCustomerPayload {
 
 input CreateOrderInput {
   billingCustomerId: Int!
+  cart: [CartItemInput!]!
   shippingCost: Int
   shippingCustomerId: Int!
   taxCost: Int!
