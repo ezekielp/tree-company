@@ -4,7 +4,17 @@ import { ProductInfoFragment } from '../graphqlTypes';
 import Modal from '../modal/Modal';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 
-export const ModalContext = createContext(null);
+interface ModalContextState {
+    openModal: () => void;
+    closeModal: () => void;
+    modalIsShowing: boolean;
+}
+
+export const ModalContext = createContext<ModalContextState>({
+    openModal: () => null,
+    closeModal: () => null,
+    modalIsShowing: false
+});
 
 const Header = styled.h1`
     font-size: 36px;

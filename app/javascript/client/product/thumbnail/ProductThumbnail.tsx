@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 
@@ -15,7 +15,9 @@ const ProductThumbnailContainer = styled.div`
     cursor: pointer;
 `;
 
-const ProductThumbnail = (props) => {
+interface ProductThumbnailProps {}
+
+const ProductThumbnail: FC<ProductThumbnailProps> = () => {
 
     const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
 
