@@ -141,24 +141,64 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 			formikHelpers: FormikHelpers<CheckoutFormData>
 		) => {
             // console.log(data);
-            const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, email, taxExempt } = data;
+        const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, email, taxExempt, shippingName, shippingAddress, shippingCity, shippingState, shippingZipCode, shippingPhoneNumber, attn } = data;
 
-            const createBillingCustomerResponse = await createBillingCustomer({
-                variables: {
-                    input: {
-                        name: billingName,
-                        address: billingAddress,
-                        city: billingCity,
-                        state: billingState,
-                        zipCode: billingZipCode,
-                        phoneNumber: billingPhoneNumber,
-                        email
-                    }
-                }
-            });
-            console.log(createBillingCustomerResponse);
+        const billingCustomerInput = {
+            name: billingName,
+            address: billingAddress,
+            city: billingCity,
+            state: billingState,
+            zipCode: billingZipCode,
+            phoneNumber: billingPhoneNumber,
+            email,
+            taxExempt
+        };
 
-            console.log("Success!");
+        const shippingCustomerInput = sameAddress ? {
+            companyName: billingName,
+            address: billingAddress,
+            city: billingCity,
+            state: billingState,
+            zipCode: billingZipCode,
+            phoneNumber: billingPhoneNumber,
+            attn
+        } : {
+            companyName: shippingName,
+            address: shippingAddress,
+            city: shippingCity,
+            state: shippingState,
+            zipCode: shippingZipCode,
+            phoneNumber: shippingPhoneNumber,
+            attn
+        };
+
+        const [createBillingCustomerResponse, createShippingCustomerResponse] = await Promise.all([createBillingCustomer({
+            variables: {
+                input: billingCustomerInput
+            }
+        }), createShippingCustomer({
+            variables: {
+                input: shippingCustomerInput
+            }
+        })]);
+        
+        // TO DO: Handle potential errors from above API calls
+        // ALSO RE ERROR-HANDLING: Need to figure out how to pass down errors from things like the zipcode validaton gem
+
+        // const createBillingCustomerResponse = await createBillingCustomer({
+        //     variables: {
+        //         input: billingCustomerInput
+        //     }
+        // });
+
+        // const createShippingCustomerResponse = await createShippingCustomer({
+
+        // })
+
+        console.log(createBillingCustomerResponse);
+        console.log(createShippingCustomerResponse);
+
+        console.log("Success!");
     };
 
     const productIds: string[] = [];

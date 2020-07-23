@@ -11,7 +11,6 @@ module Types
         argument :tax_cost, Int, required: true
         argument :unit_price, Int, required: true
         argument :cart, [Types::CartItemInputType], required: true
-        # argument :cart, [Types::CartItemType], required: true
     end
 end
 
@@ -20,9 +19,6 @@ module Mutations
         argument :input, Types::CreateOrderInputType, required: true
 
         field :order, Types::OrderType, null: false
-        field :order_quantities, [Types::OrderQuantityType], null: false
-        field :shipping_customer, Types::ShippingCustomerType, null: false
-        field :billing_customer, Types::BillingCustomerType, null: false
 
         def resolve(input:)
             new_order = Order.create(
