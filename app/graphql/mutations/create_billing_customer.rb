@@ -27,10 +27,8 @@ module Mutations
                 zip_code: input.zip_code
             )
 
-            phone_number, tax_exempt = input.values_at(:phone_number, :tax_exempt)
-
-            new_billing_customer.phone_number = phone_number if phone_number
-            new_billing_customer.tax_exempt = tax_exempt if tax_exempt
+            new_billing_customer.phone_number = input.phone_number if input.phone_number
+            new_billing_customer.tax_exempt = input.tax_exempt if input.tax_exempt
 
             { billing_customer: new_billing_customer }
         end

@@ -34,6 +34,7 @@ export const validationSchema = yup.object({
         .required()
         .email()
         .label('Email'),
+    taxExempt: yup.boolean(),
     sameAddress: yup.boolean(),
     shippingName: yup
         .string()
@@ -81,12 +82,14 @@ export const initialValues = {
     billingState: 'MD',
     billingZipCode: '',
     email: '',
+    taxExempt: false,
     sameAddress: false,
     shippingName: '',
     shippingAddress: '',
     shippingCity: '',
     shippingState: 'MD',
-    shippingZipCode: ''
+    shippingZipCode: '',
+    attn: ''
 };
 
 export const STATE_OPTIONS = [

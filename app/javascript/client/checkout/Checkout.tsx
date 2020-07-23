@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, CreateBillingCustomerInput, CreateShippingCustomerInput, CreateOrderInput } from '../graphqlTypes';
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CheckoutProducts } from './CheckoutProducts';
@@ -111,7 +111,7 @@ interface CheckoutFormData {
     billingZipCode: string;
     billingPhoneNumber?: string;
     email: string;
-    taxExempt?: string;
+    taxExempt?: boolean;
     sameAddress: boolean;
     shippingName: string;
     shippingAddress: string;
@@ -126,8 +126,12 @@ interface CheckoutFormData {
 const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
     const [sameAddress, toggleSameAddress] = useState(false);
     const [localPickup, toggleLocalPickup] = useState(false);
-    let shippingCost: number = localPickup ? 0 : 10;
 
+    const [createBillingCustomer] = useCreateBillingCustomerMutation();
+    const [createShippingCustomer] = useCreateShippingCustomerMutation();
+    const [createOrder] = useCreateOrderMutation();
+
+    let shippingCost: number = localPickup ? 0 : 10;
     useEffect(() => {
         shippingCost = localPickup ? 0 : 10;
     }, [localPickup]);
@@ -136,9 +140,23 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 			data: CheckoutFormData,
 			formikHelpers: FormikHelpers<CheckoutFormData>
 		) => {
+            // console.log(data);
+            const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, email, taxExempt } = data;
 
-
-
+            const createBillingCustomerResponse = await createBillingCustomer({
+                variables: {
+                    input: {
+                        name: billingName,
+                        address: billingAddress,
+                        city: billingCity,
+                        state: billingState,
+                        zipCode: billingZipCode,
+                        phoneNumber: billingPhoneNumber,
+                        email
+                    }
+                }
+            });
+            console.log(createBillingCustomerResponse);
 
             console.log("Success!");
     };
