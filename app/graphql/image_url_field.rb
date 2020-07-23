@@ -11,7 +11,8 @@ class ImageUrlField < GraphQL::Schema::FieldExtension
         AssociationLoader.for(
             object.class,
             # NOT SURE IF BELOW ARROW SYNTAX IS CORRECT 
-            attachment_association => :blob
+            # attachment_association => :blob
+            attachment_association
         )
     end
 

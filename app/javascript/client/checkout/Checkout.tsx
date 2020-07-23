@@ -1,4 +1,5 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
@@ -29,7 +30,7 @@ const AddressFormHeader = styled.div`
     font-size: 24px;
 `;
 
-interface CheckoutProps {
+interface CheckoutProps extends RouteComponentProps {
     unitPrice: number;
     subtotal: number;
     cart: CheckoutProduct[];
@@ -54,7 +55,7 @@ interface CheckoutFormData {
     shippingCost?: number;
 }
 
-export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
+const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
     const [sameAddress, toggleSameAddress] = useState(false);
     const [localPickup, toggleLocalPickup] = useState(false);
     let shippingCost: number = localPickup ? 0 : 10;
@@ -67,7 +68,7 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 			data: CheckoutFormData,
 			formikHelpers: FormikHelpers<CheckoutFormData>
 		) => {
-        
+        console.log("Success!");
     };
 
     const productIds: string[] = [];
@@ -239,6 +240,9 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
                                 <div>Total</div>
                                 <div>${subtotal + shippingCost + taxCost}.00</div>
                             </PriceContainer>
+                            <button type="submit" disabled={isSubmitting}>
+                                Place order
+                            </button>
 						</Form>
 					)}
 				</Formik>
@@ -247,3 +251,4 @@ export const Checkout: FC<CheckoutProps> = ({ unitPrice, cart, subtotal }) => {
 }
 
     // taxExempt?: string;
+export const Checkout = withRouter(InternalCheckout);

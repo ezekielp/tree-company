@@ -7,7 +7,8 @@ module Types
         field :description, String, null: true
         field :style_number, String, null: true
         field :counties, [Types::CountyType], null: true
-        field :image_url, String, null: true, extensions: [ImageUrlField]
+        field :image_url, String, null: true
+        # field :image_url, String, null: true, extensions: [ImageUrlField]
         # TODO field :categories
 
         def counties
@@ -18,9 +19,14 @@ module Types
         end
 
         def product_counties
-            # AssociationLoader.for(ProductCounty, :product_id).load(object.id)
-            AssociationLoader.for(ProductCounty, :product).load(object.id)
+            AssociationLoader.for(Product, :product_counties).load(object)
+        end
+
+        def image_url
+            AssociationLoader.for(Product, :image_attachment).load(object).then do |image|
+                next if image.nil?
+                Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+            end
         end
     end
 end
-
