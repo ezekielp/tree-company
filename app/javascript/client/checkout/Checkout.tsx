@@ -124,6 +124,10 @@ interface CheckoutFormData {
 }
 
 const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
+
+    // Comment in the line below once you can add stuff to the cart
+    // if (cart.length === 0) history.push('/home');
+
     const [sameAddress, toggleSameAddress] = useState(false);
     const [localPickup, toggleLocalPickup] = useState(false);
 
@@ -136,23 +140,35 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
         shippingCost = localPickup ? 0 : 10;
     }, [localPickup]);
 
+    const taxCost: number = parseFloat((subtotal * .06).toFixed(2));
+
+    const productIds: string[] = [];
+    const productIdToQuantityMap = {} as { [key: string]: number };
+    cart.forEach(item => {
+        const { productId, quantity } = item;
+        productIds.push(productId);
+        productIdToQuantityMap[productId] = quantity;
+    });
+
+    const { data: productDataQueryResult } = useGetProductsForCheckoutQuery({
+        variables: {
+            productIds
+        }
+    });
+    const productData = productDataQueryResult?.productsById;
+
+    if (!productData) return null;
+    const checkoutItems = productData.map(product => ({
+        product,
+        quantity: productIdToQuantityMap[product.id]
+    }));
+
     const handleSubmit = async (
 			data: CheckoutFormData,
 			formikHelpers: FormikHelpers<CheckoutFormData>
 		) => {
             // console.log(data);
         const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, email, taxExempt, shippingName, shippingAddress, shippingCity, shippingState, shippingZipCode, shippingPhoneNumber, attn } = data;
-
-        const billingCustomerInput = {
-            name: billingName,
-            address: billingAddress,
-            city: billingCity,
-            state: billingState,
-            zipCode: billingZipCode,
-            phoneNumber: billingPhoneNumber,
-            email,
-            taxExempt
-        };
 
         const shippingCustomerInput = sameAddress ? {
             companyName: billingName,
@@ -174,7 +190,16 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         const [createBillingCustomerResponse, createShippingCustomerResponse] = await Promise.all([createBillingCustomer({
             variables: {
-                input: billingCustomerInput
+                input: {
+                    name: billingName,
+                    address: billingAddress,
+                    city: billingCity,
+                    state: billingState,
+                    zipCode: billingZipCode,
+                    phoneNumber: billingPhoneNumber,
+                    email,
+                    taxExempt
+                }
             }
         }), createShippingCustomer({
             variables: {
@@ -185,36 +210,30 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
         // TO DO: Handle potential errors from above API calls
         // ALSO RE ERROR-HANDLING: Need to figure out how to pass down errors from things like the zipcode validaton gem
 
-        // const createBillingCustomerResponse = await createBillingCustomer({
-        //     variables: {
-        //         input: billingCustomerInput
-        //     }
-        // });
+        // I think you should call the Stripe API here, after you've created the BillingCustomer and ShippingCustomer but before you create an order, so that you don't bother creating an order before you know the charge will go through
 
-        // const createShippingCustomerResponse = await createShippingCustomer({
+        const billingCustomerId = createBillingCustomerResponse.data?.createBillingCustomer?.billingCustomer.id;
+        const shippingCustomerId = createShippingCustomerResponse.data?.createShippingCustomer?.shippingCustomer.id;
 
-        // })
+        if (!billingCustomerId || ! shippingCustomerId) return;
 
-        console.log(createBillingCustomerResponse);
-        console.log(createShippingCustomerResponse);
+        const createOrderResponse = createOrder({
+            variables: {
+                input: {
+                    billingCustomerId: parseInt(billingCustomerId),
+                    shippingCustomerId: parseInt(shippingCustomerId),
+                    shippingCost: shippingCost * 100,
+                    taxCost: taxCost * 100,
+                    unitPrice,
+                    cart
+                }
+            }
+        });
+
+        console.log(createOrderResponse);
 
         console.log("Success!");
     };
-
-    const productIds: string[] = [];
-    const productIdToQuantityMap = {} as { [key: string]: number };
-    cart.forEach(item => {
-        const { productId, quantity } = item;
-        productIds.push(productId);
-        productIdToQuantityMap[productId] = quantity;
-    });
-
-    const { data: productDataQueryResult } = useGetProductsForCheckoutQuery({
-        variables: {
-            productIds
-        }
-    });
-    const productData = productDataQueryResult?.productsById;
 
     const formRefs = {
 			"billing-name": useRef(),
@@ -230,14 +249,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 			"shipping-phone-number": useRef(),
 			attn: useRef(),
 		} as { [key: string]: React.RefObject<HTMLInputElement> };
-
-    if (!productData) return null;
-    const checkoutItems = productData.map(product => ({
-        product,
-        quantity: productIdToQuantityMap[product.id]
-    }));
-
-    const taxCost: number = subtotal * .06;
 
     return (
 			<>
@@ -360,15 +371,15 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                             <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} />
 							<PriceContainer>
                                 <div>Tax</div>
-                                <div>${taxCost}.00</div>
+                                <div>${taxCost}</div>
                             </PriceContainer>
 							<PriceContainer>
                                 <div>Shipping</div>
-                                <div>${taxCost}.00</div>
+                                <div>${shippingCost}.00</div>
                             </PriceContainer>
 							<PriceContainer>
                                 <div>Total</div>
-                                <div>${subtotal + shippingCost + taxCost}.00</div>
+                                <div>${subtotal + (shippingCost * 100) + taxCost}</div>
                             </PriceContainer>
                             <button type="submit" disabled={isSubmitting}>
                                 Place order

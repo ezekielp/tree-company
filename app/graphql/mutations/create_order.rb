@@ -1,6 +1,6 @@
 module Types
     class CartItemInputType < Types::BaseInputObject
-        argument :product_id, Int, required: true
+        argument :product_id, ID, required: true
         argument :quantity, Int, required: true
     end
 
