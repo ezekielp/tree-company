@@ -34,33 +34,42 @@ export const validationSchema = yup.object({
         .required()
         .email()
         .label('Email'),
+    taxExempt: yup.boolean(),
+    sameAddress: yup.boolean(),
     shippingName: yup
         .string()
-        .required()
-        .label('Name'),
+        .when('sameAddress', {
+            is: false,
+            then: yup.string().required('Shipping name is required if your billing address and shipping address are not the same. Please check the box above if they are the same.')
+        }),
     shippingAddress: yup
         .string()
-        .required()
-        .label('Address'),
+        .when('sameAddress', {
+            is: false,
+            then: yup.string().required().label('Address')
+        }),
     shippingCity: yup
         .string()
-        .required()
-        .label('City'),
+        .when('sameAddress', {
+            is: false,
+            then: yup.string().required().label('City')
+        }),
     shippingZipCode: yup
         .string()
-        .required()
-        .label('Zip code')
-        .nullable()
-        .test({
-            name: 'isAZipCode1',
-            test: (v: string | null) => {
-                if (!v) {
-                    return false;
-                } else {
-                    return v.length === 5 || v.length === 9;
-                };
-            },
-            message: 'Please enter either a five-digit or nine-digit zip code'
+        .when('sameAddress', {
+            is: false,
+            then: yup.string().required().label('Zip code').nullable()
+                .test({
+                    name: 'isAZipCode1',
+                    test: (v: string | null) => {
+                        if (!v) {
+                            return false;
+                        } else {
+                            return v.length === 5 || v.length === 9;
+                        };
+                    },
+                    message: 'Please enter either a five-digit or nine-digit zip code'
+                }),
         }),
     attn: yup
         .string()
@@ -73,11 +82,14 @@ export const initialValues = {
     billingState: 'MD',
     billingZipCode: '',
     email: '',
+    taxExempt: false,
+    sameAddress: false,
     shippingName: '',
     shippingAddress: '',
     shippingCity: '',
     shippingState: 'MD',
-    shippingZipCode: ''
+    shippingZipCode: '',
+    attn: ''
 };
 
 export const STATE_OPTIONS = [

@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery } from '../graphqlTypes';
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CheckoutProducts } from './CheckoutProducts';
@@ -17,6 +17,73 @@ gql`
 	}
 
 	${ProductInfoFragmentDoc}
+`;
+
+gql`
+    mutation CreateBillingCustomer($input: CreateBillingCustomerInput!) {
+        createBillingCustomer(input: $input) {
+            billingCustomer {
+                id
+                name
+                address
+                city
+                state
+                email
+                zipCode
+                phoneNumber
+                taxExempt
+            }
+        }
+    }
+`;
+
+gql`
+    mutation CreateShippingCustomer($input: CreateShippingCustomerInput!) {
+        createShippingCustomer(input: $input) {
+            shippingCustomer {
+                id
+                companyName
+                address
+                city
+                state
+                zipCode
+                phoneNumber
+                attn
+            }
+        }
+    }
+`;
+
+gql`
+    mutation CreateOrder($input: CreateOrderInput!) {
+        createOrder(input: $input) {
+            order {
+                id
+                shippingCost
+                taxCost
+                unitPrice
+                orderQuantities {
+                    id
+                    productId
+                    orderId
+                    quantity
+                }
+                products {
+                    id
+                    name
+                    size
+                    material
+                    description
+                    styleNumber
+                    counties {
+                        id
+                        name
+                    }
+                    imageUrl
+                }
+            }
+        }
+    }
 `;
 
 const AddressFormContainer = styled.section`
@@ -44,7 +111,8 @@ interface CheckoutFormData {
     billingZipCode: string;
     billingPhoneNumber?: string;
     email: string;
-    taxExempt?: string;
+    taxExempt?: boolean;
+    sameAddress: boolean;
     shippingName: string;
     shippingAddress: string;
     shippingCity: string;
@@ -56,20 +124,23 @@ interface CheckoutFormData {
 }
 
 const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
+
+    // Comment in the line below once you can add stuff to the cart
+    // if (cart.length === 0) history.push('/home');
+
     const [sameAddress, toggleSameAddress] = useState(false);
     const [localPickup, toggleLocalPickup] = useState(false);
-    let shippingCost: number = localPickup ? 0 : 10;
 
+    const [createBillingCustomer] = useCreateBillingCustomerMutation();
+    const [createShippingCustomer] = useCreateShippingCustomerMutation();
+    const [createOrder] = useCreateOrderMutation();
+
+    let shippingCost: number = localPickup ? 0 : 10;
     useEffect(() => {
         shippingCost = localPickup ? 0 : 10;
     }, [localPickup]);
 
-    const handleSubmit = async (
-			data: CheckoutFormData,
-			formikHelpers: FormikHelpers<CheckoutFormData>
-		) => {
-        console.log("Success!");
-    };
+    const taxCost: number = parseFloat((subtotal * .06).toFixed(2));
 
     const productIds: string[] = [];
     const productIdToQuantityMap = {} as { [key: string]: number };
@@ -86,6 +157,84 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     });
     const productData = productDataQueryResult?.productsById;
 
+    if (!productData) return null;
+    const checkoutItems = productData.map(product => ({
+        product,
+        quantity: productIdToQuantityMap[product.id]
+    }));
+
+    const handleSubmit = async (
+			data: CheckoutFormData,
+			formikHelpers: FormikHelpers<CheckoutFormData>
+		) => {
+            // console.log(data);
+        const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, email, taxExempt, shippingName, shippingAddress, shippingCity, shippingState, shippingZipCode, shippingPhoneNumber, attn } = data;
+
+        const shippingCustomerInput = sameAddress ? {
+            companyName: billingName,
+            address: billingAddress,
+            city: billingCity,
+            state: billingState,
+            zipCode: billingZipCode,
+            phoneNumber: billingPhoneNumber,
+            attn
+        } : {
+            companyName: shippingName,
+            address: shippingAddress,
+            city: shippingCity,
+            state: shippingState,
+            zipCode: shippingZipCode,
+            phoneNumber: shippingPhoneNumber,
+            attn
+        };
+
+        const [createBillingCustomerResponse, createShippingCustomerResponse] = await Promise.all([createBillingCustomer({
+            variables: {
+                input: {
+                    name: billingName,
+                    address: billingAddress,
+                    city: billingCity,
+                    state: billingState,
+                    zipCode: billingZipCode,
+                    phoneNumber: billingPhoneNumber,
+                    email,
+                    taxExempt
+                }
+            }
+        }), createShippingCustomer({
+            variables: {
+                input: shippingCustomerInput
+            }
+        })]);
+        
+        // TO DO: Handle potential errors from above API calls
+        // ALSO RE ERROR-HANDLING: Need to figure out how to pass down errors from things like the zipcode validaton gem
+
+        // I think you should call the Stripe API here, after you've created the BillingCustomer and ShippingCustomer but before you create an order, so that you don't bother creating an order before you know the charge will go through
+
+        const billingCustomerId = createBillingCustomerResponse.data?.createBillingCustomer?.billingCustomer.id;
+        const shippingCustomerId = createShippingCustomerResponse.data?.createShippingCustomer?.shippingCustomer.id;
+
+        if (!billingCustomerId || ! shippingCustomerId) return;
+
+        const createOrderResponse = createOrder({
+            variables: {
+                input: {
+                    billingCustomerId: parseInt(billingCustomerId),
+                    shippingCustomerId: parseInt(shippingCustomerId),
+                    shippingCost: shippingCost * 100,
+                    taxCost: taxCost * 100,
+                    unitPrice,
+                    cart
+                }
+            }
+        });
+
+        console.log(createOrderResponse);
+
+        console.log("Success!");
+    };
+
     const formRefs = {
 			"billing-name": useRef(),
 			"billing-address": useRef(),
@@ -101,18 +250,10 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 			attn: useRef(),
 		} as { [key: string]: React.RefObject<HTMLInputElement> };
 
-    if (!productData) return null;
-    const checkoutItems = productData.map(product => ({
-        product,
-        quantity: productIdToQuantityMap[product.id]
-    }));
-
-    const taxCost: number = subtotal * .06;
-
     return (
 			<>
             <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
-					{({ values, isSubmitting }) => (
+					{({ isSubmitting }) => (
 						<Form>
 							<AddressFormContainer>
                                 <AddressFormHeader>
@@ -172,7 +313,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                             {localPickup === false && (
                                 <Field
                                     name="sameAddress"
-                                    label="Is the shipping address the same as your billing address?"
+                                    label="Check here to use your billing address as your shipping address."
                                     component={FormikCheckbox}
                                     checked={sameAddress}
                                     onChange={() => toggleSameAddress(!sameAddress)}
@@ -230,15 +371,15 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                             <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} />
 							<PriceContainer>
                                 <div>Tax</div>
-                                <div>${taxCost}.00</div>
+                                <div>${taxCost}</div>
                             </PriceContainer>
 							<PriceContainer>
                                 <div>Shipping</div>
-                                <div>${taxCost}.00</div>
+                                <div>${shippingCost}.00</div>
                             </PriceContainer>
 							<PriceContainer>
                                 <div>Total</div>
-                                <div>${subtotal + shippingCost + taxCost}.00</div>
+                                <div>${subtotal + (shippingCost * 100) + taxCost}</div>
                             </PriceContainer>
                             <button type="submit" disabled={isSubmitting}>
                                 Place order

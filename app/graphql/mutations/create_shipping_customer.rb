@@ -17,7 +17,7 @@ module Mutations
         field :shipping_customer, Types::ShippingCustomerType, null: false
 
         def resolve(input:)
-            new_shipping_customer = ShippingCustomer.create(
+            new_shipping_customer = ShippingCustomer.create!(
                 company_name: input.company_name,
                 address: input.address,
                 city: input.city,
@@ -25,10 +25,9 @@ module Mutations
                 zip_code: input.zip_code
             )
 
-            phone_number, attn = input.values_at(:phone_number, :attn)
-
-            new_shipping_customer.phone_number = phone_number if phone_number
-            new_shipping_customer.attn = attn if attn
+            # debugger
+            new_shipping_customer.phone_number = input.phone_number if input.phone_number
+            new_shipping_customer.attn = input.attn if input.attn
 
             { shipping_customer: new_shipping_customer }
         end
