@@ -1,6 +1,7 @@
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
+import { ProductInfoFragment } from 'client/graphqlTypes';
 
 const ProductThumbnailContainer = styled.div`
     display: flex;
@@ -15,15 +16,24 @@ const ProductThumbnailContainer = styled.div`
     cursor: pointer;
 `;
 
-interface ProductThumbnailProps {}
+interface ProductThumbnailProps {
+    product: ProductInfoFragment;
+}
 
-const ProductThumbnail: FC<ProductThumbnailProps> = () => {
+const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
     const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
 
+    const { imageUrl? } = product.product;
+    
+    debugger
+
     return (
         <ProductThumbnailContainer onClick={()=>openModal()}>
-            <p>Thumbnail Goes here</p>
+            <img 
+            src = {imageUrl}>
+
+            </img>
         </ProductThumbnailContainer>
     )
 }
