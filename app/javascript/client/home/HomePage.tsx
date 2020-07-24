@@ -7,13 +7,17 @@ import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 interface ModalContextState {
     openModal: () => void;
     closeModal: () => void;
+    setProductId: (id: number) => void;
     modalIsShowing: boolean;
+    productId: number;
 }
 
 export const ModalContext = createContext<ModalContextState>({
     openModal: () => null,
     closeModal: () => null,
-    modalIsShowing: false
+    setProductId: ()=>null,
+    modalIsShowing: false,
+    productId: 0
 });
 
 const Header = styled.h1`
@@ -39,6 +43,7 @@ interface HomePageProps {
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const [modalIsShowing, setModalIsShowing] = useState(false);
+    const [productId, setProductId] = useState(0);
     
     const ProductThumbnails = Object.entries(products).map((product)=>(
         <ProductThumbnail key={product[0]} product={product[1]} />
@@ -48,9 +53,11 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
         <ModalContext.Provider value={{
             openModal: ()=>setModalIsShowing(true),
             closeModal: ()=>setModalIsShowing(false),
-            modalIsShowing: modalIsShowing
+            setProductId: (newProductId)=>setProductId(newProductId),
+            modalIsShowing: modalIsShowing,
+            productId: productId
         }}>
-            <Modal />
+            <Modal products={products}/>
             <Header>WELCOME TO THE TREE COMPANY!</Header>
             <ThumbnailIndexContainer>
                 {ProductThumbnails}

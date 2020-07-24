@@ -1,7 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import ProductModal from '../product/modals/ProductModal';
 import { ModalContext } from '../home/HomePage';
+import { ProductInfoFragment } from 'client/graphqlTypes';
 
 const DefaultBackdrop = styled.div`
     display: flex;
@@ -18,14 +19,19 @@ const DefaultBackdrop = styled.div`
     z-index: 10;
 `;
 
-const Modal = () => {
+interface ModalProps {
+    products: ProductInfoFragment[]
+}
 
-    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
+const Modal: FC<ModalProps> = (products) => {
+
+    const {modalIsShowing, productId, openModal, closeModal, setProductId} = useContext(ModalContext);
+    // const chosenProduct = 
 
     if (modalIsShowing){
         return (
             <DefaultBackdrop onClick={()=>closeModal()}>
-                <ProductModal />
+                <ProductModal product={chosenProduct}/>
             </DefaultBackdrop>
         )
     } else {

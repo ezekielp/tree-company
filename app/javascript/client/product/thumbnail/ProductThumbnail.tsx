@@ -22,14 +22,18 @@ interface ProductThumbnailProps {
 
 const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
-    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
+    const {modalIsShowing, productId, openModal, closeModal, setProductId} = useContext(ModalContext);
 
-    const { imageUrl? } = product.product;
-    
+    const { id? , name?, description?, imageUrl?, material?, size?, styleNumber?, counties? } = product.product;
     debugger
 
+    const handleClick = (id) => {
+        setProductId(id)
+        openModal();
+    }
+
     return (
-        <ProductThumbnailContainer onClick={()=>openModal()}>
+        <ProductThumbnailContainer onClick={(id)=>handleClick(id)}>
             <img 
             src = {imageUrl}>
 

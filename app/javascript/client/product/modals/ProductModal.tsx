@@ -1,12 +1,10 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 
 const ProductModalContainer = styled.div`
     display: flex;
     flex-direction: column;
-    grid-column: 2/3;
-    grid-row: 2/3;
     justify-content: center;
     align-items: center;
     background: white;
@@ -19,8 +17,11 @@ const CloseModalButton = styled.button`
     height: 50px;
     cursor: pointer;
 `
+interface ProductModalProps {
+    product: ProductInfoFragment
+}
 
-const ProductModal = () => {
+const ProductModal: FC<ProductModalProps> = () => {
 
     const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
 
