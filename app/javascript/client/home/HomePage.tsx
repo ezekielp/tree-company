@@ -7,17 +7,17 @@ import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 interface ModalContextState {
     openModal: () => void;
     closeModal: () => void;
-    setProduct: (product: ProductInfoFragment) => void;
+    setSelectedProduct: (product: ProductInfoFragment) => void;
     modalIsShowing: boolean;
-    product: ProductInfoFragment;
+    selectedProduct: ProductInfoFragment;
 }
 
 export const ModalContext = createContext<ModalContextState>({
     openModal: () => null,
     closeModal: () => null,
-    setProduct: (product)=>null,
+    setSelectedProduct: (product)=>null,
     modalIsShowing: false,
-    product: {id: "", name: "", size: "", material: "", description: ""} 
+    selectedProduct: { name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""} 
 });
 
 const Header = styled.h1`
@@ -43,7 +43,7 @@ interface HomePageProps {
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const [modalIsShowing, setModalIsShowing] = useState(false);
-    const [product, setProduct] = useState({id: "", name: "", size: "", material: ""} );
+    const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""} );
     
     const ProductThumbnails = Object.entries(products).map((product)=>(
         <ProductThumbnail key={product[0]} product={product[1]} />
@@ -53,9 +53,9 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
         <ModalContext.Provider value={{
             openModal: ()=>setModalIsShowing(true),
             closeModal: ()=>setModalIsShowing(false),
-            setProduct: (selectedProduct: ProductInfoFragment)=>setProduct(selectedProduct),
+            setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
             modalIsShowing: modalIsShowing,
-            product: product
+            selectedProduct: selectedProduct
         }}>
             <Modal />
             <Header>WELCOME TO THE TREE COMPANY!</Header>

@@ -14,6 +14,7 @@ const ProductThumbnailContainer = styled.div`
     border-radius: 10px;
     color: white;
     cursor: pointer;
+    margin-top: 10px;
 `;
 
 interface ProductThumbnailProps {
@@ -22,25 +23,27 @@ interface ProductThumbnailProps {
 
 const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
-    const {modalIsShowing, productId, openModal, closeModal, setProductId} = useContext(ModalContext);
+    const {modalIsShowing, selectedProduct, openModal, closeModal, setSelectedProduct} = useContext(ModalContext);
 
     const { id , name, description, imageUrl, material, size, styleNumber, counties } = product.product;
 
-    const handleClick = (id: string) => {
-        setProductId(parseInt(id))
+    const handleClick = (product: ProductInfoFragment) => {
+        setSelectedProduct(product)
         openModal();
     }
 
     if (!imageUrl) return null;
-    
-    // const TestImage = styled.div`
-    //     backgroundImage: url(${imageUrl});
-    // `
 
+    const imageStyles = {
+        objectFit: 'cover',
+        width: '290px',
+        height: '390px'
+    }
 
     return (
-        <ProductThumbnailContainer onClick={(id)=>handleClick(id)}>
-            <div style={{ backgroundImage: `url(${imageUrl})`}}></div>
+        <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
+            {/* <div style={{ backgroundImage: `url(${imageUrl})`}}></div> */}
+            <img src={imageUrl} alt="" style={ imageStyles }/>
         </ProductThumbnailContainer>
     )
 }
