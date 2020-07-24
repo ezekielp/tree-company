@@ -1,6 +1,7 @@
 import React, { FC, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
+import CSS from 'csstype';
 
 const ProductModalContainer = styled.div`
     display: flex;
@@ -27,7 +28,7 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     if (!selectedProduct.imageUrl) return null;
 
-    const imageStyles = {
+    const imageStyles: CSS.Properties = {
         objectFit: 'cover',
         width: '600px',
         height: '800px'
