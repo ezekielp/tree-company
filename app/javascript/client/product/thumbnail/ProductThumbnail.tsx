@@ -2,7 +2,6 @@ import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 import { ProductInfoFragment } from 'client/graphqlTypes';
-import CSS from 'csstype';
 
 const ProductThumbnailContainer = styled.div`
     display: flex;
@@ -16,6 +15,12 @@ const ProductThumbnailContainer = styled.div`
     color: white;
     cursor: pointer;
     margin-top: 10px;
+`;
+
+const ProductImageContainer = styled.img`
+    object-fit: cover;
+    width: 290px;
+    height: 390px;
 `;
 
 interface ProductThumbnailProps {
@@ -35,15 +40,9 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
     if (!imageUrl) return null;
 
-    const imageStyles: CSS.Properties = {
-        objectFit: 'cover',
-        width: '290px',
-        height: '390px'
-    }
-
     return (
         <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
-            <img src={imageUrl} style={ imageStyles }/>
+            <ProductImageContainer src={imageUrl} />
         </ProductThumbnailContainer>
     )
 }

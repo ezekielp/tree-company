@@ -1,7 +1,6 @@
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
-import CSS from 'csstype';
 
 const ProductModalContainer = styled.div`
     display: flex;
@@ -18,6 +17,11 @@ const CloseModalButton = styled.button`
     height: 50px;
     cursor: pointer;
 `
+const ProductImageContainer = styled.img`
+    object-fit: cover;
+    width: 290px;
+    height: 390px;
+`;
 
 interface ProductModalProps {}
 
@@ -27,12 +31,6 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     if (!selectedProduct.imageUrl) return null;
 
-    const imageStyles: CSS.Properties = {
-        objectFit: 'cover',
-        width: '300px',
-        height: '400px'
-    }
-
     // TODO add to cart/quantity
 
     return (
@@ -41,7 +39,7 @@ const ProductModal: FC<ProductModalProps> = () => {
             <div>{selectedProduct.material}</div>
             <div>{selectedProduct.description}</div>
             <div>{selectedProduct.size}</div>
-            <img src={selectedProduct.imageUrl} alt="" style={imageStyles}/>
+            <ProductImageContainer src={selectedProduct.imageUrl} />
             <CloseModalButton onClick={()=>closeModal()}>Close</CloseModalButton>
         </ProductModalContainer>
     )
