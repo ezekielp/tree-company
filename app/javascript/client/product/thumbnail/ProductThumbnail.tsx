@@ -40,9 +40,13 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
         height: '390px'
     }
 
-    const { imageUrl? } = product.product;
-    
+    const { id? , name?, description?, imageUrl?, material?, size?, styleNumber?, counties? } = product.product;
     debugger
+
+    const handleClick = (id) => {
+        setProductId(id)
+        openModal();
+    }
 
     return (
         <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
