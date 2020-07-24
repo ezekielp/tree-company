@@ -22,17 +22,7 @@ interface ProductModalProps {}
 
 const ProductModal: FC<ProductModalProps> = () => {
 
-    const { selectedProduct, closeModal} = useContext(ModalContext);
-
-    if (!selectedProduct.imageUrl) return null;
-
-    const imageStyles: CSS.Properties = {
-        objectFit: 'cover',
-        width: '300px',
-        height: '400px'
-    }
-
-    // TODO add to cart/quantity
+    const {modalIsShowing, product, openModal, closeModal} = useContext(ModalContext);
 
     return (
         <ProductModalContainer onClick={(e) => e.stopPropagation()}>

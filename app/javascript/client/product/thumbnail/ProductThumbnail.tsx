@@ -40,17 +40,23 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
         height: '390px'
     }
 
-    const { id? , name?, description?, imageUrl?, material?, size?, styleNumber?, counties? } = product.product;
-    debugger
+    const { id , name, description, imageUrl, material, size, styleNumber, counties } = product.product;
 
-    const handleClick = (id) => {
-        setProductId(id)
+    const handleClick = (id: string) => {
+        setProductId(parseInt(id))
         openModal();
     }
 
+    if (!imageUrl) return null;
+    
+    // const TestImage = styled.div`
+    //     backgroundImage: url(${imageUrl});
+    // `
+
+
     return (
-        <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
-            <img src={imageUrl} style={ imageStyles }/>
+        <ProductThumbnailContainer onClick={(id)=>handleClick(id)}>
+            <div style={{ backgroundImage: `url(${imageUrl})`}}></div>
         </ProductThumbnailContainer>
     )
 }

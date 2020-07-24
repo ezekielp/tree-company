@@ -19,17 +19,19 @@ const DefaultBackdrop = styled.div`
     z-index: 10;
 `;
 
-interface ModalProps {}
+interface ModalProps {
+    // products: ProductInfoFragment[]
+}
 
 const Modal: FC<ModalProps> = () => {
 
-    const {modalIsShowing, productId, openModal, closeModal, setProductId} = useContext(ModalContext);
-    // const chosenProduct = 
+    const {modalIsShowing, product, openModal, closeModal} = useContext(ModalContext);
+
 
     if (modalIsShowing){
         return (
             <DefaultBackdrop onClick={()=>closeModal()}>
-                <ProductModal product={chosenProduct}/>
+                <ProductModal product={product}/>
             </DefaultBackdrop>
         )
     } else {
