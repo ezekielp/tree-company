@@ -34,29 +34,16 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
     if (!imageUrl) return null;
 
-    const imageStyles: CSS.Properties = {
+    const imageStyles = {
         objectFit: 'cover',
         width: '290px',
         height: '390px'
     }
 
-    const { id , name, description, imageUrl, material, size, styleNumber, counties } = product.product;
-
-    const handleClick = (id: string) => {
-        setProductId(parseInt(id))
-        openModal();
-    }
-
-    if (!imageUrl) return null;
-    
-    // const TestImage = styled.div`
-    //     backgroundImage: url(${imageUrl});
-    // `
-
-
     return (
-        <ProductThumbnailContainer onClick={(id)=>handleClick(id)}>
-            <div style={{ backgroundImage: `url(${imageUrl})`}}></div>
+        <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
+            {/* <div style={{ backgroundImage: `url(${imageUrl})`}}></div> */}
+            <img src={imageUrl} alt="" style={ imageStyles }/>
         </ProductThumbnailContainer>
     )
 }

@@ -25,13 +25,13 @@ interface ModalProps {
 
 const Modal: FC<ModalProps> = () => {
 
-    const {modalIsShowing, product, openModal, closeModal} = useContext(ModalContext);
+    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
 
 
     if (modalIsShowing){
         return (
             <DefaultBackdrop onClick={()=>closeModal()}>
-                <ProductModal product={product}/>
+                <ProductModal />
             </DefaultBackdrop>
         )
     } else {

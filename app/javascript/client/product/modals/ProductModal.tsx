@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 import CSS from 'csstype';
@@ -18,11 +18,25 @@ const CloseModalButton = styled.button`
     height: 50px;
     cursor: pointer;
 `
+<<<<<<< HEAD
 interface ProductModalProps {}
+=======
+interface ProductModalProps {
+    // product: ProductInfoFragment
+}
+>>>>>>> load images
 
 const ProductModal: FC<ProductModalProps> = () => {
 
-    const {modalIsShowing, product, openModal, closeModal} = useContext(ModalContext);
+    const { selectedProduct, closeModal} = useContext(ModalContext);
+
+    if (!selectedProduct.imageUrl) return null;
+
+    const imageStyles = {
+        objectFit: 'cover',
+        width: '600px',
+        height: '800px'
+    }
 
     return (
         <ProductModalContainer onClick={(e) => e.stopPropagation()}>
