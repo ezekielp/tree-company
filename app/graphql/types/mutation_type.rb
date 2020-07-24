@@ -4,5 +4,6 @@ module Types
     field :create_shipping_customer, mutation: Mutations::CreateShippingCustomer
     field :create_billing_customer, mutation: Mutations::CreateBillingCustomer
     field :create_order, mutation: Mutations::CreateOrder
+    field :create_payment_intent, mutation: Mutations::CreatePaymentIntent
   end
 end

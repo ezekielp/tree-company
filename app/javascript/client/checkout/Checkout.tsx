@@ -1,8 +1,9 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation } from '../graphqlTypes';
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct } from './CheckoutContainer';
 import { STATE_OPTIONS, initialValues, validationSchema } from './utils';
@@ -17,6 +18,21 @@ gql`
 	}
 
 	${ProductInfoFragmentDoc}
+`;
+
+gql`
+    mutation CreateStripePaymentIntent($input: CreatePaymentIntentInput!) {
+        createPaymentIntent(input: $input) {
+            stripePaymentIntent {
+                id
+                amount
+                clientSecret
+                description
+                receiptEmail
+                status
+            }
+        }
+    }
 `;
 
 gql`
@@ -128,8 +144,14 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     // Comment in the line below once you can add stuff to the cart
     // if (cart.length === 0) history.push('/home');
 
+    const [createStripePaymentIntent] = useCreateStripePaymentIntentMutation();
+
+    const stripe = useStripe();
+    const stripeElements = useElements();
+    
     const [sameAddress, toggleSameAddress] = useState(false);
     const [localPickup, toggleLocalPickup] = useState(false);
+    const [stripeErrorMessage, setStripeErrorMessage] = useState<string | null>(null);
 
     const [createBillingCustomer] = useCreateBillingCustomerMutation();
     const [createShippingCustomer] = useCreateShippingCustomerMutation();
@@ -141,6 +163,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     }, [localPickup]);
 
     const taxCost: number = parseFloat((subtotal * .06).toFixed(2));
+    const totalCost: number = subtotal + (shippingCost * 100) + taxCost;
 
     const productIds: string[] = [];
     const productIdToQuantityMap = {} as { [key: string]: number };
@@ -167,7 +190,33 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 			data: CheckoutFormData,
 			formikHelpers: FormikHelpers<CheckoutFormData>
 		) => {
-            // console.log(data);
+
+        const createPaymentIntentResponse = await createStripePaymentIntent({
+            variables: {
+                input: {
+                    amount: totalCost,
+                }
+            }
+        });
+
+        const stripePaymentIntent = createPaymentIntentResponse.data?.createPaymentIntent?.stripePaymentIntent;
+        const [clientSecret, description, status] = [stripePaymentIntent?.clientSecret, stripePaymentIntent?.description, stripePaymentIntent?.status];
+
+        if (!stripe || !stripeElements) return null;
+        const cardElement = stripeElements.getElement(CardElement);
+        if (!cardElement) return null;
+
+        // const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment();
+
+        // if (stripeError) {
+        //     const errorMessage = stripeError.message
+        //         ? stripeError.message
+        //         : 'Oops! Something went wrong. Please try to submit the form again.';
+        //     setStripeErrorMessage(errorMessage);
+        // } else {
+
+        // }
+
         const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, email, taxExempt, shippingName, shippingAddress, shippingCity, shippingState, shippingZipCode, shippingPhoneNumber, attn } = data;
 
         const shippingCustomerInput = sameAddress ? {
@@ -252,138 +301,147 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
     return (
 			<>
-            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+				<Formik
+					initialValues={initialValues}
+					onSubmit={handleSubmit}
+					validationSchema={validationSchema}
+				>
 					{({ isSubmitting }) => (
 						<Form>
 							<AddressFormContainer>
-                                <AddressFormHeader>
-                                    Billing Address
-                                </AddressFormHeader>
-                                <Field
-                                    name="billingName"
-                                    label="Name"
-                                    component={FormikTextInput}
-                                    innerRef={formRefs['billing-name']}
-                                />
-                                <Field
-                                    name="billingAddress"
-                                    label="Address"
-                                    component={FormikTextInput}
-                                    innerRef={formRefs['billing-address']}
-                                />
-                                <Field
-                                    name="billingCity"
-                                    label="City"
-                                    component={FormikTextInput}
-                                    innerRef={formRefs['billing-city']}
-                                />
-                                <Field
-                                    name="billingState"
-                                    label="State"
-                                    component={FormikSelectInput}
-                                    options={STATE_OPTIONS}
-                                />
-                                <Field
-                                    name="billingZipCode"
-                                    label="Zip Code"
-                                    component={FormikZipCodeInput}
-                                    innerRef={formRefs['billing-zip-code']}
-                                />
-                                <Field
-                                    name="billingPhoneNumber"
-                                    label="Phone Number"
-                                    component={FormikPhoneNumberInput}
-                                    innerRef={formRefs['billing-phone-number']}
-                                />
-                                <Field
-                                    name="email"
-                                    label="Email"
-                                    component={FormikTextInput}
-                                    type="email"
-                                    innerRef={formRefs.email}
-                                />
-                            </AddressFormContainer>
-                            <Field
-                                name="localPickup"
-                                label="Check here if you would like to pick up the signs instead of having them shipped to you."
-                                component={FormikCheckbox}
-                                checked={localPickup}
-                                onChange={() => toggleLocalPickup(!localPickup)}
-                            />
-                            {localPickup === false && (
-                                <Field
-                                    name="sameAddress"
-                                    label="Check here to use your billing address as your shipping address."
-                                    component={FormikCheckbox}
-                                    checked={sameAddress}
-                                    onChange={() => toggleSameAddress(!sameAddress)}
-                                />
-                            )}
-                            {localPickup === false && sameAddress === false && (
-                                <AddressFormContainer>
-                                    <AddressFormHeader>
-                                        Shipping Address
-                                    </AddressFormHeader>
-                                    <Field
-                                        name="shippingName"
-                                        label="Company Name"
-                                        component={FormikTextInput}
-                                        innerRef={formRefs['shipping-name']}
-                                    />
-                                    <Field
-                                        name="shippingAddress"
-                                        label="Address"
-                                        component={FormikTextInput}
-                                        innerRef={formRefs['shipping-address']}
-                                    />
-                                    <Field
-                                        name="shippingCity"
-                                        label="City"
-                                        component={FormikTextInput}
-                                        innerRef={formRefs['shipping-city']}
-                                    />
-                                    <Field 
-                                        name="shippingState"
-                                        label="State"
-                                        component={FormikSelectInput}
-                                        options={STATE_OPTIONS}
-                                    />
-                                    <Field 
-                                        name="shippingZipCode"
-                                        label="Zip Code"
-                                        component={FormikZipCodeInput}
-                                        innerRef={formRefs['shipping-zip-code']}
-                                    />
-                                    <Field
-                                        name="shippingPhoneNumber"
-                                        label="Phone Number"
-                                        component={FormikPhoneNumberInput}
-                                        innerRef={formRefs['shipping-phone-number']}
-                                    />
-                                    <Field 
-                                        name="attn"
-                                        label="Attn"
-                                        component={FormikTextInput}
-                                        innerRef={formRefs.attn}
-                                    />
-                                </AddressFormContainer>
-                            )}
-                            <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} />
+								<AddressFormHeader>Billing Address</AddressFormHeader>
+								<Field
+									name="billingName"
+									label="Name"
+									component={FormikTextInput}
+									innerRef={formRefs["billing-name"]}
+								/>
+								<Field
+									name="billingAddress"
+									label="Address"
+									component={FormikTextInput}
+									innerRef={formRefs["billing-address"]}
+								/>
+								<Field
+									name="billingCity"
+									label="City"
+									component={FormikTextInput}
+									innerRef={formRefs["billing-city"]}
+								/>
+								<Field
+									name="billingState"
+									label="State"
+									component={FormikSelectInput}
+									options={STATE_OPTIONS}
+								/>
+								<Field
+									name="billingZipCode"
+									label="Zip Code"
+									component={FormikZipCodeInput}
+									innerRef={formRefs["billing-zip-code"]}
+								/>
+								<Field
+									name="billingPhoneNumber"
+									label="Phone Number"
+									component={FormikPhoneNumberInput}
+									innerRef={formRefs["billing-phone-number"]}
+								/>
+								<Field
+									name="email"
+									label="Email"
+									component={FormikTextInput}
+									type="email"
+									innerRef={formRefs.email}
+								/>
+							</AddressFormContainer>
+							<Field
+								name="localPickup"
+								label="Check here if you would like to pick up the signs instead of having them shipped to you."
+								component={FormikCheckbox}
+								checked={localPickup}
+								onChange={() => toggleLocalPickup(!localPickup)}
+							/>
+							{localPickup === false && (
+								<Field
+									name="sameAddress"
+									label="Check here to use your billing address as your shipping address."
+									component={FormikCheckbox}
+									checked={sameAddress}
+									onChange={() => toggleSameAddress(!sameAddress)}
+								/>
+							)}
+							{localPickup === false && sameAddress === false && (
+								<AddressFormContainer>
+									<AddressFormHeader>Shipping Address</AddressFormHeader>
+									<Field
+										name="shippingName"
+										label="Company Name"
+										component={FormikTextInput}
+										innerRef={formRefs["shipping-name"]}
+									/>
+									<Field
+										name="shippingAddress"
+										label="Address"
+										component={FormikTextInput}
+										innerRef={formRefs["shipping-address"]}
+									/>
+									<Field
+										name="shippingCity"
+										label="City"
+										component={FormikTextInput}
+										innerRef={formRefs["shipping-city"]}
+									/>
+									<Field
+										name="shippingState"
+										label="State"
+										component={FormikSelectInput}
+										options={STATE_OPTIONS}
+									/>
+									<Field
+										name="shippingZipCode"
+										label="Zip Code"
+										component={FormikZipCodeInput}
+										innerRef={formRefs["shipping-zip-code"]}
+									/>
+									<Field
+										name="shippingPhoneNumber"
+										label="Phone Number"
+										component={FormikPhoneNumberInput}
+										innerRef={formRefs["shipping-phone-number"]}
+									/>
+									<Field
+										name="attn"
+										label="Attn"
+										component={FormikTextInput}
+										innerRef={formRefs.attn}
+									/>
+								</AddressFormContainer>
+							)}
+							<CheckoutProducts
+								checkoutItems={checkoutItems}
+								unitPrice={unitPrice}
+							/>
 							<PriceContainer>
-                                <div>Tax</div>
-                                <div>${taxCost}</div>
-                            </PriceContainer>
+								<div>Tax</div>
+								<div>${taxCost}</div>
+							</PriceContainer>
 							<PriceContainer>
-                                <div>Shipping</div>
-                                <div>${shippingCost}.00</div>
-                            </PriceContainer>
+								<div>Shipping</div>
+								<div>${shippingCost}.00</div>
+							</PriceContainer>
 							<PriceContainer>
-                                <div>Total</div>
-                                <div>${subtotal + (shippingCost * 100) + taxCost}</div>
-                            </PriceContainer>
-                            <button type="submit" disabled={isSubmitting}>
-                                Place order
-                            </button>
+								<div>Total</div>
+								<div>${totalCost}</div>
+							</PriceContainer>
+							<CardElement
+								onFocus={() => setStripeErrorMessage(null)}
+								onChange={(e) =>
+									e.error && setStripeErrorMessage(e.error.message)
+								}
+							/>
+							<button type="submit" disabled={isSubmitting}>
+								Place order
+							</button>
 						</Form>
 					)}
 				</Formik>
