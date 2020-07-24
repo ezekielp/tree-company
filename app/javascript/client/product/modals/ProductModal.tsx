@@ -18,9 +18,7 @@ const CloseModalButton = styled.button`
     height: 50px;
     cursor: pointer;
 `
-interface ProductModalProps {
-    // product: ProductInfoFragment
-}
+interface ProductModalProps {}
 
 const ProductModal: FC<ProductModalProps> = () => {
 
