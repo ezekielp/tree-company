@@ -2,7 +2,6 @@ import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 import { ProductInfoFragment } from 'client/graphqlTypes';
-import CSS from 'csstype';
 
 const ProductThumbnailContainer = styled.div`
     display: flex;
@@ -40,6 +39,10 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
         width: '290px',
         height: '390px'
     }
+
+    const { imageUrl? } = product.product;
+    
+    debugger
 
     return (
         <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
