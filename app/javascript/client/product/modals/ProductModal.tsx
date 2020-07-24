@@ -23,7 +23,7 @@ interface ProductModalProps {
 
 const ProductModal: FC<ProductModalProps> = () => {
 
-    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
+    const {modalIsShowing, product, openModal, closeModal} = useContext(ModalContext);
 
     return (
         <ProductModalContainer onClick={(e) => e.stopPropagation()}>
