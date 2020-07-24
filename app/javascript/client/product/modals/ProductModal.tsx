@@ -18,13 +18,8 @@ const CloseModalButton = styled.button`
     height: 50px;
     cursor: pointer;
 `
-<<<<<<< HEAD
+
 interface ProductModalProps {}
-=======
-interface ProductModalProps {
-    // product: ProductInfoFragment
-}
->>>>>>> load images
 
 const ProductModal: FC<ProductModalProps> = () => {
 

@@ -2,7 +2,6 @@ import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import ProductModal from '../product/modals/ProductModal';
 import { ModalContext } from '../home/HomePage';
-import { ProductInfoFragment } from 'client/graphqlTypes';
 
 const DefaultBackdrop = styled.div`
     display: flex;
@@ -19,14 +18,11 @@ const DefaultBackdrop = styled.div`
     z-index: 10;
 `;
 
-interface ModalProps {
-    // products: ProductInfoFragment[]
-}
+interface ModalProps {}
 
 const Modal: FC<ModalProps> = () => {
 
     const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
-
 
     if (modalIsShowing){
         return (

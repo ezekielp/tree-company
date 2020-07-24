@@ -43,7 +43,6 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
     return (
         <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
-            {/* <div style={{ backgroundImage: `url(${imageUrl})`}}></div> */}
             <img src={imageUrl} style={ imageStyles }/>
         </ProductThumbnailContainer>
     )
