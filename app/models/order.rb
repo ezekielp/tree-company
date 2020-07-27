@@ -30,8 +30,8 @@ class Order < ApplicationRecord
         end
     end
 
-    def price_in_dollars
-        unit_price / 100
+    def price_in_dollars(price)
+        price / 100
     end
 
     def subtotal
