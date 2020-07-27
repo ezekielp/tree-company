@@ -19,7 +19,7 @@ module Types
         private
 
         def order_quantities
-            AssociationLoader.for(OrderQuantity, :order_id).load(object.id)
+            AssociationLoader.for(Order, :order_quantities).load(object)
         end
     end
 end

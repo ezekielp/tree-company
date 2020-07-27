@@ -25,6 +25,9 @@ gem 'turbolinks', '~> 5'
 gem 'validates_zipcode'
 gem 'phonelib'
 
+# Stripe
+gem 'stripe'
+
 # AWS S3 SDK
 gem "aws-sdk-s3"
 

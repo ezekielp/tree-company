@@ -21,7 +21,7 @@ module Mutations
         field :order, Types::OrderType, null: false
 
         def resolve(input:)
-            new_order = Order.create(
+            new_order = Order.create!(
                 billing_customer_id: input.billing_customer_id,
                 shipping_customer_id: input.shipping_customer_id,
                 shipping_cost: input.shipping_cost,
@@ -30,7 +30,7 @@ module Mutations
             )
 
             input.cart.each do |item|
-                OrderQuantity.create(
+                OrderQuantity.create!(
                     product_id: item.product_id,
                     order_id: new_order.id,
                     quantity: item.quantity

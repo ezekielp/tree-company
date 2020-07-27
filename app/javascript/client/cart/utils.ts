@@ -1,11 +1,11 @@
 export const determinePrice = (quantity: number): number => {
     if (quantity < 10) {
-        return 7;
+        return 700;
     } else if (quantity < 50) {
-        return 5;
+        return 500;
     } else if (quantity < 100) {
-        return 4;
+        return 400;
     } else {
-        return 3;
+        return 300;
     }
 };
