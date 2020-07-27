@@ -24,6 +24,7 @@
 		"apollo-link-error": "^1.1.13",
 		"apollo-link-http": "^1.5.17",
 		"babel-plugin-transform-react-remove-prop-types": "^0.4.24",
+		"dotenv-webpack": "^2.0.0",
 		"eslint-plugin-react": "^7.20.3",
 		"formik": "^2.1.5",
 		"graphql": "^15.3.0",

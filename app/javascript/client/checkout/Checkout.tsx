@@ -180,6 +180,21 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     });
     const productData = productDataQueryResult?.productsById;
 
+    const formRefs = {
+			"billing-name": useRef(),
+			"billing-address": useRef(),
+			"billing-city": useRef(),
+			"billing-zip-code": useRef(),
+			"billing-phone-number": useRef(),
+			email: useRef(),
+			"shipping-name": useRef(),
+			"shipping-address": useRef(),
+			"shipping-city": useRef(),
+			"shipping-zip-code": useRef(),
+			"shipping-phone-number": useRef(),
+			attn: useRef(),
+		} as { [key: string]: React.RefObject<HTMLInputElement> };
+
     if (!productData) return null;
     const checkoutItems = productData.map(product => ({
         product,
@@ -191,6 +206,25 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 			formikHelpers: FormikHelpers<CheckoutFormData>
 		) => {
 
+        const {
+					billingName,
+					billingAddress,
+					billingCity,
+					billingState,
+					billingZipCode,
+					billingPhoneNumber,
+					email,
+					taxExempt,
+					shippingName,
+					shippingAddress,
+					shippingCity,
+					shippingState,
+					shippingZipCode,
+					shippingPhoneNumber,
+					attn
+                }
+        = data;
+
         const createPaymentIntentResponse = await createStripePaymentIntent({
             variables: {
                 input: {
@@ -201,23 +235,33 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         const stripePaymentIntent = createPaymentIntentResponse.data?.createPaymentIntent?.stripePaymentIntent;
         const [clientSecret, description, status] = [stripePaymentIntent?.clientSecret, stripePaymentIntent?.description, stripePaymentIntent?.status];
+        if (!clientSecret) return null;
 
         if (!stripe || !stripeElements) return null;
         const cardElement = stripeElements.getElement(CardElement);
         if (!cardElement) return null;
 
-        // const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment();
+        const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: cardElement,
+                billing_details: {
+                    name: billingName,
+                    email
+                }
+            }
+        });
 
-        // if (stripeError) {
-        //     const errorMessage = stripeError.message
-        //         ? stripeError.message
-        //         : 'Oops! Something went wrong. Please try to submit the form again.';
-        //     setStripeErrorMessage(errorMessage);
-        // } else {
-
-        // }
-
-        const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, email, taxExempt, shippingName, shippingAddress, shippingCity, shippingState, shippingZipCode, shippingPhoneNumber, attn } = data;
+        if (stripeError) {
+            const errorMessage = stripeError.message
+                ? stripeError.message
+                : 'Oops! Something went wrong. Please try to submit the form again.';
+            setStripeErrorMessage(errorMessage);
+            return;
+        } else if (paymentIntent?.status !== 'succeeded') {
+            // TO DO: See about logging this in a more sustainable and thorough way, whether it succeeded or not
+            console.log('paymentIntent:', paymentIntent);
+            return;
+        }
 
         const shippingCustomerInput = sameAddress ? {
             companyName: billingName,
@@ -259,8 +303,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
         // TO DO: Handle potential errors from above API calls
         // ALSO RE ERROR-HANDLING: Need to figure out how to pass down errors from things like the zipcode validaton gem
 
-        // I think you should call the Stripe API here, after you've created the BillingCustomer and ShippingCustomer but before you create an order, so that you don't bother creating an order before you know the charge will go through
-
         const billingCustomerId = createBillingCustomerResponse.data?.createBillingCustomer?.billingCustomer.id;
         const shippingCustomerId = createShippingCustomerResponse.data?.createShippingCustomer?.shippingCustomer.id;
 
@@ -283,21 +325,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         console.log("Success!");
     };
-
-    const formRefs = {
-			"billing-name": useRef(),
-			"billing-address": useRef(),
-			"billing-city": useRef(),
-			"billing-zip-code": useRef(),
-			"billing-phone-number": useRef(),
-			email: useRef(),
-			"shipping-name": useRef(),
-			"shipping-address": useRef(),
-			"shipping-city": useRef(),
-			"shipping-zip-code": useRef(),
-			"shipping-phone-number": useRef(),
-			attn: useRef(),
-		} as { [key: string]: React.RefObject<HTMLInputElement> };
 
     return (
 			<>
