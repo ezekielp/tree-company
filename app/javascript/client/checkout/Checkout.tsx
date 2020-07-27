@@ -313,8 +313,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                 input: {
                     billingCustomerId: parseInt(billingCustomerId),
                     shippingCustomerId: parseInt(shippingCustomerId),
-                    shippingCost: shippingCost * 100,
-                    taxCost: taxCost * 100,
+                    shippingCost,
+                    taxCost,
                     unitPrice,
                     cart
                 }
