@@ -6,7 +6,7 @@ import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberIn
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct } from './CheckoutContainer';
-import { STATE_OPTIONS, initialValues, validationSchema } from './utils';
+import { STATE_OPTIONS, displayPrice, initialValues, validationSchema } from './utils';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -157,13 +157,13 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     const [createShippingCustomer] = useCreateShippingCustomerMutation();
     const [createOrder] = useCreateOrderMutation();
 
-    let shippingCost: number = localPickup ? 0 : 10;
+    let shippingCost: number = localPickup ? 0 : 1000;
     useEffect(() => {
-        shippingCost = localPickup ? 0 : 10;
+        shippingCost = localPickup ? 0 : 1000;
     }, [localPickup]);
 
-    const taxCost: number = parseFloat((subtotal * .06).toFixed(2));
-    const totalCost: number = subtotal + (shippingCost * 100) + taxCost;
+    const taxCost: number = parseFloat((subtotal * .06).toFixed(4));
+    const totalCost: number = subtotal + shippingCost + taxCost;
 
     const productIds: string[] = [];
     const productIdToQuantityMap = {} as { [key: string]: number };
@@ -450,15 +450,15 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 							/>
 							<PriceContainer>
 								<div>Tax</div>
-								<div>${taxCost}</div>
+								<div>${displayPrice(taxCost)}</div>
 							</PriceContainer>
 							<PriceContainer>
 								<div>Shipping</div>
-								<div>${shippingCost}.00</div>
+								<div>${displayPrice(shippingCost)}</div>
 							</PriceContainer>
 							<PriceContainer>
 								<div>Total</div>
-								<div>${totalCost}</div>
+								<div>${displayPrice(totalCost)}</div>
 							</PriceContainer>
 							<CardElement
 								onFocus={() => setStripeErrorMessage(null)}

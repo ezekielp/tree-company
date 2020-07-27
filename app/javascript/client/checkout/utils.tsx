@@ -1,5 +1,9 @@
 import * as yup from 'yup';
 
+export const displayPrice = (price: number): string => {
+    return (price / 100).toFixed(2);
+};
+
 export const validationSchema = yup.object({
     billingName: yup
         .string()

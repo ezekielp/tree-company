@@ -7,7 +7,8 @@ import { loadStripe } from '@stripe/stripe-js';
 import { render } from 'react-dom';
 import { client } from './client';
 
-const stripeApiKey = process.env.STRIPE_PUBLISHABLE_API_KEY;
+// const stripeApiKey = process.env.STRIPE_PUBLISHABLE_API_KEY;
+const stripeApiKey = process.env.STRIPE_PUBLISHABLE_API_KEY_TEST;
 const stripePromise = stripeApiKey ? loadStripe(stripeApiKey) : null;
 
 const RootApp = () => {
