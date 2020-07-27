@@ -113,6 +113,11 @@ const AddressFormHeader = styled.div`
     font-size: 24px;
 `;
 
+const StyledErrorMessage = styled.div`
+    color: red;
+    margin-top: 15px;
+`;
+
 interface CheckoutProps extends RouteComponentProps {
     unitPrice: number;
     subtotal: number;
@@ -321,9 +326,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
             }
         });
 
-        console.log(createOrderResponse);
-
-        console.log("Success!");
+        // TO DO: Pass the createOrderResponse.data on to a confirmation component and display it
     };
 
     return (
@@ -339,31 +342,31 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 								<AddressFormHeader>Billing Address</AddressFormHeader>
 								<Field
 									name="billingName"
-									label="Name"
+									label="Name*"
 									component={FormikTextInput}
 									innerRef={formRefs["billing-name"]}
 								/>
 								<Field
 									name="billingAddress"
-									label="Address"
+									label="Address*"
 									component={FormikTextInput}
 									innerRef={formRefs["billing-address"]}
 								/>
 								<Field
 									name="billingCity"
-									label="City"
+									label="City*"
 									component={FormikTextInput}
 									innerRef={formRefs["billing-city"]}
 								/>
 								<Field
 									name="billingState"
-									label="State"
+									label="State*"
 									component={FormikSelectInput}
 									options={STATE_OPTIONS}
 								/>
 								<Field
 									name="billingZipCode"
-									label="Zip Code"
+									label="Zip Code*"
 									component={FormikZipCodeInput}
 									innerRef={formRefs["billing-zip-code"]}
 								/>
@@ -375,7 +378,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 								/>
 								<Field
 									name="email"
-									label="Email"
+									label="Email*"
 									component={FormikTextInput}
 									type="email"
 									innerRef={formRefs.email}
@@ -466,12 +469,16 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 									e.error && setStripeErrorMessage(e.error.message)
 								}
 							/>
+							{stripeErrorMessage && (
+								<StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
+							)}
 							<button type="submit" disabled={isSubmitting}>
 								Place order
 							</button>
 						</Form>
 					)}
 				</Formik>
+                <div>*Required</div>
 			</>
 		);
 }

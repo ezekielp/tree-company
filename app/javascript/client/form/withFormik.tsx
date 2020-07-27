@@ -14,7 +14,7 @@ const Label = styled.div`
 const InputWrapper = styled.div`
 `;
 
-const StyledErrorMessage = styled(ErrorMessage)`
+export const StyledErrorMessage = styled(ErrorMessage)`
     color: red;
     margin-top: 15px;
 `;

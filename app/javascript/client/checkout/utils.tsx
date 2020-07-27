@@ -5,79 +5,90 @@ export const displayPrice = (price: number): string => {
 };
 
 export const validationSchema = yup.object({
-    billingName: yup
-        .string()
-        .required()
-        .label('Name'),
-    billingAddress: yup
-        .string()
-        .required()
-        .label('Address'),
-    billingCity: yup
-        .string()
-        .required()
-        .label('City'),
-    billingZipCode: yup
-        .string()
-        .required()
-        .label('Zip code')
-        .nullable()
-        .test({
-            name: 'isAZipCode1',
-            test: (v: string | null) => {
-                if (!v) {
-                    return false;
-                } else {
-                    return v.length === 5 || v.length === 9;
-                };
-            },
-            message: 'Please enter either a five-digit or nine-digit zip code'
-        }),
-    email: yup
-        .string()
-        .required()
-        .email()
-        .label('Email'),
-    taxExempt: yup.boolean(),
-    sameAddress: yup.boolean(),
-    shippingName: yup
-        .string()
-        .when('sameAddress', {
-            is: false,
-            then: yup.string().required('Shipping name is required if your billing address and shipping address are not the same. Please check the box above if they are the same.')
-        }),
-    shippingAddress: yup
-        .string()
-        .when('sameAddress', {
-            is: false,
-            then: yup.string().required().label('Address')
-        }),
-    shippingCity: yup
-        .string()
-        .when('sameAddress', {
-            is: false,
-            then: yup.string().required().label('City')
-        }),
-    shippingZipCode: yup
-        .string()
-        .when('sameAddress', {
-            is: false,
-            then: yup.string().required().label('Zip code').nullable()
-                .test({
-                    name: 'isAZipCode1',
-                    test: (v: string | null) => {
-                        if (!v) {
-                            return false;
-                        } else {
-                            return v.length === 5 || v.length === 9;
-                        };
-                    },
-                    message: 'Please enter either a five-digit or nine-digit zip code'
-                }),
-        }),
-    attn: yup
-        .string()
-});
+					billingName: yup.string().required().label("Name"),
+					billingAddress: yup.string().required().label("Address"),
+					billingCity: yup.string().required().label("City"),
+					billingZipCode: yup
+						.string()
+						.required()
+						.label("Zip code")
+						.nullable()
+						.test({
+							name: "isAZipCode1",
+							test: (v: string | null) => {
+								if (!v) {
+									return false;
+								} else {
+									return v.length === 5 || v.length === 9;
+								}
+							},
+							message:
+								"Please enter either a five-digit or nine-digit zip code",
+						}),
+					billingPhoneNumber: yup
+						.string()
+						.length(
+							10,
+							"Please enter a 10-digit US phone number, or leave blank"
+						)
+						.nullable(),
+					email: yup.string().required().email().label("Email"),
+					taxExempt: yup.boolean(),
+					sameAddress: yup.boolean(),
+					shippingName: yup.string().when("sameAddress", {
+						is: false,
+						then: yup
+							.string()
+							.required(
+								"Shipping name is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
+							),
+					}),
+					shippingAddress: yup.string().when("sameAddress", {
+						is: false,
+						then: yup
+							.string()
+							.required(
+								"Shipping address is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
+							),
+					}),
+					shippingCity: yup.string().when("sameAddress", {
+						is: false,
+						then: yup
+							.string()
+							.required(
+								"Shipping city is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
+							),
+					}),
+					shippingZipCode: yup.string().when("sameAddress", {
+						is: false,
+						then: yup
+							.string()
+							.required(
+								"Shipping zip code is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
+							)
+							.nullable()
+							.test({
+								name: "isAZipCode1",
+								test: (v: string | null) => {
+									if (!v) {
+										return false;
+									} else {
+										return v.length === 5 || v.length === 9;
+									}
+								},
+								message:
+									"Please enter either a five-digit or nine-digit zip code",
+							}),
+					}),
+					shippingPhoneNumber: yup
+						.string()
+						.length(
+							10,
+							"Please enter a 10-digit US phone number, or leave blank"
+						)
+						.nullable(),
+					attn: yup.string(),
+				});
 
 export const initialValues = {
     billingName: '',
