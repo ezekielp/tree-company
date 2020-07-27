@@ -1,6 +1,8 @@
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
+import { ProductInfoFragment } from 'client/graphqlTypes';
+import CSS from 'csstype';
 
 const ProductThumbnailContainer = styled.div`
     display: flex;
@@ -13,17 +15,35 @@ const ProductThumbnailContainer = styled.div`
     border-radius: 10px;
     color: white;
     cursor: pointer;
+    margin-top: 10px;
 `;
 
-interface ProductThumbnailProps {}
+interface ProductThumbnailProps {
+    product: ProductInfoFragment;
+}
 
-const ProductThumbnail: FC<ProductThumbnailProps> = () => {
+const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
-    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
+    const {modalIsShowing, selectedProduct, openModal, closeModal, setSelectedProduct} = useContext(ModalContext);
+
+    const { id , name, description, imageUrl, material, size, styleNumber, counties } = product.product;
+
+    const handleClick = (product: ProductInfoFragment) => {
+        setSelectedProduct(product)
+        openModal();
+    }
+
+    if (!imageUrl) return null;
+
+    const imageStyles: CSS.Properties = {
+        objectFit: 'cover',
+        width: '290px',
+        height: '390px'
+    }
 
     return (
-        <ProductThumbnailContainer onClick={()=>openModal()}>
-            <p>Thumbnail Goes here</p>
+        <ProductThumbnailContainer onClick={()=>handleClick(product.product)}>
+            <img src={imageUrl} style={ imageStyles }/>
         </ProductThumbnailContainer>
     )
 }

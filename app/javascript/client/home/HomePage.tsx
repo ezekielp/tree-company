@@ -7,13 +7,17 @@ import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 interface ModalContextState {
     openModal: () => void;
     closeModal: () => void;
+    setSelectedProduct: (product: ProductInfoFragment) => void;
     modalIsShowing: boolean;
+    selectedProduct: ProductInfoFragment;
 }
 
 export const ModalContext = createContext<ModalContextState>({
     openModal: () => null,
     closeModal: () => null,
-    modalIsShowing: false
+    setSelectedProduct: (product)=>null,
+    modalIsShowing: false,
+    selectedProduct: { name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""} 
 });
 
 const Header = styled.h1`
@@ -23,10 +27,13 @@ const Header = styled.h1`
     width: 100%;
 `;
 
-const ThumbnailIndexWrapper = styled.div`
+const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
     width: 100%;
+    height: 100vh;
+    flex-wrap: wrap;
+    padding: 20px;
 `
 
 interface HomePageProps {
@@ -36,20 +43,25 @@ interface HomePageProps {
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const [modalIsShowing, setModalIsShowing] = useState(false);
+    const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""} );
+    
+    const ProductThumbnails = Object.entries(products).map((product)=>(
+        <ProductThumbnail key={product[0]} product={product[1]} />
+    ))
 
     return (
         <ModalContext.Provider value={{
             openModal: ()=>setModalIsShowing(true),
             closeModal: ()=>setModalIsShowing(false),
-            modalIsShowing: modalIsShowing
+            setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
+            modalIsShowing: modalIsShowing,
+            selectedProduct: selectedProduct
         }}>
             <Modal />
             <Header>WELCOME TO THE TREE COMPANY!</Header>
-            <ThumbnailIndexWrapper>
-                <ProductThumbnail />
-                <ProductThumbnail />
-                <ProductThumbnail />
-            </ThumbnailIndexWrapper>
+            <ThumbnailIndexContainer>
+                {ProductThumbnails}
+            </ThumbnailIndexContainer>
         </ModalContext.Provider>
     )
 }

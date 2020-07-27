@@ -1,12 +1,11 @@
-import React, { useContext } from 'react';
+import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
+import CSS from 'csstype';
 
 const ProductModalContainer = styled.div`
     display: flex;
     flex-direction: column;
-    grid-column: 2/3;
-    grid-row: 2/3;
     justify-content: center;
     align-items: center;
     background: white;
@@ -19,14 +18,29 @@ const CloseModalButton = styled.button`
     height: 50px;
     cursor: pointer;
 `
+interface ProductModalProps {}
 
-const ProductModal = () => {
+const ProductModal: FC<ProductModalProps> = () => {
 
-    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
+    const { selectedProduct, closeModal} = useContext(ModalContext);
+
+    if (!selectedProduct.imageUrl) return null;
+
+    const imageStyles: CSS.Properties = {
+        objectFit: 'cover',
+        width: '300px',
+        height: '400px'
+    }
+
+    // TODO add to cart/quantity
 
     return (
         <ProductModalContainer onClick={(e) => e.stopPropagation()}>
-            <p>Product Modal Goes here</p>
+            <div>{selectedProduct.name}</div>
+            <div>{selectedProduct.material}</div>
+            <div>{selectedProduct.description}</div>
+            <div>{selectedProduct.size}</div>
+            <img src={selectedProduct.imageUrl} alt="" style={imageStyles}/>
             <CloseModalButton onClick={()=>closeModal()}>Close</CloseModalButton>
         </ProductModalContainer>
     )
