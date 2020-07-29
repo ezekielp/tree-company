@@ -7,9 +7,13 @@ const AddToCartButton = styled.button`
 `
 
 const CloseModalButton = styled.button`
-    width: 100px;
-    height: 50px;
+    width: 20px;
+    height: 20px;
     cursor: pointer;
+    background: none;
+    border: 1px solid black;
+    border-radius: 1rem;
+    font-weight: bold;
 `
 
 const InputQuantity = styled.input`
@@ -28,9 +32,10 @@ const ProductImageContainer = styled.img`
 `;
 
 const ProductModalContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: center; */
+    display: grid;
     align-items: center;
     background: white;
     border-radius: 10px;
@@ -50,10 +55,9 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     if (!selectedProduct.imageUrl) return null;
 
-    // TODO add to cart/quantity
-
     return (
         <ProductModalContainer onClick={(e) => e.stopPropagation()}>
+            <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
             <ProductName>{selectedProduct.name}</ProductName>
             <ProductInformation>
                 <span>Material: {selectedProduct.material}</span>
@@ -61,7 +65,7 @@ const ProductModal: FC<ProductModalProps> = () => {
                 {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
             </ProductInformation>
             <ProductImageContainer src={selectedProduct.imageUrl} />
-            <CloseModalButton onClick={()=>closeModal()}>Close</CloseModalButton>
+            
         </ProductModalContainer>
     )
 }
