@@ -1,6 +1,7 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
+import { setTimeout } from 'timers';
 
 const AddToCartButton = styled.button`
 
@@ -14,6 +15,14 @@ const CloseModalButton = styled.button`
     border: 1px solid black;
     border-radius: 1rem;
     font-weight: bold;
+`
+
+const DecreaseQuantityButton = styled.button`
+
+`
+
+const IncreaseQuantityButton = styled.button`
+
 `
 
 const InputQuantity = styled.input`
@@ -52,6 +61,19 @@ interface ProductModalProps {}
 const ProductModal: FC<ProductModalProps> = () => {
 
     const { selectedProduct, closeModal} = useContext(ModalContext);
+    const [productQuantity, setProductQuantity] = useState(1);
+    const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
+
+    useEffect( ()=> {
+        if (inputRef.current) inputRef.current.value=productQuantity.toString();
+    });
+
+    const handleChange = (change: number) => {
+        if ((productQuantity == 1 && change == 1) || (productQuantity > 1)){
+            setProductQuantity(productQuantity + change);
+            // if (inputRef.current) inputRef.current.value=productQuantity.toString();
+        };
+    };
 
     if (!selectedProduct.imageUrl) return null;
 
@@ -65,7 +87,10 @@ const ProductModal: FC<ProductModalProps> = () => {
                 {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
             </ProductInformation>
             <ProductImageContainer src={selectedProduct.imageUrl} />
-            
+            <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton>
+            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef}/>
+            <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton>
+            <AddToCartButton>Add to Cart</AddToCartButton>
         </ProductModalContainer>
     )
 }
