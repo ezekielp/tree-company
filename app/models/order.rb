@@ -19,4 +19,26 @@ class Order < ApplicationRecord
     belongs_to :billing_customer
     has_many :order_quantities
     has_many :products, through: :order_quantities
+
+    def order_items
+        order_products = self.products
+        self.order_quantities.map do |oq|
+            {
+                product: order_products.find { |p| p.id == oq.product_id },
+                quantity: oq.quantity
+            }
+        end
+    end
+
+    def price_in_dollars(price)
+        price / 100
+    end
+
+    def subtotal
+        order_quantities.sum(:quantity) * self.unit_price
+    end
+
+    def total_cost
+        self.subtotal + self.tax_cost + self.shipping_cost
+    end
 end

@@ -195,6 +195,7 @@ GEM
       execjs
       railties (>= 3.2)
       tilt
+    redis (4.2.1)
     regexp_parser (1.7.1)
     rspec-core (3.9.2)
       rspec-support (~> 3.9.3)
@@ -227,6 +228,10 @@ GEM
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
+    sidekiq (6.1.1)
+      connection_pool (>= 2.2.2)
+      rack (~> 2.0)
+      redis (>= 4.2.0)
     spring (2.1.0)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -293,6 +298,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (>= 6)
   selenium-webdriver
+  sidekiq
   spring
   spring-watcher-listen (~> 2.0.0)
   stripe

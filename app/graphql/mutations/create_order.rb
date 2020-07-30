@@ -37,6 +37,8 @@ module Mutations
                 )
             end
 
+            OrderMailer.with(order: new_order).new_order_email.deliver_later
+
             { order: new_order }
         end
     end
