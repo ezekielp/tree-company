@@ -1,4 +1,5 @@
 import React, { FC, useContext, useState, useRef, useEffect } from 'react';
+import { ProductInfoFragment, useUpdateCartMutation } from '../../graphqlTypes';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 
@@ -70,29 +71,35 @@ const ProductModal: FC<ProductModalProps> = () => {
     const handleChange = (change: number) => {
         if (change > 1) {
             setProductQuantity(change);
-        };
+        }
 
-        if ((productQuantity == 1 && change == 1) || (productQuantity > 1)){
+        else if ((productQuantity == 1 && change == 1) || (productQuantity > 1)){
             setProductQuantity(productQuantity + change);
         };
     };
 
+    const handleSubmit = () => {
+        console.log("added " + productQuantity + " to cart");
+        closeModal();
+    };
+
     if (!selectedProduct.imageUrl) return null;
+
 
     return (
         <ProductModalContainer onClick={(e) => e.stopPropagation()}>
             <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
             <ProductName>{selectedProduct.name}</ProductName>
+            <ProductImageContainer src={selectedProduct.imageUrl} />
             <ProductInformation>
                 <span>Material: {selectedProduct.material}</span>
                 <span>Size: {selectedProduct.size}</span>
                 {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
             </ProductInformation>
-            <ProductImageContainer src={selectedProduct.imageUrl} />
             <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton>
-            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onChange={(e)=>handleChange(e.current.value)}/>
+            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onBlur={()=>handleChange(parseInt(inputRef.current.value))}/>
             <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton>
-            <AddToCartButton>Add to Cart</AddToCartButton>
+            <AddToCartButton onClick={()=>handleSubmit()}>Add to Cart</AddToCartButton>
         </ProductModalContainer>
     )
 }

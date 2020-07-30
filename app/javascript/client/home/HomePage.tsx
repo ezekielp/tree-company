@@ -31,9 +31,9 @@ const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     flex-wrap: wrap;
-    padding: 20px;
+    /* padding: 20px; */
 `
 
 interface HomePageProps {
