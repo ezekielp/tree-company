@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { BillingCustomerInfoFragment, ShippingCustomerInfoFragment } from '../graphqlTypes';
 import { CheckoutProducts, CheckoutItem } from '../checkout/CheckoutProducts';
 import styled from 'styled-components';
@@ -28,7 +29,8 @@ interface OrderConfirmationPageProps {
     totalCost: number;
 }
 
-export const OrderConfirmationPage: FC<OrderConfirmationPageProps> = ({ billingCustomer, shippingCustomer, checkoutItems, unitPrice, subtotal, shippingCost, taxCost, totalCost }) => {
+export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirmationPageProps>> = ({ location }) => {
+    const { billingCustomer, shippingCustomer, checkoutItems, unitPrice, subtotal, shippingCost, taxCost, totalCost } = location.state;
     if (!billingCustomer) {
         return null;
     };

@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { Switch, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
@@ -190,7 +190,7 @@ interface CheckoutFormData {
     shippingCost?: number;
 }
 
-const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
+const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, cart, subtotal }) => {
 
     // Comment in the line below once you can add stuff to the cart
     // if (cart.length === 0) history.push('/home');
@@ -361,7 +361,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         if (!billingCustomerId || ! shippingCustomerId) return;
 
-        const createOrderResponse = createOrder({
+        const createOrderResponse = await createOrder({
             variables: {
                 input: {
                     billingCustomerId: parseInt(billingCustomerId),
@@ -374,7 +374,24 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
             }
         });
 
-        // TO DO: Pass the createOrderResponse.data on to a confirmation component and display it
+        if (!createOrderResponse.errors) {
+            history.push({
+                pathname: '/order-confirmation',
+                state: { 
+                    billingCustomer: billingCustomerInput,
+                    shippingCustomer: shippingCustomerInput,
+                    checkoutItems,
+                    unitPrice,
+                    subtotal,
+                    shippingCost,
+                    taxCost,
+                    totalCost
+                }
+            });
+        } else {
+            return;
+            // TO DO: On error, redirect the user to a page with Jim's contact details, along with a link to the trusty old printable order form
+        }
     };
 
     return (

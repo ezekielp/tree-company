@@ -3,15 +3,17 @@ import { Redirect, Route, RouteComponentProps, RouteProps, Switch, withRouter } 
 import { HomeContainer } from './home/HomeContainer';
 import { CartContainer } from './cart/CartContainer';
 import { CheckoutContainer } from './checkout/CheckoutContainer';
+import { OrderConfirmationPage } from './order_confirmation/OrderConfirmationPage';
 
 interface InternalAppContainerProps extends RouteComponentProps {}
 
-const InternalAppContainer: SFC<InternalAppContainerProps> = props => {
+const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
     return (
 			<Switch>
 				<Route path="/home" component={HomeContainer} />
 				<Route path="/cart" component={CartContainer} />
 				<Route path="/checkout" component={CheckoutContainer} />
+				<Route path="/order-confirmation" component={OrderConfirmationPage} />
 				<Route path="*">
 					<Redirect to="/home" />
 				</Route>
