@@ -1,7 +1,6 @@
 import React, { FC, useContext, useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
-import { setTimeout } from 'timers';
 
 const AddToCartButton = styled.button`
 
@@ -69,9 +68,12 @@ const ProductModal: FC<ProductModalProps> = () => {
     });
 
     const handleChange = (change: number) => {
+        if (change > 1) {
+            setProductQuantity(change);
+        };
+
         if ((productQuantity == 1 && change == 1) || (productQuantity > 1)){
             setProductQuantity(productQuantity + change);
-            // if (inputRef.current) inputRef.current.value=productQuantity.toString();
         };
     };
 
@@ -88,7 +90,7 @@ const ProductModal: FC<ProductModalProps> = () => {
             </ProductInformation>
             <ProductImageContainer src={selectedProduct.imageUrl} />
             <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton>
-            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef}/>
+            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onChange={(e)=>handleChange(e.current.value)}/>
             <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton>
             <AddToCartButton>Add to Cart</AddToCartButton>
         </ProductModalContainer>
