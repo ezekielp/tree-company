@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation } from '../graphqlTypes';
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -40,17 +40,25 @@ gql`
     mutation CreateBillingCustomer($input: CreateBillingCustomerInput!) {
         createBillingCustomer(input: $input) {
             billingCustomer {
-                id
-                name
-                address
-                city
-                state
-                email
-                zipCode
-                phoneNumber
-                taxExempt
+                ...BillingCustomerInfo
             }
         }
+    }
+
+    ${BillingCustomerInfoFragmentDoc}
+`;
+
+gql`
+    fragment BillingCustomerInfo on BillingCustomer {
+        id
+        name
+        address
+        city
+        state
+        email
+        zipCode
+        phoneNumber
+        taxExempt        
     }
 `;
 
@@ -58,16 +66,24 @@ gql`
     mutation CreateShippingCustomer($input: CreateShippingCustomerInput!) {
         createShippingCustomer(input: $input) {
             shippingCustomer {
-                id
-                companyName
-                address
-                city
-                state
-                zipCode
-                phoneNumber
-                attn
+                ...ShippingCustomerInfo
             }
         }
+    }
+
+    ${ShippingCustomerInfoFragmentDoc}
+`;
+
+gql`
+    fragment ShippingCustomerInfo on ShippingCustomer {
+        id
+        companyName
+        address
+        city
+        state
+        zipCode
+        phoneNumber
+        attn
     }
 `;
 
@@ -75,31 +91,38 @@ gql`
     mutation CreateOrder($input: CreateOrderInput!) {
         createOrder(input: $input) {
             order {
-                id
-                shippingCost
-                taxCost
-                unitPrice
-                orderQuantities {
-                    id
-                    productId
-                    orderId
-                    quantity
-                }
-                products {
-                    id
-                    name
-                    size
-                    material
-                    description
-                    styleNumber
-                    counties {
-                        id
-                        name
-                    }
-                    imageUrl
-                }
+                ...OrderInfo
             }
         }
+    }
+
+    ${OrderInfoFragmentDoc}
+`;
+
+gql`
+    fragment OrderInfo on Order {
+        id
+        shippingCost
+        taxCost
+        unitPrice
+        orderQuantities {
+            id
+            productId
+            orderId
+            quantity
+        }
+        products {
+            id
+            name
+            size
+            material
+            description
+            styleNumber
+            counties {
+                id
+                name
+            }
+        }        
     }
 `;
 
@@ -291,6 +314,17 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
             return;
         }
 
+        const billingCustomerInput = {
+            name: billingName,
+            address: billingAddress,
+            city: billingCity,
+            state: billingState,
+            zipCode: billingZipCode,
+            phoneNumber: billingPhoneNumber,
+            email,
+            taxExempt
+        }
+
         const shippingCustomerInput = sameAddress ? {
             companyName: billingName,
             address: billingAddress,
@@ -311,16 +345,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         const [createBillingCustomerResponse, createShippingCustomerResponse] = await Promise.all([createBillingCustomer({
             variables: {
-                input: {
-                    name: billingName,
-                    address: billingAddress,
-                    city: billingCity,
-                    state: billingState,
-                    zipCode: billingZipCode,
-                    phoneNumber: billingPhoneNumber,
-                    email,
-                    taxExempt
-                }
+                input: billingCustomerInput
             }
         }), createShippingCustomer({
             variables: {
