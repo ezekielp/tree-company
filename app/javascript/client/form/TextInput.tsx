@@ -5,6 +5,7 @@ interface TextInputProps extends Omit<HTMLProps<HTMLInputElement>, 'as' | 'ref' 
 }
 
 const StyledTextInput = styled.input`
+    line-height: 150%;
 `;
 
 export const TextInput = React.forwardRef(( { ...rest }: TextInputProps, ref) => (

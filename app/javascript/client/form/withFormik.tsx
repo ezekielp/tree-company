@@ -1,5 +1,6 @@
 import { FieldProps, ErrorMessage } from 'formik';
 import React, { ComponentType } from 'react';
+import { device } from '../media';
 import styled from 'styled-components';
 
 interface WithFormikProps {
@@ -9,9 +10,19 @@ interface WithFormikProps {
 }
 
 const Label = styled.div`
+    margin-right: 7px;
+    margin-bottom: 10px;
 `;
 
 const InputWrapper = styled.div`
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    margin-right: 36px;
+    ${`@media ${device.mobile}`} {
+        margin-right: 0;
+    }
 `;
 
 export const StyledErrorMessage = styled(ErrorMessage)`
