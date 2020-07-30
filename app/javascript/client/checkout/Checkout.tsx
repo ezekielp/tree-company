@@ -118,6 +118,9 @@ const StyledErrorMessage = styled.div`
     margin-top: 15px;
 `;
 
+const CheckoutHeader = styled.h1`
+`;
+
 interface CheckoutProps extends RouteComponentProps {
     unitPrice: number;
     subtotal: number;
@@ -331,6 +334,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
     return (
 			<>
+                <CheckoutHeader>Checkout</CheckoutHeader>
 				<Formik
 					initialValues={initialValues}
 					onSubmit={handleSubmit}

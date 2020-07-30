@@ -50,18 +50,19 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
     ))
 
     return (
-        <ModalContext.Provider value={{
-            openModal: ()=>setModalIsShowing(true),
-            closeModal: ()=>setModalIsShowing(false),
-            setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
-            modalIsShowing: modalIsShowing,
-            selectedProduct: selectedProduct
-        }}>
-            <Modal />
-            <Header>WELCOME TO THE TREE COMPANY!</Header>
-            <ThumbnailIndexContainer>
-                {ProductThumbnails}
-            </ThumbnailIndexContainer>
-        </ModalContext.Provider>
+        <></>
+        // <ModalContext.Provider value={{
+        //     openModal: ()=>setModalIsShowing(true),
+        //     closeModal: ()=>setModalIsShowing(false),
+        //     setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
+        //     modalIsShowing: modalIsShowing,
+        //     selectedProduct: selectedProduct
+        // }}>
+        //     <Modal />
+        //     <Header>WELCOME TO THE TREE COMPANY!</Header>
+        //     <ThumbnailIndexContainer>
+        //         {ProductThumbnails}
+        //     </ThumbnailIndexContainer>
+        // </ModalContext.Provider>
     )
 }
