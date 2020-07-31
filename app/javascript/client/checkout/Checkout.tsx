@@ -126,6 +126,12 @@ gql`
     }
 `;
 
+gql`
+    mutation ClearCart {
+        clearCart
+    }
+`;
+
 const CheckoutFormContainer = styled.div`
     width: 80%;
     margin: 0 auto;
