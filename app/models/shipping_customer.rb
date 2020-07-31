@@ -3,15 +3,19 @@
 # Table name: shipping_customers
 #
 #  id           :bigint           not null, primary key
-#  company_name :string           not null
 #  address      :text             not null
+#  attn         :text
 #  city         :string           not null
+#  company_name :string           not null
+#  phone_number :string
 #  state        :string           not null
 #  zip_code     :string           not null
-#  phone_number :string
-#  attn         :text
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#
+# Indexes
+#
+#  index_shipping_customers_on_company_name  (company_name)
 #
 class ShippingCustomer < ApplicationRecord
     validates :state, inclusion: { in: Constants::STATES }

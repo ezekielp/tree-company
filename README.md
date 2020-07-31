@@ -1,24 +1,8 @@
-# README
+# The Tree Company
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Shell commands for running and working with the app locally
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* `bin/webpack-dev-server`: Runs a Webpack dev server that watches frontend code and refreshes whenever you save
+* `rails s`: Runs the Rails server (Puma)
+* `bundle exec sidekiq -q default -q mailers`: Starts Sidekiq for background processing (currently just for Action Mailer jobs)
+* `yarn codegen`: Generates new GraphQL types and helper hooks after writing new GraphQL types, queries, mutations, etc.
