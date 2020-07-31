@@ -1,5 +1,6 @@
-import React, { FC, useContext, useState, useRef, useEffect } from 'react';
-import { ProductInfoFragment, useUpdateCartMutation } from '../../graphqlTypes';
+import React, { FC, useContext, useState, useRef, useEffect, FocusEvent } from 'react';
+import { ProductInfoFragment, useAddToCartMutation } from '../../graphqlTypes';
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 
@@ -66,7 +67,17 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     useEffect( ()=> {
         if (inputRef.current) inputRef.current.value=productQuantity.toString();
-    });
+
+        // useUpdateCartMutation({
+        //     variables: {
+        //         input: {
+        //             productId: selectedProduct.id,
+        //             quantity: productQuantity
+        //         }
+        //     }
+        // });
+
+    }, [productQuantity] );
 
     const handleChange = (change: number) => {
         if (change > 1) {
@@ -80,15 +91,6 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     const handleSubmit = () => {
         console.log("added " + productQuantity + " to cart");
-
-        useUpdateCartMutation({
-            variables: {
-                input: {
-                    productId: selectedProduct.id,
-                    quantity: productQuantity
-                }
-            }
-        });
 
         closeModal();
     };
