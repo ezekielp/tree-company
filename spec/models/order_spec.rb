@@ -13,8 +13,7 @@
 #
 # Indexes
 #
-#  index_orders_on_billing_customer_id   (billing_customer_id)
-#  index_orders_on_shipping_customer_id  (shipping_customer_id)
+#  index_orders_on_billing_customer_id  (billing_customer_id)
 #
 require 'rails_helper'
 

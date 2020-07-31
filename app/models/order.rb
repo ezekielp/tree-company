@@ -13,14 +13,13 @@
 #
 # Indexes
 #
-#  index_orders_on_billing_customer_id   (billing_customer_id)
-#  index_orders_on_shipping_customer_id  (shipping_customer_id)
+#  index_orders_on_billing_customer_id  (billing_customer_id)
 #
 class Order < ApplicationRecord
     validates :shipping_cost, inclusion: { in: [1000, 0] }
     validates :unit_price, inclusion: { in: [300, 400, 500, 700] }
 
-    belongs_to :shipping_customer
+    belongs_to :shipping_customer, optional: true
     belongs_to :billing_customer
     has_many :order_quantities
     has_many :products, through: :order_quantities

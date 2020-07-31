@@ -29,11 +29,14 @@ interface OrderConfirmationPageProps {
     totalCost: number;
 }
 
-export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirmationPageProps>> = ({ location }) => {
-    const { billingCustomer, shippingCustomer, checkoutItems, unitPrice, subtotal, shippingCost, taxCost, totalCost } = location.state;
-    if (!billingCustomer) {
+export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirmationPageProps>> = ({ history, location }) => {
+    if (!location.state) {
+        history.push('/home');
         return null;
     };
+
+    const { billingCustomer, shippingCustomer, checkoutItems, unitPrice, subtotal, shippingCost, taxCost, totalCost } = location.state;
+    if (!billingCustomer) return null;
 
     const { name: billingName, address: billingAddress, city: billingCity, state: billingState, email, zipCode: billingZipCode, phoneNumber: billingPhoneNumber } = billingCustomer;
 

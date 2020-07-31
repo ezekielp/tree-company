@@ -190,6 +190,7 @@ interface CheckoutFormData {
     billingPhoneNumber?: string;
     email: string;
     taxExempt?: boolean;
+    localPickup: boolean;
     sameAddress: boolean;
     shippingName: string;
     shippingAddress: string;
@@ -211,13 +212,14 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
     const stripe = useStripe();
     const stripeElements = useElements();
     
-    const [sameAddress, toggleSameAddress] = useState(false);
-    const [localPickup, toggleLocalPickup] = useState(false);
+    const [sameAddress, setSameAddress] = useState(false);
+    const [localPickup, setLocalPickup] = useState(false);
     const [stripeErrorMessage, setStripeErrorMessage] = useState<string | null>(null);
 
     const [createBillingCustomer] = useCreateBillingCustomerMutation();
     const [createShippingCustomer] = useCreateShippingCustomerMutation();
     const [createOrder] = useCreateOrderMutation();
+    const [clearCart] = useClearCartMutation();
 
     let shippingCost: number = localPickup ? 0 : 1000;
     useEffect(() => {
@@ -290,7 +292,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
         const createPaymentIntentResponse = await createStripePaymentIntent({
             variables: {
                 input: {
-                    amount: totalCost,
+                    amount: 1000,
                 }
             }
         });
@@ -357,8 +359,11 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
         let createBillingCustomerResponse, createShippingCustomerResponse;
 
         if (localPickup) {
-
-
+            createBillingCustomerResponse = await createBillingCustomer({
+                variables: {
+                    input: billingCustomerInput
+                }
+            });
         } else {
             [createBillingCustomerResponse, createShippingCustomerResponse] = await Promise.all([createBillingCustomer({
                 variables: {
@@ -371,7 +376,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
             })]);
         }
 
-        
         // TO DO: Handle potential errors from above API calls
         // ALSO RE ERROR-HANDLING: Need to figure out how to pass down errors from things like the zipcode validaton gem
 
@@ -402,13 +406,13 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
         });
 
         if (!createOrderResponse.errors) {
-            useClearCartMutation();
+            await clearCart();
 
             history.push({
                 pathname: '/order-confirmation',
                 state: { 
                     billingCustomer: billingCustomerInput,
-                    shippingCustomer: shippingCustomerInput ? shippingCustomerInput : null,
+                    shippingCustomer: shippingCustomerId ? shippingCustomerInput : null,
                     checkoutItems,
                     unitPrice,
                     subtotal,
@@ -490,7 +494,16 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 								label="Check below if you would like to pick up the signs instead of having them shipped to you."
 								component={FormikCheckbox}
 								checked={localPickup}
-								onChange={() => toggleLocalPickup(!localPickup)}
+								onChange={() => {
+                                    setLocalPickup(!localPickup);
+                                    // if (localPickup) {
+                                    //     setLocalPickup(false)
+                                    //     setSameAddress(false)
+                                    // } else {
+                                    //     setLocalPickup(true)
+                                    //     setSameAddress(true)
+                                    // }
+                                }}
 							/>
 							{localPickup === false && (
 								<Field
@@ -498,7 +511,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 									label="Check below to use your billing address as your shipping address."
 									component={FormikCheckbox}
 									checked={sameAddress}
-									onChange={() => toggleSameAddress(!sameAddress)}
+									onChange={() => setSameAddress(!sameAddress)}
 								/>
 							)}
 							{localPickup === false && sameAddress === false && (

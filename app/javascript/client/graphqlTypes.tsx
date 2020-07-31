@@ -157,7 +157,7 @@ export type Order = {
   orderQuantities: Array<OrderQuantity>;
   products: Array<Product>;
   shippingCost: Scalars['Int'];
-  shippingCustomerId: Scalars['Int'];
+  shippingCustomerId?: Maybe<Scalars['Int']>;
   taxCost: Scalars['Int'];
   unitPrice: Scalars['Int'];
 };

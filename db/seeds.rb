@@ -11,7 +11,6 @@ require 'open-uri'
 # Reset the database if we're ever going to re-seed. If we want to add individual signs, should do it via the command line (or Rails migrations?) or a simple admin panel we can build
 Product.destroy_all
 
-Seed the products (signs)
 sign_19 = Product.create(name: "Reforestation Project", size: "11x15", material: ".05g HDPE", description: "", style_number: "19")
 
 file_19 = URI.open('https://tree-company-seeds.s3.amazonaws.com/style19.gif')
@@ -120,8 +119,8 @@ sign_61.image.attach(io: file_61, filename: 'style61.jpg')
 # Create the counties and all relevant associations
 County.destroy_all
 
-Constants::MARYLAND_COUNTIES.concat(Constants::VIRGINIA_COUNTIES).each do |c|
-    County.create(name: c)
+(Constants::MARYLAND_COUNTIES + Constants::VIRGINIA_COUNTIES).each do |c|
+    County.find_or_create_by!(name: c)
 end
 
 ProductCounty.destroy_all
@@ -131,13 +130,24 @@ carroll = County.find_by(name: "Carroll County")
 montgomery = County.find_by(name: "Montgomery County")
 arlington = County.find_by(name: "Arlington County")
 
-ProductCounty.create(product_id: sign_47.id, county_id: baltimore.id)
-ProductCounty.create(product_id: sign_48.id, county_id: baltimore.id)
-ProductCounty.create(product_id: sign_49.id, county_id: baltimore.id)
-ProductCounty.create(product_id: sign_50.id, county_id: carroll.id)
-ProductCounty.create(product_id: sign_51.id, county_id: carroll.id)
-ProductCounty.create(product_id: sign_31.id, county_id: arlington.id)
-ProductCounty.create(product_id: sign_61.id, county_id: montgomery.id)
+sign_23 = Product.find_by(style_number: "23")
+sign_25 = Product.find_by(style_number: "25")
+sign_26 = Product.find_by(style_number: "26")
+sign_31 = Product.find_by(style_number: "31")
+sign_47 = Product.find_by(style_number: "47")
+sign_48 = Product.find_by(style_number: "48")
+sign_49 = Product.find_by(style_number: "49")
+sign_50 = Product.find_by(style_number: "50")
+sign_51 = Product.find_by(style_number: "51")
+sign_61 = Product.find_by(style_number: "61")
+
+ProductCounty.create!(product_id: sign_47.id, county_id: baltimore.id)
+ProductCounty.create!(product_id: sign_48.id, county_id: baltimore.id)
+ProductCounty.create!(product_id: sign_49.id, county_id: baltimore.id)
+ProductCounty.create!(product_id: sign_50.id, county_id: carroll.id)
+ProductCounty.create!(product_id: sign_51.id, county_id: carroll.id)
+ProductCounty.create!(product_id: sign_31.id, county_id: arlington.id)
+ProductCounty.create!(product_id: sign_61.id, county_id: montgomery.id)
 
 
 # Create the only separate category we have at the moment, and the relevant associations
@@ -147,6 +157,6 @@ Category.destroy_all
 Category.create(name: "wetland_stream_buffer")
 c1 = Category.first
 
-ProductCategory.create(product_id: sign_23.id, category_id: c1.id)
-ProductCategory.create(product_id: sign_25.id, category_id: c1.id)
-ProductCategory.create(product_id: sign_26.id, category_id: c1.id)
+ProductCategory.create!(product_id: sign_23.id, category_id: c1.id)
+ProductCategory.create!(product_id: sign_25.id, category_id: c1.id)
+ProductCategory.create!(product_id: sign_26.id, category_id: c1.id)

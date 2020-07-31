@@ -117,7 +117,7 @@ type Order {
   orderQuantities: [OrderQuantity!]!
   products: [Product!]!
   shippingCost: Int!
-  shippingCustomerId: Int!
+  shippingCustomerId: Int
   taxCost: Int!
   unitPrice: Int!
 }

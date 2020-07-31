@@ -35,32 +35,33 @@ export const validationSchema = yup.object({
 					email: yup.string().required().email().label("Email"),
 					taxExempt: yup.boolean(),
 					sameAddress: yup.boolean(),
-					shippingName: yup.string().when("sameAddress", {
-						is: false,
+					localPickup: yup.boolean(),
+					shippingName: yup.string().when(["sameAddress", "localPickup"], {
+						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
 						then: yup
 							.string()
 							.required(
 								"Shipping name is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
 							),
 					}),
-					shippingAddress: yup.string().when("sameAddress", {
-						is: false,
+					shippingAddress: yup.string().when(["sameAddress", "localPickup"], {
+						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
 						then: yup
 							.string()
 							.required(
 								"Shipping address is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
 							),
 					}),
-					shippingCity: yup.string().when("sameAddress", {
-						is: false,
+					shippingCity: yup.string().when(["sameAddress", "localPickup"], {
+						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
 						then: yup
 							.string()
 							.required(
 								"Shipping city is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
 							),
 					}),
-					shippingZipCode: yup.string().when("sameAddress", {
-						is: false,
+					shippingZipCode: yup.string().when(["sameAddress", "localPickup"], {
+						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
 						then: yup
 							.string()
 							.required(
@@ -98,6 +99,7 @@ export const initialValues = {
     billingZipCode: '',
     email: '',
     taxExempt: false,
+    localPickup: false,
     sameAddress: false,
     shippingName: '',
     shippingAddress: '',
