@@ -37,6 +37,13 @@ export type CartItemInput = {
   quantity: Scalars['Int'];
 };
 
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  products: Array<Product>;
+};
+
 export type County = {
   __typename?: 'County';
   id: Scalars['ID'];
@@ -158,6 +165,7 @@ export type OrderQuantity = {
 
 export type Product = {
   __typename?: 'Product';
+  categories?: Maybe<Array<Category>>;
   counties?: Maybe<Array<County>>;
   description?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
@@ -342,18 +350,7 @@ export type CreateOrderMutation = (
     { __typename?: 'CreateOrderPayload' }
     & { order: (
       { __typename?: 'Order' }
-      & Pick<Order, 'id' | 'shippingCost' | 'taxCost' | 'unitPrice'>
-      & { orderQuantities: Array<(
-        { __typename?: 'OrderQuantity' }
-        & Pick<OrderQuantity, 'id' | 'productId' | 'orderId' | 'quantity'>
-      )>, products: Array<(
-        { __typename?: 'Product' }
-        & Pick<Product, 'id' | 'name' | 'size' | 'material' | 'description' | 'styleNumber'>
-        & { counties?: Maybe<Array<(
-          { __typename?: 'County' }
-          & Pick<County, 'id' | 'name'>
-        )>> }
-      )> }
+      & OrderInfoFragment
     ) }
   ) }
 );
@@ -716,32 +713,11 @@ export const CreateOrderDocument = gql`
     mutation CreateOrder($input: CreateOrderInput!) {
   createOrder(input: $input) {
     order {
-      id
-      shippingCost
-      taxCost
-      unitPrice
-      orderQuantities {
-        id
-        productId
-        orderId
-        quantity
-      }
-      products {
-        id
-        name
-        size
-        material
-        description
-        styleNumber
-        counties {
-          id
-          name
-        }
-      }
+      ...OrderInfo
     }
   }
 }
-    `;
+    ${OrderInfoFragmentDoc}`;
 export type CreateOrderMutationFn = ApolloReactCommon.MutationFunction<CreateOrderMutation, CreateOrderMutationVariables>;
 
 /**

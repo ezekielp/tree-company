@@ -21,6 +21,12 @@ input CartItemInput {
   quantity: Int!
 }
 
+type Category {
+  id: ID!
+  name: String!
+  products: [Product!]!
+}
+
 type County {
   id: ID!
   name: String!
@@ -116,6 +122,7 @@ type OrderQuantity {
 }
 
 type Product {
+  categories: [Category!]
   counties: [County!]
   description: String
   id: ID!
