@@ -292,7 +292,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
         const createPaymentIntentResponse = await createStripePaymentIntent({
             variables: {
                 input: {
-                    amount: 1000,
+                    amount: totalCost,
                 }
             }
         });
@@ -496,13 +496,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 								checked={localPickup}
 								onChange={() => {
                                     setLocalPickup(!localPickup);
-                                    // if (localPickup) {
-                                    //     setLocalPickup(false)
-                                    //     setSameAddress(false)
-                                    // } else {
-                                    //     setLocalPickup(true)
-                                    //     setSameAddress(true)
-                                    // }
                                 }}
 							/>
 							{localPickup === false && (
