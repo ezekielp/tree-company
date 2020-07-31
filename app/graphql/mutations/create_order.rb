@@ -6,7 +6,7 @@ module Types
 
     class CreateOrderInputType < Types::BaseInputObject
         argument :billing_customer_id, Int, required: true
-        argument :shipping_customer_id, Int, required: true
+        argument :shipping_customer_id, Int, required: false
         argument :shipping_cost, Int, required: false
         argument :tax_cost, Int, required: true
         argument :unit_price, Int, required: true

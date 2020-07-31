@@ -78,7 +78,7 @@ export type CreateOrderInput = {
   billingCustomerId: Scalars['Int'];
   cart: Array<CartItemInput>;
   shippingCost?: Maybe<Scalars['Int']>;
-  shippingCustomerId: Scalars['Int'];
+  shippingCustomerId?: Maybe<Scalars['Int']>;
   taxCost: Scalars['Int'];
   unitPrice: Scalars['Int'];
 };

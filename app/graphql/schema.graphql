@@ -62,7 +62,7 @@ input CreateOrderInput {
   billingCustomerId: Int!
   cart: [CartItemInput!]!
   shippingCost: Int
-  shippingCustomerId: Int!
+  shippingCustomerId: Int
   taxCost: Int!
   unitPrice: Int!
 }

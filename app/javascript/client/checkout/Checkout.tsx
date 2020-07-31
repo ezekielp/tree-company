@@ -353,35 +353,51 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
             phoneNumber: shippingPhoneNumber,
             attn
         };
+        
+        let createBillingCustomerResponse, createShippingCustomerResponse;
 
-        const [createBillingCustomerResponse, createShippingCustomerResponse] = await Promise.all([createBillingCustomer({
-            variables: {
-                input: billingCustomerInput
-            }
-        }), createShippingCustomer({
-            variables: {
-                input: shippingCustomerInput
-            }
-        })]);
+        if (localPickup) {
+
+
+        } else {
+            [createBillingCustomerResponse, createShippingCustomerResponse] = await Promise.all([createBillingCustomer({
+                variables: {
+                    input: billingCustomerInput
+                }
+            }), createShippingCustomer({
+                variables: {
+                    input: shippingCustomerInput
+                }
+            })]);
+        }
+
         
         // TO DO: Handle potential errors from above API calls
         // ALSO RE ERROR-HANDLING: Need to figure out how to pass down errors from things like the zipcode validaton gem
 
-        const billingCustomerId = createBillingCustomerResponse.data?.createBillingCustomer?.billingCustomer.id;
-        const shippingCustomerId = createShippingCustomerResponse.data?.createShippingCustomer?.shippingCustomer.id;
+        const billingCustomerId = createBillingCustomerResponse?.data?.createBillingCustomer?.billingCustomer.id;
+        const shippingCustomerId = localPickup ? null : createShippingCustomerResponse?.data?.createShippingCustomer?.shippingCustomer.id;
 
-        if (!billingCustomerId || ! shippingCustomerId) return;
+        if (!billingCustomerId) return;
+
+        const createOrderInput = shippingCustomerId ? {
+            billingCustomerId: parseInt(billingCustomerId),
+            shippingCustomerId: parseInt(shippingCustomerId),
+            shippingCost,
+            taxCost,
+            unitPrice,
+            cart
+        } : {
+            billingCustomerId: parseInt(billingCustomerId),
+            shippingCost,
+            taxCost,
+            unitPrice,
+            cart
+        };
 
         const createOrderResponse = await createOrder({
             variables: {
-                input: {
-                    billingCustomerId: parseInt(billingCustomerId),
-                    shippingCustomerId: parseInt(shippingCustomerId),
-                    shippingCost,
-                    taxCost,
-                    unitPrice,
-                    cart
-                }
+                input: createOrderInput
             }
         });
 
@@ -392,7 +408,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                 pathname: '/order-confirmation',
                 state: { 
                     billingCustomer: billingCustomerInput,
-                    shippingCustomer: shippingCustomerInput,
+                    shippingCustomer: shippingCustomerInput ? shippingCustomerInput : null,
                     checkoutItems,
                     unitPrice,
                     subtotal,
