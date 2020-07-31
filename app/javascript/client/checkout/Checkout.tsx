@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { Switch, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -128,7 +128,12 @@ gql`
 
 gql`
     mutation ClearCart {
-        clearCart
+        clearCart {
+            cart {
+                productId
+                quantity
+            }
+        }
     }
 `;
 
@@ -381,6 +386,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
         });
 
         if (!createOrderResponse.errors) {
+            useClearCartMutation();
+
             history.push({
                 pathname: '/order-confirmation',
                 state: { 
