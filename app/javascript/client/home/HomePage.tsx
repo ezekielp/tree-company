@@ -5,19 +5,21 @@ import Modal from '../modal/Modal';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 
 interface ModalContextState {
-    openModal: () => void;
+    openModal: (modalName: string) => void;
     closeModal: () => void;
     setSelectedProduct: (product: ProductInfoFragment) => void;
     modalIsShowing: boolean;
     selectedProduct: ProductInfoFragment;
+    displayedModal: String;
 }
 
 export const ModalContext = createContext<ModalContextState>({
-    openModal: () => null,
+    openModal: (modalName) => null,
     closeModal: () => null,
     setSelectedProduct: (product)=>null,
     modalIsShowing: false,
-    selectedProduct: { name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""} 
+    selectedProduct: { name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""},
+    displayedModal: ""
 });
 
 const Header = styled.h1`
@@ -43,7 +45,8 @@ interface HomePageProps {
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const [modalIsShowing, setModalIsShowing] = useState(false);
-    const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""} );
+    const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: ""} );
+    const [displayedModal, setDisplayedModal] = useState("");
     
     const ProductThumbnails = Object.entries(products).map((product)=>(
         <ProductThumbnail key={product[0]} product={product[1]} />
@@ -51,11 +54,12 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     return (
         <ModalContext.Provider value={{
-            openModal: ()=>setModalIsShowing(true),
+            openModal: (modalName)=>{setModalIsShowing(true);setDisplayedModal(modalName)},
             closeModal: ()=>setModalIsShowing(false),
             setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
             modalIsShowing: modalIsShowing,
-            selectedProduct: selectedProduct
+            selectedProduct: selectedProduct,
+            displayedModal: displayedModal
         }}>
             <Modal />
             <Header>WELCOME TO THE TREE COMPANY!</Header>

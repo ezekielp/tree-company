@@ -34,8 +34,8 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
     const { id , name, description, imageUrl, material, size, styleNumber, counties } = product.product;
 
     const handleClick = (product: ProductInfoFragment) => {
-        setSelectedProduct(product)
-        openModal();
+        setSelectedProduct(product);
+        openModal("productModal");
     }
 
     if (!imageUrl) return null;

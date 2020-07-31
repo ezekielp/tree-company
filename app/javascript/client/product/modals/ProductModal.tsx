@@ -80,6 +80,16 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     const handleSubmit = () => {
         console.log("added " + productQuantity + " to cart");
+
+        useUpdateCartMutation({
+            variables: {
+                input: {
+                    productId: selectedProduct.id,
+                    quantity: productQuantity
+                }
+            }
+        });
+
         closeModal();
     };
 
@@ -96,10 +106,10 @@ const ProductModal: FC<ProductModalProps> = () => {
                 <span>Size: {selectedProduct.size}</span>
                 {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
             </ProductInformation>
-            <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton>
-            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onBlur={()=>handleChange(parseInt(inputRef.current.value))}/>
-            <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton>
-            <AddToCartButton onClick={()=>handleSubmit()}>Add to Cart</AddToCartButton>
+            {/* <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton> */}
+            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onBlur={handleChange}/>
+            {/* <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton> */}
+            <AddToCartButton onClick={handleSubmit}>Add to Cart</AddToCartButton>
         </ProductModalContainer>
     )
 }
