@@ -7,9 +7,19 @@ module Types
         field :description, String, null: true
         field :style_number, String, null: true
         field :counties, [Types::CountyType], null: true
+        field :categories, [Types::CategoryType], null: true
         field :image_url, String, null: true
-        # field :image_url, String, null: true, extensions: [ImageUrlField]
-        # TODO field :categories
+
+        def categories
+            product_categories.then do |product_category_list|
+                category_ids = product_category_list.map(&:category_id)
+                RecordLoader.for(Category).load_many(category_ids)
+            end
+        end
+
+        def product_categories
+            AssociationLoader.for(Product, :product_categories).load(object)
+        end
 
         def counties
             product_counties.then do |product_county_list|
