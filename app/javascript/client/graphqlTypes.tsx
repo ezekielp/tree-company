@@ -300,9 +300,14 @@ export type CreateBillingCustomerMutation = (
     { __typename?: 'CreateBillingCustomerPayload' }
     & { billingCustomer: (
       { __typename?: 'BillingCustomer' }
-      & Pick<BillingCustomer, 'id' | 'name' | 'address' | 'city' | 'state' | 'email' | 'zipCode' | 'phoneNumber' | 'taxExempt'>
+      & BillingCustomerInfoFragment
     ) }
   ) }
+);
+
+export type BillingCustomerInfoFragment = (
+  { __typename?: 'BillingCustomer' }
+  & Pick<BillingCustomer, 'id' | 'name' | 'address' | 'city' | 'state' | 'email' | 'zipCode' | 'phoneNumber' | 'taxExempt'>
 );
 
 export type CreateShippingCustomerMutationVariables = Exact<{
@@ -316,9 +321,14 @@ export type CreateShippingCustomerMutation = (
     { __typename?: 'CreateShippingCustomerPayload' }
     & { shippingCustomer: (
       { __typename?: 'ShippingCustomer' }
-      & Pick<ShippingCustomer, 'id' | 'companyName' | 'address' | 'city' | 'state' | 'zipCode' | 'phoneNumber' | 'attn'>
+      & ShippingCustomerInfoFragment
     ) }
   ) }
+);
+
+export type ShippingCustomerInfoFragment = (
+  { __typename?: 'ShippingCustomer' }
+  & Pick<ShippingCustomer, 'id' | 'companyName' | 'address' | 'city' | 'state' | 'zipCode' | 'phoneNumber' | 'attn'>
 );
 
 export type CreateOrderMutationVariables = Exact<{
@@ -338,7 +348,7 @@ export type CreateOrderMutation = (
         & Pick<OrderQuantity, 'id' | 'productId' | 'orderId' | 'quantity'>
       )>, products: Array<(
         { __typename?: 'Product' }
-        & Pick<Product, 'id' | 'name' | 'size' | 'material' | 'description' | 'styleNumber' | 'imageUrl'>
+        & Pick<Product, 'id' | 'name' | 'size' | 'material' | 'description' | 'styleNumber'>
         & { counties?: Maybe<Array<(
           { __typename?: 'County' }
           & Pick<County, 'id' | 'name'>
@@ -346,6 +356,22 @@ export type CreateOrderMutation = (
       )> }
     ) }
   ) }
+);
+
+export type OrderInfoFragment = (
+  { __typename?: 'Order' }
+  & Pick<Order, 'id' | 'shippingCost' | 'taxCost' | 'unitPrice'>
+  & { orderQuantities: Array<(
+    { __typename?: 'OrderQuantity' }
+    & Pick<OrderQuantity, 'id' | 'productId' | 'orderId' | 'quantity'>
+  )>, products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name' | 'size' | 'material' | 'description' | 'styleNumber'>
+    & { counties?: Maybe<Array<(
+      { __typename?: 'County' }
+      & Pick<County, 'id' | 'name'>
+    )>> }
+  )> }
 );
 
 export type GetCartForCheckoutContainerQueryVariables = Exact<{ [key: string]: never; }>;
@@ -379,6 +405,57 @@ export type ProductInfoFragment = (
   )>> }
 );
 
+export const BillingCustomerInfoFragmentDoc = gql`
+    fragment BillingCustomerInfo on BillingCustomer {
+  id
+  name
+  address
+  city
+  state
+  email
+  zipCode
+  phoneNumber
+  taxExempt
+}
+    `;
+export const ShippingCustomerInfoFragmentDoc = gql`
+    fragment ShippingCustomerInfo on ShippingCustomer {
+  id
+  companyName
+  address
+  city
+  state
+  zipCode
+  phoneNumber
+  attn
+}
+    `;
+export const OrderInfoFragmentDoc = gql`
+    fragment OrderInfo on Order {
+  id
+  shippingCost
+  taxCost
+  unitPrice
+  orderQuantities {
+    id
+    productId
+    orderId
+    quantity
+  }
+  products {
+    id
+    name
+    size
+    material
+    description
+    styleNumber
+    counties {
+      id
+      name
+    }
+  }
+}
+    `;
 export const ProductInfoFragmentDoc = gql`
     fragment ProductInfo on Product {
   id
@@ -571,19 +648,11 @@ export const CreateBillingCustomerDocument = gql`
     mutation CreateBillingCustomer($input: CreateBillingCustomerInput!) {
   createBillingCustomer(input: $input) {
     billingCustomer {
-      id
-      name
-      address
-      city
-      state
-      email
-      zipCode
-      phoneNumber
-      taxExempt
+      ...BillingCustomerInfo
     }
   }
 }
-    `;
+    ${BillingCustomerInfoFragmentDoc}`;
 export type CreateBillingCustomerMutationFn = ApolloReactCommon.MutationFunction<CreateBillingCustomerMutation, CreateBillingCustomerMutationVariables>;
 
 /**
@@ -613,18 +682,11 @@ export const CreateShippingCustomerDocument = gql`
     mutation CreateShippingCustomer($input: CreateShippingCustomerInput!) {
   createShippingCustomer(input: $input) {
     shippingCustomer {
-      id
-      companyName
-      address
-      city
-      state
-      zipCode
-      phoneNumber
-      attn
+      ...ShippingCustomerInfo
     }
   }
 }
-    `;
+    ${ShippingCustomerInfoFragmentDoc}`;
 export type CreateShippingCustomerMutationFn = ApolloReactCommon.MutationFunction<CreateShippingCustomerMutation, CreateShippingCustomerMutationVariables>;
 
 /**
@@ -675,7 +737,6 @@ export const CreateOrderDocument = gql`
           id
           name
         }
-        imageUrl
       }
     }
   }

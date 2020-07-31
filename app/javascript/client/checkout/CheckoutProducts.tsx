@@ -7,7 +7,7 @@ const CheckoutProductContainer = styled.div`
     display: flex;
 `;
 
-interface CheckoutItem {
+export interface CheckoutItem {
     product: ProductInfoFragment;
     quantity: number;
 }
