@@ -45,6 +45,11 @@ const ProductName = styled.div`
 
 interface ProductModalProps {}
 
+interface AddToCartData {
+    productId: string;
+    quantity: number;
+}
+
 const ProductModal: FC<ProductModalProps> = () => {
 
     const { selectedProduct, closeModal} = useContext(ModalContext);
@@ -53,13 +58,7 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     const [addItemToCart] = useAddToCartMutation();   
 
-    const handleSubmit = ((values: {
-        productId: string;
-        quantity: number;
-    }, formikHelpers: FormikHelpers<{
-        productId: string;
-        quantity: number;
-    }>) => {
+    const handleSubmit = async (values: AddToCartData, formikHelpers: FormikHelpers<AddToCartData>) => {
         if (!inputRef.current) return initialValues;
 
         const productQuantity = parseInt(inputRef.current.value);
@@ -67,7 +66,7 @@ const ProductModal: FC<ProductModalProps> = () => {
         const addedItem = addItemToCart({
             variables: {
                 input: {
-                    productId: values.productId,
+                    productId: selectedProduct.id,
                     quantity: productQuantity
                 }
             }
@@ -76,7 +75,7 @@ const ProductModal: FC<ProductModalProps> = () => {
         console.log("added " + productQuantity + " to cart");
         console.log(addedItem);
         closeModal();
-    });
+    };
 
     if (!selectedProduct.imageUrl) return null;
 
