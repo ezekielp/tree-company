@@ -64,16 +64,17 @@ const ProductModal: FC<ProductModalProps> = () => {
 
         const productQuantity = parseInt(inputRef.current.value);
         
-        addItemToCart({
+        const addedItem = addItemToCart({
             variables: {
                 input: {
-                    productId: selectedProduct.id,
+                    productId: values.productId,
                     quantity: productQuantity
                 }
             }
         });
 
         console.log("added " + productQuantity + " to cart");
+        console.log(addedItem);
         closeModal();
     });
 
@@ -91,7 +92,7 @@ const ProductModal: FC<ProductModalProps> = () => {
                     <ProductModalContainer onClick={(e) => e.stopPropagation()}>
                         <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
                         <ProductName>{selectedProduct.name}</ProductName>
-                        <ProductImageContainer src={selectedProduct.imageUrl} />
+                        {selectedProduct.imageUrl && <ProductImageContainer src={selectedProduct.imageUrl} />}
                         <ProductInformation>
                             <span>Material: {selectedProduct.material}</span>
                             <span>Size: {selectedProduct.size}</span>
