@@ -19,18 +19,6 @@ const CloseModalButton = styled.button`
     font-weight: bold;
 `
 
-const DecreaseQuantityButton = styled.button`
-
-`
-
-const IncreaseQuantityButton = styled.button`
-
-`
-
-const InputQuantity = styled.input`
-
-`
-
 const ProductInformation = styled.div`
     display: flex;
     flex-direction: column;
@@ -43,9 +31,6 @@ const ProductImageContainer = styled.img`
 `;
 
 const ProductModalContainer = styled.div`
-    /* display: flex; */
-    /* flex-direction: column; */
-    /* justify-content: center; */
     display: grid;
     align-items: center;
     background: white;
@@ -63,46 +48,10 @@ interface ProductModalProps {}
 const ProductModal: FC<ProductModalProps> = () => {
 
     const { selectedProduct, closeModal} = useContext(ModalContext);
-    // const [productQuantity, setProductQuantity] = useState(1);
+    
     const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
-    const [addItemToCart] = useAddToCartMutation();
-
-    // useEffect( ()=> {
-    //     if (inputRef.current) inputRef.current.value=productQuantity.toString();
-    // });
-
-    // const handleChange = (event: FocusEvent<HTMLInputElement>) => {
-    //     const change = parseInt(event.target.value);
-    //     // if (change > 1) {
-    //     //     setProductQuantity(change);
-    //     // }
-
-    //     // else if ((productQuantity == 1 && change == 1) || (productQuantity > 1)){
-    //     //     setProductQuantity(productQuantity + change);
-    //     // };
-        
-    //     setProductQuantity(change);
-    // };
-
-    // const handleSubmit = () => {
-
-    //     if (!inputRef.current) return initialValues;
-    //     const productQuantity = parseInt(inputRef.current.value);
-
-    //     console.log("added " + productQuantity + " to cart");
-
-    //     useAddToCartMutation({
-    //         variables: {
-    //             input: {
-    //                 productId: selectedProduct.id,
-    //                 quantity: productQuantity
-    //             }
-    //         }
-    //     });
-
-    //     closeModal();
-    // };
+    const [addItemToCart] = useAddToCartMutation();   
 
     const handleSubmit = ((values: {
         productId: string;
@@ -148,11 +97,7 @@ const ProductModal: FC<ProductModalProps> = () => {
                             <span>Size: {selectedProduct.size}</span>
                             {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
                         </ProductInformation>
-                        {/* <Field name="quantity" label="Quantity" innerRef={inputRef} component={<InputQuantity placeholder="1" type="number" min="1" max="999" onBlur={handleChange}/>}/> */}
                         <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput}/>
-                        {/* <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton> */}
-                        {/* <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onBlur={handleChange}/> */}
-                        {/* <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton> */}
                         <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
                     </ProductModalContainer>
                 </Form>    
