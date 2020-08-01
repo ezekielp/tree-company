@@ -1,6 +1,7 @@
 import React, { FC, useContext, useState, useRef, useEffect, FocusEvent } from 'react';
 import { ProductInfoFragment, useAddToCartMutation } from '../../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
+import { FormikNumberInput, FormikTextInput} from '../../form/inputs';
 import styled from 'styled-components';
 import { ModalContext } from '../../home/HomePage';
 
@@ -62,57 +63,101 @@ interface ProductModalProps {}
 const ProductModal: FC<ProductModalProps> = () => {
 
     const { selectedProduct, closeModal} = useContext(ModalContext);
-    const [productQuantity, setProductQuantity] = useState(1);
+    // const [productQuantity, setProductQuantity] = useState(1);
     const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
-    useEffect( ()=> {
-        if (inputRef.current) inputRef.current.value=productQuantity.toString();
+    const [addItemToCart] = useAddToCartMutation();
 
-        // useUpdateCartMutation({
-        //     variables: {
-        //         input: {
-        //             productId: selectedProduct.id,
-        //             quantity: productQuantity
-        //         }
-        //     }
-        // });
+    // useEffect( ()=> {
+    //     if (inputRef.current) inputRef.current.value=productQuantity.toString();
+    // });
 
-    }, [productQuantity] );
+    // const handleChange = (event: FocusEvent<HTMLInputElement>) => {
+    //     const change = parseInt(event.target.value);
+    //     // if (change > 1) {
+    //     //     setProductQuantity(change);
+    //     // }
 
-    const handleChange = (change: number) => {
-        if (change > 1) {
-            setProductQuantity(change);
-        }
+    //     // else if ((productQuantity == 1 && change == 1) || (productQuantity > 1)){
+    //     //     setProductQuantity(productQuantity + change);
+    //     // };
+        
+    //     setProductQuantity(change);
+    // };
 
-        else if ((productQuantity == 1 && change == 1) || (productQuantity > 1)){
-            setProductQuantity(productQuantity + change);
-        };
-    };
+    // const handleSubmit = () => {
 
-    const handleSubmit = () => {
+    //     if (!inputRef.current) return initialValues;
+    //     const productQuantity = parseInt(inputRef.current.value);
+
+    //     console.log("added " + productQuantity + " to cart");
+
+    //     useAddToCartMutation({
+    //         variables: {
+    //             input: {
+    //                 productId: selectedProduct.id,
+    //                 quantity: productQuantity
+    //             }
+    //         }
+    //     });
+
+    //     closeModal();
+    // };
+
+    const handleSubmit = ((values: {
+        productId: string;
+        quantity: number;
+    }, formikHelpers: FormikHelpers<{
+        productId: string;
+        quantity: number;
+    }>) => {
+        if (!inputRef.current) return initialValues;
+
+        const productQuantity = parseInt(inputRef.current.value);
+        
+        addItemToCart({
+            variables: {
+                input: {
+                    productId: selectedProduct.id,
+                    quantity: productQuantity
+                }
+            }
+        });
+
         console.log("added " + productQuantity + " to cart");
-
         closeModal();
-    };
+    });
 
     if (!selectedProduct.imageUrl) return null;
 
+    const initialValues = {
+        productId: selectedProduct.id,
+        quantity: 1
+    };
 
     return (
-        <ProductModalContainer onClick={(e) => e.stopPropagation()}>
-            <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
-            <ProductName>{selectedProduct.name}</ProductName>
-            <ProductImageContainer src={selectedProduct.imageUrl} />
-            <ProductInformation>
-                <span>Material: {selectedProduct.material}</span>
-                <span>Size: {selectedProduct.size}</span>
-                {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
-            </ProductInformation>
-            {/* <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton> */}
-            <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onBlur={handleChange}/>
-            {/* <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton> */}
-            <AddToCartButton onClick={handleSubmit}>Add to Cart</AddToCartButton>
-        </ProductModalContainer>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+            {({ isSubmitting }) => (
+                <Form>
+                    <ProductModalContainer onClick={(e) => e.stopPropagation()}>
+                        <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
+                        <ProductName>{selectedProduct.name}</ProductName>
+                        <ProductImageContainer src={selectedProduct.imageUrl} />
+                        <ProductInformation>
+                            <span>Material: {selectedProduct.material}</span>
+                            <span>Size: {selectedProduct.size}</span>
+                            {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
+                        </ProductInformation>
+                        {/* <Field name="quantity" label="Quantity" innerRef={inputRef} component={<InputQuantity placeholder="1" type="number" min="1" max="999" onBlur={handleChange}/>}/> */}
+                        <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput}/>
+                        {/* <DecreaseQuantityButton onClick={()=>handleChange(-1)}>-</DecreaseQuantityButton> */}
+                        {/* <InputQuantity placeholder="1" type="number" min="1" max="999" ref={inputRef} onBlur={handleChange}/> */}
+                        {/* <IncreaseQuantityButton onClick={()=>handleChange(1)}>+</IncreaseQuantityButton> */}
+                        <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
+                    </ProductModalContainer>
+                </Form>    
+            )}
+        </Formik>
     )
 }
 

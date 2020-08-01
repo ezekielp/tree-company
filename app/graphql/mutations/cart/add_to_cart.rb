@@ -9,8 +9,12 @@ module Mutations
                 new_cart = cart.dup
                 product_id = input.product_id
                 quantity = input.quantity
-
+                debugger
+                
+                new_cart[product_id] = 0 if (!new_cart[product_id]) 
                 new_cart[product_id] += quantity
+
+                debugger
 
                 context[:cart] = new_cart
 
