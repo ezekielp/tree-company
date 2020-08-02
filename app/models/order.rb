@@ -3,19 +3,23 @@
 # Table name: orders
 #
 #  id                   :bigint           not null, primary key
-#  billing_customer_id  :integer          not null
-#  shipping_customer_id :integer          not null
 #  shipping_cost        :integer          default(1000), not null
 #  tax_cost             :integer          not null
 #  unit_price           :integer          not null
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
+#  billing_customer_id  :integer          not null
+#  shipping_customer_id :integer
+#
+# Indexes
+#
+#  index_orders_on_billing_customer_id  (billing_customer_id)
 #
 class Order < ApplicationRecord
     validates :shipping_cost, inclusion: { in: [1000, 0] }
     validates :unit_price, inclusion: { in: [300, 400, 500, 700] }
 
-    belongs_to :shipping_customer
+    belongs_to :shipping_customer, optional: true
     belongs_to :billing_customer
     has_many :order_quantities
     has_many :products, through: :order_quantities
@@ -40,5 +44,9 @@ class Order < ApplicationRecord
 
     def total_cost
         self.subtotal + self.tax_cost + self.shipping_cost
+    end
+
+    def local_pickup?
+        self.shipping_cost == 0
     end
 end

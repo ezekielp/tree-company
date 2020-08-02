@@ -3,13 +3,17 @@
 # Table name: products
 #
 #  id           :bigint           not null, primary key
+#  description  :text
+#  material     :string           not null
 #  name         :string           not null
 #  size         :string           not null
-#  material     :string           not null
-#  description  :text
 #  style_number :string
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#
+# Indexes
+#
+#  index_products_on_name_and_id  (name,id)
 #
 class Product < ApplicationRecord
     validates :size, inclusion: { in: %w(11x15 12x18 6x8 5.5x8), message: "%{value} is not a valid size" }

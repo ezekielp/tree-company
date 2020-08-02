@@ -7,6 +7,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_counties_on_name  (name) UNIQUE
+#
 require 'rails_helper'
 
 RSpec.describe County, type: :model do
