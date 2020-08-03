@@ -435,6 +435,22 @@ export type ProductInfoFragment = (
   )>> }
 );
 
+export type AddToCartMutationVariables = Exact<{
+  input: UpdateCartInput;
+}>;
+
+
+export type AddToCartMutation = (
+  { __typename?: 'Mutation' }
+  & { addToCart: (
+    { __typename?: 'AddToCartPayload' }
+    & { cart: Array<(
+      { __typename?: 'CartItem' }
+      & Pick<CartItem, 'productId' | 'quantity'>
+    )> }
+  ) }
+);
+
 export const BillingCustomerInfoFragmentDoc = gql`
     fragment BillingCustomerInfo on BillingCustomer {
   id
@@ -486,6 +502,7 @@ export const OrderInfoFragmentDoc = gql`
   }
 }
     `;
+<<<<<<< HEAD
 export type AddToCartMutationVariables = Exact<{
   input: UpdateCartInput;
 }>;
@@ -502,6 +519,8 @@ export type AddToCartMutation = (
   ) }
 );
 
+=======
+>>>>>>> add to cart functional
 export const ProductInfoFragmentDoc = gql`
     fragment ProductInfo on Product {
   id
