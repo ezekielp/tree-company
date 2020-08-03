@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
     before_action :ensure_session_token
-    # helper_method :add_to_cart
 
     def ensure_session_token
         if !session[:session_token] || !session[:cart] || session_token_expired?
@@ -19,19 +18,4 @@ class ApplicationController < ActionController::Base
         session[:expires_at] = Time.current + 7.days
     end
 
-    # def cart_context
-    #     @cart_context ||= {
-    #         add_to_cart: add_to_cart
-    #     }
-    # end
-
-    # delegate :add_to_cart,
-    #         to: :application_controller
-
-    # def add_to_cart(product_id, quantity)
-    # #     # session[:cart][product_id] = 0 if (!session[:cart][product_id]) 
-    # #     debugger
-    #     session[:cart][product_id] += quantity
-    # #     debugger
-    # end
 end

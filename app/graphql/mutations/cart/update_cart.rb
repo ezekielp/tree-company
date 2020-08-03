@@ -13,27 +13,26 @@ module Mutations
             field :cart, [Types::CartItemType], null: false
             
             def resolve(input:)
-                new_cart = cart.dup
+                cart = context[:cart]
                 product_id = input.product_id
                 quantity = input.quantity
 
                 if quantity == 0
-                    new_cart.delete(product_id)
+                    cart.delete(product_id)
                 else
-                    new_cart[product_id] = quantity
+                    cart[product_id] = quantity
                 end
 
-                context[:cart] = new_cart
+                cart_as_array = []
 
-                new_cart_as_array = []
-                context[:cart].each do |product_id, quantity|
-                    new_cart_as_array << { 
+                cart.each do |product_id, quantity|
+                    cart_as_array << { 
                     product_id: product_id,
                     quantity: quantity
                     }
                 end
                 
-                { cart: new_cart_as_array }
+                { cart: cart_as_array }
             end
         end
     end
