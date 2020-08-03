@@ -12,8 +12,6 @@ class GraphqlController < ApplicationController
       # Query context goes here, for example:
       # current_user: current_user,
       cart: session[:cart],
-      # add_to_cart: add_to_cart
-      # cart_context: cart_context
     }
     result = TreeCompanySchema.execute(query, variables: variables, context: context, operation_name: operation_name)
     render json: result
