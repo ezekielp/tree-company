@@ -17,7 +17,7 @@ Tax cost: $<%= @order.price_in_dollars(@order.tax_cost) %>
 Shipping cost: $<%= @order.price_in_dollars(@order.shipping_cost) %> 
 Total charge: $<%= @order.price_in_dollars(@order.total_cost) %> 
 
-<% if @order[:shipping_customer] %>
+<% if @order.shipping_customer %>
 Shipping information:
 Company name: <%= @order.shipping_customer.company_name %> 
 Address: <%= @order.shipping_customer.address %> 

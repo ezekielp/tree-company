@@ -6,7 +6,7 @@ class OrderMailer < ApplicationMailer
 
     def new_order_customer_email(email_address)
         @order = params[:order]
-        mail(to: email_address), subject: "Order confirmation from The Tree Company")
+        mail(to: email_address, subject: "Order confirmation from The Tree Company")
     end
 
 end
