@@ -1,0 +1,45 @@
+ORDER CONFIRMATION
+Thank you for your order, <%= @order.billing_customer.name%>!
+[TO ADD: SHIPPING INFORMATION]
+Order date: <%= Date.current %>
+
+Order details
+-------------------------------
+<% @order.order_items.each do |item| %>
+
+<%= item[:product].name %> (style <%= item[:product].style_number %>)
+Quantity: <%= item[:quantity] %>
+<% end %>
+
+Unit price: $<%= @order.price_in_dollars(@order.unit_price) %>.00
+Subtotal: $<%= @order.price_in_dollars(@order.subtotal) %> 
+Tax cost: $<%= @order.price_in_dollars(@order.tax_cost) %> 
+Shipping cost: $<%= @order.price_in_dollars(@order.shipping_cost) %> 
+Total charge: $<%= @order.price_in_dollars(@order.total_cost) %> 
+
+<% if @order[:shipping_customer] %>
+Shipping information:
+Company name: <%= @order.shipping_customer.company_name %> 
+Address: <%= @order.shipping_customer.address %> 
+City: <%= @order.shipping_customer.city %> 
+State: <%= @order.shipping_customer.state %> 
+Zip code: <%= @order.shipping_customer.zip_code %>
+<% if @order.shipping_customer.phone_number %>
+Phone number: <%= @order.shipping_customer.phone_number %> 
+<% end %>
+<% if @order.shipping_customer.attn %>
+Phone number: <%= @order.shipping_customer.attn %> 
+<% end %>
+<% end %>
+
+Billing information:
+Name: <%= @order.billing_customer.name %>
+Email address: <%= @order.billing_customer.email %>
+Address: <%= @order.billing_customer.address %>
+City: <%= @order.billing_customer.city %>
+State: <%= @order.billing_customer.state %>
+Zip code: <%= @order.billing_customer.zip_code %>
+<% if @order.billing_customer.phone_number %>
+Phone number: <%= @order.billing_customer.phone_number %> 
+<% end %>
+Tax exempt? <%= @order.billing_customer.tax_exempt %> 
