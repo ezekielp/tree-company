@@ -46,8 +46,7 @@ Rails.application.configure do
     address: "smtp.gmail.com",
     port: 587,
     user_name: "ezekielp",
-    # password: ENV.fetch('ZEKE_GMAIL_APP_PASSWORD'),
-    password: "fake",
+    password: ENV.fetch('ZEKE_GMAIL_APP_PASSWORD'),
     authentication: "plain",
     enable_starttls_auto: true
   }
