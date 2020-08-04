@@ -37,7 +37,10 @@ module Mutations
                 )
             end
 
-            OrderMailer.with(order: new_order).new_order_email.deliver_later
+            customer_email = BillingCustomer.find(input.billing_customer_id).email
+
+            OrderMailer.with(order: new_order).new_order_admin_email.deliver_later
+            OrderMailer.with(order: new_order).new_order_customer_email(customer_email).deliver_later
 
             { order: new_order }
         end
