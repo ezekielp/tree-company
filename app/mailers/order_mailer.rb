@@ -9,4 +9,8 @@ class OrderMailer < ApplicationMailer
         mail(to: email_address, subject: "Order confirmation from The Tree Company")
     end
 
+    def new_order_error_email
+        @errors = params[:errors]
+        mail(to: ENV.fetch('ZEKE_EMAIL'), subject: 'Uh oh! New order error at Thetreecompany.com')
+    end
 end
