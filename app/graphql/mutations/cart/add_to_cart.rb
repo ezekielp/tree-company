@@ -20,9 +20,7 @@ module Mutations
                     product_id: product_id,
                     quantity: quantity
                     }
-                end
-
-                debugger    
+                end  
                 
                 { cart: cart_as_array }
             end

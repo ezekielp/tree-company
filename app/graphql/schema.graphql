@@ -110,8 +110,8 @@ type CreateShippingCustomerPayload {
 }
 
 type Mutation {
-  clearCart: ClearCartPayload!
   addToCart(input: UpdateCartInput!): AddToCartPayload!
+  clearCart: ClearCartPayload!
   createBillingCustomer(input: CreateBillingCustomerInput!): CreateBillingCustomerPayload!
   createOrder(input: CreateOrderInput!): CreateOrderPayload!
   createPaymentIntent(input: CreatePaymentIntentInput!): CreatePaymentIntentPayload!
