@@ -16,7 +16,7 @@ gql`
 
 interface ProductModalContainerProps {};
 
-const ProductModalContainer: FC<ProductModalContainerProps & RouteComponentProps> = () => {
+const ProductModalContainer: FC<ProductModalContainerProps> = () => {
     return (
         <ProductModal />
     )
