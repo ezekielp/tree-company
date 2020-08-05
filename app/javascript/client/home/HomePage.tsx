@@ -10,7 +10,7 @@ interface ModalContextState {
     setSelectedProduct: (product: ProductInfoFragment) => void;
     modalIsShowing: boolean;
     selectedProduct: ProductInfoFragment;
-    displayedModal: String;
+    displayedModal: string;
 }
 
 export const ModalContext = createContext<ModalContextState>({

@@ -8,5 +8,5 @@ const StyledNumberInput = styled.input`
 `;
 
 export const NumberInput = React.forwardRef(( { ...rest }: NumberInputProps, ref) => (
-    <StyledNumberInput {...rest} ref={ref as React.RefObject<HTMLInputElement>} type="number" min="1" max="999" />
+    <StyledNumberInput {...rest} ref={ref as React.RefObject<HTMLInputElement>} type="number" min="1" max="9999" />
 ));
