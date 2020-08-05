@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
-import ProductModal from '../product/modals/ProductModal';
 import { ModalContext } from '../home/HomePage';
+import ProductModalContainer from 'client/product/modals/ProductModalContainer';
 
 const DefaultBackdrop = styled.div`
     display: flex;
@@ -22,12 +22,22 @@ interface ModalProps {}
 
 const Modal: FC<ModalProps> = () => {
 
-    const {modalIsShowing, openModal, closeModal} = useContext(ModalContext);
+    const {modalIsShowing, openModal, closeModal, displayedModal} = useContext(ModalContext);
+
+    let renderedModal;
+
+    switch (displayedModal){
+        case "productModal":
+            renderedModal = (<ProductModalContainer />);
+            break;
+        default:
+            renderedModal = null;
+    }
 
     if (modalIsShowing){
         return (
             <DefaultBackdrop onClick={()=>closeModal()}>
-                <ProductModal />
+                {renderedModal}
             </DefaultBackdrop>
         )
     } else {
