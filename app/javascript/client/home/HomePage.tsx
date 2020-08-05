@@ -5,7 +5,7 @@ import Modal from '../modal/Modal';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 
 interface ModalContextState {
-    openModal: (modalName: string) => void;
+    openModal: (modalName: string, productId?: string, quantity?: number) => void;
     closeModal: () => void;
     setSelectedProduct: (product: ProductInfoFragment) => void;
     modalIsShowing: boolean;
@@ -54,7 +54,9 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     return (
         <ModalContext.Provider value={{
-            openModal: (modalName)=>{setModalIsShowing(true);setDisplayedModal(modalName)},
+            openModal: (modalName)=>{setDisplayedModal(modalName);setTimeout(() => {
+                setModalIsShowing(true)
+            }, 1000);},
             closeModal: ()=>setModalIsShowing(false),
             setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
             modalIsShowing: modalIsShowing,

@@ -52,7 +52,7 @@ interface AddToCartData {
 
 const ProductModal: FC<ProductModalProps> = () => {
 
-    const { selectedProduct, closeModal} = useContext(ModalContext);
+    const { selectedProduct, closeModal, openModal } = useContext(ModalContext);
     
     const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
@@ -63,18 +63,23 @@ const ProductModal: FC<ProductModalProps> = () => {
 
         const productQuantity = parseInt(inputRef.current.value);
         
-        const addedItem = addItemToCart({
+        addItemToCart({
             variables: {
                 input: {
                     productId: selectedProduct.id,
                     quantity: productQuantity
                 }
             }
-        });
+        }).then(
+            (event)=>{
+                console.log(event);
+                closeModal();
+                setTimeout(() => {
+                openModal("successModal", selectedProduct.id, productQuantity );    
+                }, 1000);
+            }
+        );
 
-        console.log("added " + productQuantity + " to cart");
-        console.log(addedItem);
-        closeModal();
     };
 
     if (!selectedProduct.imageUrl) return null;

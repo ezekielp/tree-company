@@ -2,6 +2,7 @@ import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../home/HomePage';
 import ProductModalContainer from 'client/product/modals/ProductModalContainer';
+import SuccessModal from './SuccessModal';
 
 const DefaultBackdrop = styled.div`
     display: flex;
@@ -13,7 +14,7 @@ const DefaultBackdrop = styled.div`
     left: 0;
     height: 100vh;
     width: 100%;
-    background: rgba(0,0,0,0.75);
+    background: rgba(0,0,0,0.6);
     overflow-y: auto;
     z-index: 10;
 `;
@@ -24,25 +25,30 @@ const Modal: FC<ModalProps> = () => {
 
     const {modalIsShowing, openModal, closeModal, displayedModal} = useContext(ModalContext);
 
-    let renderedModal;
+    if (!modalIsShowing) return null;
+
+    let clickEffect;
+    let component;
 
     switch (displayedModal){
         case "productModal":
-            renderedModal = (<ProductModalContainer />);
+            clickEffect = () => closeModal();
+            component = (<ProductModalContainer />);
+            // debugger
             break;
+        case "successModal":
+            clickEffect = () => closeModal();
+            component = (<SuccessModal />);
+            // debugger
         default:
-            renderedModal = null;
+            component = null;
     }
 
-    if (modalIsShowing){
-        return (
-            <DefaultBackdrop onClick={()=>closeModal()}>
-                {renderedModal}
-            </DefaultBackdrop>
-        )
-    } else {
-        return null;
-    }
+    return (
+        <DefaultBackdrop onClick={clickEffect}>
+            {component}
+        </DefaultBackdrop>
+    )
 
 }
 
