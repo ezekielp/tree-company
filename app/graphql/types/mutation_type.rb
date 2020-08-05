@@ -8,5 +8,6 @@ module Types
     field :create_billing_customer, mutation: Mutations::CreateBillingCustomer
     field :create_order, mutation: Mutations::CreateOrder
     field :create_payment_intent, mutation: Mutations::CreatePaymentIntent
+    field :send_error_mailer, mutation: Mutations::SendErrorMailer
   end
 end

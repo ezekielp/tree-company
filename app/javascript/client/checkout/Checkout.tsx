@@ -1,6 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from 'react';
 import { Switch, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, useSendErrorMailerMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -137,6 +137,14 @@ gql`
     }
 `;
 
+gql`
+    mutation SendErrorMailer($input: SendErrorMailerInput!) {
+        sendErrorMailer(input: $input) {
+            errors
+        }
+    }
+`;
+
 const CheckoutFormContainer = styled.div`
     width: 80%;
     margin: 0 auto;
@@ -220,6 +228,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
     const [createShippingCustomer] = useCreateShippingCustomerMutation();
     const [createOrder] = useCreateOrderMutation();
     const [clearCart] = useClearCartMutation();
+    const [sendErrorMailer] = useSendErrorMailerMutation();
 
     let shippingCost: number = localPickup ? 0 : 1000;
     useEffect(() => {
@@ -422,8 +431,14 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                 }
             });
         } else {
-            return;
-            // TO DO: On error, redirect the user to a page with Jim's contact details, along with a link to the trusty old printable order form
+            await sendErrorMailer({
+                variables: {
+                    input: {
+                        errors: createOrderResponse.errors.map(e => e.message)
+                    }
+                }
+            });
+            history.push('/error');
         }
     };
 
