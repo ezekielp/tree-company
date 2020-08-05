@@ -14,10 +14,10 @@ export const ErrorPage: FC<ErrorPageProps> = () => {
     return (
         <>
             <ErrorMessage>
-                Oops! Something went wrong on our end. Sorry about that.
+                Oops! Something went wrong on our end. Our apologies.
             </ErrorMessage>
             <ErrorMessage>
-                Please use our printable order form instead. You can send it to Jim by mail or fax — his contact details are on the form.
+                Please contact Jim directly by email at sales@thetreecompany.com or by phone at 410-788-7277 to place your order. Or, click here to download a printable order form that you can fax or mail in to place your order (you can find the relevant contact details on the form).
             </ErrorMessage>
             <ErrorMessage>
                 Thanks very much for your business!
