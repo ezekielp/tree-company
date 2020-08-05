@@ -431,7 +431,13 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                 }
             });
         } else {
-            await sendErrorMailer();
+            await sendErrorMailer({
+                variables: {
+                    input: {
+                        errors: createOrderResponse.errors.map(e => e.message)
+                    }
+                }
+            });
             history.push('/error');
         }
     };
