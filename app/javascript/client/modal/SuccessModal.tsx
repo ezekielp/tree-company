@@ -1,5 +1,4 @@
-import React, { FC, useContext, useState, useRef, useEffect, FocusEvent } from 'react';
-import { ProductInfoFragment } from '../graphqlTypes';
+import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../home/HomePage';
 
