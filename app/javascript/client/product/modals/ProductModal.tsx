@@ -73,10 +73,8 @@ const ProductModal: FC<ProductModalProps> = () => {
         }).then(
             (event)=>{
                 console.log(event);
-                closeModal();
-                setTimeout(() => {
+                // closeModal();
                 openModal("successModal", selectedProduct.id, productQuantity );    
-                }, 1000);
             }
         );
 

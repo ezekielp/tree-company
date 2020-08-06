@@ -54,9 +54,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     return (
         <ModalContext.Provider value={{
-            openModal: (modalName)=>{setDisplayedModal(modalName);setTimeout(() => {
-                setModalIsShowing(true)
-            }, 1000);},
+            openModal: (modalName)=>{setDisplayedModal(modalName);setModalIsShowing(true);},
             closeModal: ()=>setModalIsShowing(false),
             setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
             modalIsShowing: modalIsShowing,
