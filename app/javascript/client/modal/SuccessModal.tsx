@@ -37,14 +37,12 @@ const ProductName = styled.div`
     font-weight: bold;
 `
 
-interface SuccessModalProps {
-
-}
+interface SuccessModalProps {}
 
 
 const SuccessModal: FC<SuccessModalProps> = () => {
 
-    const { selectedProduct, closeModal, openModal } = useContext(ModalContext);
+    const { selectedProduct, closeModal, flashMessage } = useContext(ModalContext);
 
     if (!selectedProduct.imageUrl) return null;
 
@@ -52,6 +50,7 @@ const SuccessModal: FC<SuccessModalProps> = () => {
         <SuccessModalContainer>
             <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
             <h1>This was a triumph</h1>
+            <div>{`You have added ${flashMessage} ${selectedProduct.name} sign(s) to the cart!`} </div>
         </SuccessModalContainer>
     )
 }

@@ -52,7 +52,7 @@ interface AddToCartData {
 
 const ProductModal: FC<ProductModalProps> = () => {
 
-    const { selectedProduct, closeModal, openModal } = useContext(ModalContext);
+    const { selectedProduct, setFlashMessage, closeModal, openModal } = useContext(ModalContext);
     
     const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
@@ -73,8 +73,8 @@ const ProductModal: FC<ProductModalProps> = () => {
         }).then(
             (event)=>{
                 console.log(event);
-                // closeModal();
-                openModal("successModal", selectedProduct.id, productQuantity );    
+                setFlashMessage(productQuantity.toString());
+                openModal("successModal");    
             }
         );
 
