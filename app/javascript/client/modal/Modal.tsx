@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ModalContext } from '../home/HomePage';
 import ProductModalContainer from 'client/product/modals/ProductModalContainer';
@@ -42,7 +42,7 @@ const Modal: FC<ModalProps> = () => {
         case "successModal":
             clickEffect = () => closeModal();
             component = (<SuccessModal />);
-            // debugger
+            break;
         default:
             component = null;
     }
