@@ -5,7 +5,7 @@ import Modal from '../modal/Modal';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 
 interface ModalContextState {
-    openModal: (modalName: string, productId?: string, quantity?: number) => void;
+    openModal: (modalName: string) => void;
     closeModal: () => void;
     setSelectedProduct: (product: ProductInfoFragment) => void;
     setFlashMessage: (flashMessage: string) => void;
@@ -39,7 +39,6 @@ const ThumbnailIndexContainer = styled.div`
     width: 100%;
     height: 100%;
     flex-wrap: wrap;
-    /* padding: 20px; */
 `
 
 interface HomePageProps {
