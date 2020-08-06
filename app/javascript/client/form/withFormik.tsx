@@ -1,6 +1,6 @@
 import { FieldProps, ErrorMessage } from 'formik';
 import React, { ComponentType } from 'react';
-import { device } from '../media';
+import { device } from '../styles';
 import styled from 'styled-components';
 
 interface WithFormikProps {
