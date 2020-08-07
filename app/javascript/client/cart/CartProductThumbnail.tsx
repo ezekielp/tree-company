@@ -98,7 +98,6 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
         }).then(
             (event)=>{
                 console.log(event);
-                // useGetCartForCartContainerQuery();
             }
         );
     };
@@ -128,8 +127,6 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             {counties && <div>Counties: {countyList}</div>}
                         </CartProductDetails>
                         <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={quantity}/>
-                        {/* <select onChange={handleChange}>{quantityOptions}</select> */}
-                        {/* <button onClick={()=>setQuantity(0)}>Remove Item</button> */}
                         <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
                         <div>${totalPrice}.00</div>
                     </FlexContainer>
