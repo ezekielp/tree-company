@@ -1,13 +1,16 @@
 interface Sizes {
+    smaller: string;
     larger: string;
 }
 
 const sizes: Sizes = {
+    smaller: '450px',
     larger: '800px',
 };
 
 export const device = {
-    mobile: `(max-width: ${sizes.larger})`,
+    mobileSmaller: `(max-width: ${sizes.smaller})`,
+    mobileLarge: `(max-width: ${sizes.larger})`,
     larger: `(min-width: ${sizes.larger})`
 };
 

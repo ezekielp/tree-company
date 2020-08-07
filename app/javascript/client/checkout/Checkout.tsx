@@ -178,7 +178,7 @@ const CheckoutHeader = styled.h1`
 const FormFieldsContainer = styled.div`
     display: flex;
     width: 100%;
-    ${`@media ${device.mobile}`} {
+    ${`@media ${device.mobileLarge}`} {
         flex-direction: column;
     }
 `;
