@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ModalContext } from '../home/HomePage';
 
 const CloseModalButton = styled.button`
-    width: 75%;
+    width: 100%;
     height: 2rem;
     cursor: pointer;
     border: 1px solid black;
@@ -24,7 +24,7 @@ const CheckoutButton = styled.button`
 `
 
 const ViewCartButton = styled.button`
-    width: 75%;
+    width: 100%;
     height: 2rem;
     cursor: pointer;
     border: 1px solid black;
