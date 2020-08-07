@@ -76,7 +76,6 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     });
 
     const [updateItemQuantity] = useUpdateCartMutation();  
-    // const [updateCart] = useGetCartForCartContainerQuery();
 
     const handleSubmit = async (values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
 
@@ -100,7 +99,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
 
     const initialValues = {
         productId: id,
-        quantity: quantity
+        quantity: currentQuantity
     };
 
     return (
@@ -122,7 +121,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             </div>
                             {counties && <div>Counties: {countyList}</div>}
                         </CartProductDetails>
-                        <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={quantity}/>
+                        <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
                         <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
                         <div>${totalPrice}.00</div>
                     </ItemContainer>
