@@ -5,6 +5,7 @@ import { TextInput } from './TextInput';
 import { ZipCodeInput } from './ZipCodeInput';
 import { withFormik } from './withFormik';
 import { NumberInput } from './NumberInput';
+import { UpdateNumberInput } from './UpdateNumberInput';
 
 export const FormikCheckbox = withFormik(Checkbox);
 export const FormikTextInput = withFormik(TextInput);
@@ -12,3 +13,4 @@ export const FormikPhoneNumberInput = withFormik(PhoneNumberInput);
 export const FormikSelectInput = withFormik(SelectInput);
 export const FormikZipCodeInput = withFormik(ZipCodeInput);
 export const FormikNumberInput = withFormik(NumberInput)
+export const FormikUpdateNumberInput = withFormik(UpdateNumberInput)
