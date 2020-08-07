@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
 import treePhotoCompressed from './assets/tree_photo_compressed.jpg';
-import { colors } from './styles';
+import { device, colors } from './styles';
 import styled from 'styled-components';
 
 interface HeaderProps {}
@@ -23,11 +23,21 @@ const FlexContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    ${`@media ${device.mobileLarge}`} {
+        flex-direction: column-reverse;
+    }
 `;
 
 const HeaderTextContainer = styled.div`
     color: white;
     padding-left: 50px;
+
+    ${`@media ${device.mobileLarge}`} {
+        margin: 50px 0;
+        padding: 0;
+        text-align: center;
+    }
 `;
 
 const HeaderHeading = styled.h1`
@@ -43,6 +53,11 @@ const HeaderSubheading = styled.div`
 const TreePhoto = styled.img`
     width: 40%;
     border-left: 5px solid white;
+
+    ${`@media ${device.mobileLarge}`} {
+        width: 100%;
+        border: none;
+    }
 `;
 
 export const Header: FC<HeaderProps> = () => {
