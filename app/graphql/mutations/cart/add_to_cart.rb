@@ -7,6 +7,7 @@ module Mutations
             
             def resolve(input:)
                 cart = context[:cart]
+                debugger    
                 product_id = input.product_id
                 quantity = input.quantity
 

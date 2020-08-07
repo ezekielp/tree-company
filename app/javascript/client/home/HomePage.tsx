@@ -8,15 +8,19 @@ interface ModalContextState {
     openModal: (modalName: string) => void;
     closeModal: () => void;
     setSelectedProduct: (product: ProductInfoFragment) => void;
+    setFlashMessage: (flashMessage: string) => void;
+    flashMessage: string;
     modalIsShowing: boolean;
     selectedProduct: ProductInfoFragment;
-    displayedModal: String;
+    displayedModal: string;
 }
 
 export const ModalContext = createContext<ModalContextState>({
     openModal: (modalName) => null,
     closeModal: () => null,
     setSelectedProduct: (product)=>null,
+    setFlashMessage: (flashMessage) => null,
+    flashMessage: "",
     modalIsShowing: false,
     selectedProduct: { name: "", id: "", size: "", material: "", description: "", styleNumber: "", imageUrl: ""},
     displayedModal: ""
@@ -35,7 +39,6 @@ const ThumbnailIndexContainer = styled.div`
     width: 100%;
     height: 100%;
     flex-wrap: wrap;
-    /* padding: 20px; */
 `
 
 interface HomePageProps {
@@ -47,6 +50,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
     const [modalIsShowing, setModalIsShowing] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: ""} );
     const [displayedModal, setDisplayedModal] = useState("");
+    const [flashMessage, setFlashMessage] = useState("");
     
     const ProductThumbnails = Object.entries(products).map((product)=>(
         <ProductThumbnail key={product[0]} product={product[1]} />
@@ -54,9 +58,11 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     return (
         <ModalContext.Provider value={{
-            openModal: (modalName)=>{setModalIsShowing(true);setDisplayedModal(modalName)},
+            openModal: (modalName)=>{setDisplayedModal(modalName);setModalIsShowing(true);},
             closeModal: ()=>setModalIsShowing(false),
             setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
+            setFlashMessage: (message)=>setFlashMessage(message),
+            flashMessage: flashMessage,
             modalIsShowing: modalIsShowing,
             selectedProduct: selectedProduct,
             displayedModal: displayedModal
