@@ -4,7 +4,7 @@ import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ModalContext } from '../home/HomePage';
 
 const CloseModalButton = styled.button`
-    width: 50%;
+    width: 75%;
     height: 2rem;
     cursor: pointer;
     border: 1px solid black;
@@ -14,7 +14,7 @@ const CloseModalButton = styled.button`
 `
 
 const CheckoutButton = styled.button`
-    width: 50%;
+    width: 100%;
     height: 2rem;
     cursor: pointer;
     border: 1px solid black;
@@ -24,7 +24,7 @@ const CheckoutButton = styled.button`
 `
 
 const ViewCartButton = styled.button`
-    width: 50%;
+    width: 75%;
     height: 2rem;
     cursor: pointer;
     border: 1px solid black;
@@ -68,7 +68,6 @@ const SuccessModal: FC<SuccessModalProps> = ({ history }) => {
     if (!selectedProduct.imageUrl) return null;
 
     // TODO if screenwidth > device large toggle cart slider instead
-    // reroutes
     const handleClick = (path: string)=>{
         closeModal();
         history.push(`/${path}`);
@@ -78,9 +77,9 @@ const SuccessModal: FC<SuccessModalProps> = ({ history }) => {
     return (
         <SuccessModalContainer>
             <h1>You have added: <br/><br/>{`${flashMessage}x ${selectedProduct.name}`} <br/><br/> to the cart! </h1>
-            <CloseModalButton onClick={()=>closeModal()}>Continue Shopping</CloseModalButton>
             <ViewCartButton onClick={()=>handleClick("cart")}>View Cart</ViewCartButton>
             <CheckoutButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</CheckoutButton>
+            <CloseModalButton onClick={()=>closeModal()}>Continue Shopping</CloseModalButton>
         </SuccessModalContainer>
     )
 }

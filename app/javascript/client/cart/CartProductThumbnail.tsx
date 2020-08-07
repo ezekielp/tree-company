@@ -5,11 +5,16 @@ import { FormikUpdateNumberInput, FormikTextInput} from '../form/inputs';
 import { range } from 'lodash';
 import styled from 'styled-components';
 
-const FlexContainer = styled.section`
-    display: flex;
+const ItemContainer = styled.section`
+    display: grid;
     justify-content: space-between;
     max-width: 800px;
     max-height: 400px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    margin-top: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid black;
 `;
 
 const ImageContainer = styled.figure`
@@ -30,11 +35,16 @@ const ImageStandIn = styled.div`
 `;
 
 const UpdateCartButton = styled.button`
-
+    border-radius: 1rem;
+    width: 100%;
+    height: 50%;
 `
 
 export const CartProductDetails = styled.div`
     max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 `;
 
 export const ProductNameContainer = styled.div`
@@ -65,22 +75,8 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
         return <option key={num} value={num} {...selected}>{num}</option>
     });
 
-    // const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    //     setQuantity(parseInt(event.target.value));
-
-    //     useUpdateCartMutation({
-    //         variables: {
-    //             input: {
-    //                 productId: id,
-    //                 quantity: currentQuantity
-    //             }
-    //         }
-    //     });
-
-    //     useGetCartForCartContainerQuery();
-    // }
-
-    const [updateCart] = useUpdateCartMutation();  
+    const [updateItemQuantity] = useUpdateCartMutation();  
+    // const [updateCart] = useGetCartForCartContainerQuery();
 
     const handleSubmit = async (values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
 
@@ -88,7 +84,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
 
         const newQuantity = parseInt(inputRef.current.value);
 
-        updateCart({
+        updateItemQuantity({
             variables: {
                 input: {
                     productId: id,
@@ -111,7 +107,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
         <Formik initialValues={initialValues} onSubmit={handleSubmit}>
             {({ isSubmitting }) => (
                 <Form>
-                    <FlexContainer>
+                    <ItemContainer>
                         <ImageContainer>
                             {imageUrl ? (
                                 <Image src={imageUrl} alt={name} />
@@ -129,7 +125,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                         <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={quantity}/>
                         <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
                         <div>${totalPrice}.00</div>
-                    </FlexContainer>
+                    </ItemContainer>
                 </Form>
             )}
         </Formik>
