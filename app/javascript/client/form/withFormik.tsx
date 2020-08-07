@@ -1,6 +1,6 @@
 import { FieldProps, ErrorMessage } from 'formik';
 import React, { ComponentType } from 'react';
-import { device } from '../media';
+import { device } from '../styles';
 import styled from 'styled-components';
 
 interface WithFormikProps {
@@ -20,7 +20,7 @@ const InputWrapper = styled.div`
     display: flex;
     flex-direction: column;
     margin-right: 36px;
-    ${`@media ${device.mobile}`} {
+    ${`@media ${device.mobileLarge}`} {
         margin-right: 0;
     }
 `;

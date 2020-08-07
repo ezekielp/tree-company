@@ -7,7 +7,7 @@ import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct, CheckoutContainer } from './CheckoutContainer';
 import { STATE_OPTIONS, displayPrice, initialValues, validationSchema } from './utils';
-import { device } from '../media';
+import { device } from '../styles';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -178,7 +178,7 @@ const CheckoutHeader = styled.h1`
 const FormFieldsContainer = styled.div`
     display: flex;
     width: 100%;
-    ${`@media ${device.mobile}`} {
+    ${`@media ${device.mobileLarge}`} {
         flex-direction: column;
     }
 `;
