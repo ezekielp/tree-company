@@ -39,6 +39,10 @@ const Modal: FC<ModalProps> = () => {
             clickEffect = () => null;
             component = (<SuccessModal />);
             break;
+        case "successModal":
+            clickEffect = () => closeModal();
+            component = (<SuccessModal />);
+            break;
         default:
             component = null;
     }

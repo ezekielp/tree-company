@@ -31,6 +31,7 @@ export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ hi
     client().watchQuery({ query: GetCartForCartContainerDocument }).subscribe({
         next(data) { refetch() }
     });
+
     const cart = data?.cart;
 
     if (!cart) return null;
