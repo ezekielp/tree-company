@@ -9,12 +9,12 @@ interface WithFormikProps {
     innerRef?: React.RefObject<HTMLInputElement>;
 }
 
-const Label = styled.div`
+export const Label = styled.div`
     margin-right: 7px;
     margin-bottom: 10px;
 `;
 
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
     width: 100%;
     margin-bottom: 15px;
     display: flex;
@@ -40,6 +40,7 @@ export const withFormik = <P extends object>(WrappedComponent: ComponentType<P>)
         const newVal = arg && arg.target ? arg.target.value : arg;
         const withOnChange = onChange ? onChange(newVal) : newVal;
         form.setFieldValue(name, withOnChange);
+        // debugger;
     };
 
     const onBlur = () => {

@@ -3,6 +3,7 @@ import { Switch, Redirect, RouteComponentProps, withRouter } from 'react-router-
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, useSendErrorMailerMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
+import { InputWrapper, Label } from '../form/withFormik';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct, CheckoutContainer } from './CheckoutContainer';
@@ -449,7 +450,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 					onSubmit={handleSubmit}
 					validationSchema={validationSchema}
 				>
-					{({ values, isSubmitting, setFieldValue }) => (
+					{({ values, isSubmitting, setFieldValue, validateField }) => (
 						<Form>
                             <AddressFormHeader>Billing Address</AddressFormHeader>
 							<AddressFormContainer>
@@ -503,54 +504,48 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                                     />
                                 </FormFieldsContainer>
 							</AddressFormContainer>
-							<Field
-								name="localPickup"
-								label="Check below if you would like to pick up the signs instead of having them shipped to you."
-								component={FormikCheckbox}
-								checked={localPickup}
-								onChange={() => {
-                                    setLocalPickup(!localPickup);
-                                }}
-							/>
-							{localPickup === false && (
+                            <InputWrapper>
+                                <Label>
+                                    Check below if you would like to pick up the signs instead of having them shipped to you.
+                                </Label>
+                                <Field name="localPickup" type="checkbox" />
+                            </InputWrapper>
+							{values.localPickup === false && (
+                                <>
 								<Field
 									name="sameAddress"
 									label="Check below to use your billing address as your shipping address."
 									component={FormikCheckbox}
 									checked={sameAddress}
 									onChange={() => {
+                                        !sameAddress && setShippingAddress(values, setFieldValue);
                                         setSameAddress(!sameAddress);
-                                        setShippingAddress(values, setFieldValue);
                                     }}
 								/>
-							)}
-                            <p>{values.shippingZipCode}</p>
-							{localPickup === false && (
-                                <>
                                 <AddressFormHeader>Shipping Address</AddressFormHeader>
 								<AddressFormContainer>
 									<Field
 										name="shippingName"
-										label="Company Name"
+										label="Company Name*"
 										component={FormikTextInput}
 										innerRef={formRefs["shipping-name"]}
 									/>
 									<Field
 										name="shippingAddress"
-										label="Address"
+										label="Address*"
 										component={FormikTextInput}
 										innerRef={formRefs["shipping-address"]}
 									/>
                                     <FormFieldsContainer>
                                         <Field
                                             name="shippingCity"
-                                            label="City"
+                                            label="City*"
                                             component={FormikTextInput}
                                             innerRef={formRefs["shipping-city"]}
                                         />
                                         <Field
                                             name="shippingState"
-                                            label="State"
+                                            label="State*"
                                             component={FormikSelectInput}
                                             options={STATE_OPTIONS}
                                         />
@@ -558,14 +553,14 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                                     <FormFieldsContainer>
                                         <Field
                                             name="shippingZipCode"
-                                            label="Zip Code"
+                                            label="Zip Code*"
                                             component={FormikZipCodeInput}
                                             innerRef={formRefs["shipping-zip-code"]}
                                         />
                                         <Field
                                             name="shippingPhoneNumber"
                                             label="Phone Number"
-                                            component={sameAddress ? FormikTextInput : FormikPhoneNumberInput}
+                                            component={FormikPhoneNumberInput}
                                             innerRef={formRefs["shipping-phone-number"]}
                                         />
                                     </FormFieldsContainer>
