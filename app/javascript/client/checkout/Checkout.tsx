@@ -445,13 +445,19 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
             shippingCost,
             taxCost,
             unitPrice,
-            cart
+            cart: cart.map(cartItem => ({
+                productId: cartItem.productId,
+                quantity: cartItem.quantity
+            }))
         } : {
             billingCustomerId: parseInt(billingCustomerId),
             shippingCost,
             taxCost,
             unitPrice,
-            cart
+            cart: cart.map(cartItem => ({
+                productId: cartItem.productId,
+                quantity: cartItem.quantity
+            }))
         };
 
         const createOrderResponse = await createOrder({
@@ -560,16 +566,17 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                         </Label>
                                         <Field name="taxExempt" type="checkbox" />
                                     </InputWrapper>
-                                    {values.taxId && (
+                                    {values.taxExempt && (
                                         <Field
                                             name="taxId"
                                             label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
+                                            component={FormikTextInput}
                                         />
                                     )}
                                 </AddressFormContainer>
                                 <InputWrapper>
                                     <Label>
-                                        Check below if you would like to pick up the signs instead of having them shipped to you.
+                                        Check below if you'd like to pick up the signs instead of having them shipped to you.
                                     </Label>
                                     <Field name="localPickup" type="checkbox" />
                                 </InputWrapper>

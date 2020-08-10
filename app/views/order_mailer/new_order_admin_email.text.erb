@@ -38,6 +38,9 @@ City: <%= @order.billing_customer.city %>
 State: <%= @order.billing_customer.state %>
 Zip code: <%= @order.billing_customer.zip_code %>
 <% if @order.billing_customer.phone_number %>
-Phone number: <%= @order.billing_customer.phone_number %> 
+Phone number: <%= @order.billing_customer.phone_number %>
 <% end %>
-Tax exempt? <%= @order.billing_customer.tax_exempt %> 
+Tax exempt? <%= @order.billing_customer.tax_exempt ? "Yes" : "No" %>
+<% if @order.billing_customer.tax_id %>
+Tax ID: <%= @order.billing_customer.tax_id %>
+<% end %>
