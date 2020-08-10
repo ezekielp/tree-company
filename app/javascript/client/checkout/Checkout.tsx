@@ -157,7 +157,17 @@ const AddressFormContainer = styled.section`
 `;
 
 const PriceContainer = styled.div`
-	display: flex;
+    display: flex;
+    margin-bottom: 10px;
+`;
+
+const PaymentHeader = styled.div`
+    font-size: 24px;
+    margin-bottom: 16px;
+`;
+
+const PaymentContainer = styled.div`
+
 `;
 
 const AddressFormHeader = styled.div`
@@ -184,6 +194,45 @@ const FormFieldsContainer = styled.div`
     }
 `;
 
+const MailInOrderTextContainer = styled.div`
+    line-height: 130%;
+`;
+
+const MailInOrderText = styled.div`
+    font-variation-settings: 'wght' 700;
+    margin-bottom: 15px;
+`;
+
+const AddressTextContainer = styled.div`
+    text-align: center;
+    margin-bottom: 15px;
+`;
+
+const AddressLine = styled.div``;
+
+const RequiredLabel = styled.div`
+    font-size: 12px;
+`;
+
+const stripeCardInputStyle = {
+    base: {
+        color: '#32325d',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': { color: '#aab7c4' },
+    },
+    invalid: { color: '#fa755a', iconColor: '#fa755a' },
+};
+
+const StripeCardContainer = styled.div`
+    width: 350px;
+    border: 1px solid lightgray;
+    border-radius: 5%;
+    padding: 10px;
+    margin-bottom: 15px;
+`;
+
 interface CheckoutProps extends RouteComponentProps {
     unitPrice: number;
     subtotal: number;
@@ -201,6 +250,7 @@ export interface CheckoutFormData {
     taxExempt?: boolean;
     localPickup: boolean;
     sameAddress: boolean;
+    mailInOrder: boolean;
     shippingName: string;
     shippingAddress: string;
     shippingCity: string;
@@ -221,6 +271,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     const stripeElements = useElements();
     
     const [sameAddress, setSameAddress] = useState(false);
+    const [mailInOrder, setMailInOrder] = useState(false);
 
     const [stripeErrorMessage, setStripeErrorMessage] = useState<string | null>(null);
 
@@ -229,8 +280,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     const [createOrder] = useCreateOrderMutation();
     const [clearCart] = useClearCartMutation();
     const [sendErrorMailer] = useSendErrorMailerMutation();
-
-    // const totalCostMinusShipping: number = subtotal + taxCost;
 
     const productIds: string[] = [];
     const productIdToQuantityMap = {} as { [key: string]: number };
@@ -567,6 +616,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             innerRef={formRefs.attn}
                                         />
                                     </AddressFormContainer>
+                                    <RequiredLabel>* Required</RequiredLabel>
                                     </>
                                 )}
                                 <CheckoutProducts
@@ -585,23 +635,55 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     <div>Total</div>
                                     <div>${displayPrice(totalCost)}</div>
                                 </PriceContainer>
-                                <CardElement
-                                    onFocus={() => setStripeErrorMessage(null)}
-                                    onChange={(e) =>
-                                        e.error && setStripeErrorMessage(e.error.message)
-                                    }
-                                />
-                                {stripeErrorMessage && (
-                                    <StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
-                                )}
-                                <button type="submit" disabled={isSubmitting}>
-                                    Place order
-                                </button>
+                                <PaymentContainer>
+                                    <PaymentHeader>Payment</PaymentHeader>
+                                    <Field
+                                            name="mailInOrder"
+                                            label="Check below if you'd like to pay by check."
+                                            component={FormikCheckbox}
+                                            checked={mailInOrder}
+                                            onChange={() => {
+                                                setMailInOrder(!mailInOrder);
+                                            }}
+                                        />
+                                    {mailInOrder && (
+                                        <MailInOrderTextContainer>
+                                            <MailInOrderText>
+                                                Please print out this checkout page (multiple pages is fine) and send it with your check, payable to The Tree Company, to the address below:
+                                            </MailInOrderText>
+                                            <AddressTextContainer>
+                                                <AddressLine>The Tree Company</AddressLine>
+                                                <AddressLine>20 N. Beaumont Ave.</AddressLine>
+                                                <AddressLine>Catonsville, MD 21228</AddressLine>
+                                            </AddressTextContainer>
+                                        </MailInOrderTextContainer>
+                                    )}
+                                    {!mailInOrder && (
+                                        <>
+                                            <StripeCardContainer>
+                                                <CardElement
+                                                    options={{
+                                                        style: stripeCardInputStyle
+                                                    }}
+                                                    onFocus={() => setStripeErrorMessage(null)}
+                                                    onChange={(e) =>
+                                                        e.error && setStripeErrorMessage(e.error.message)
+                                                    }
+                                                />
+                                                {stripeErrorMessage && (
+                                                    <StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
+                                                )}
+                                            </StripeCardContainer>
+                                            <button type="submit" disabled={isSubmitting}>
+                                                Place order
+                                            </button>
+                                        </>
+                                    )}
+                                </PaymentContainer>
                             </Form>
                         )
                     }}
 				</Formik>
-                <div>*Required</div>
 			</CheckoutFormContainer>
 		);
 }

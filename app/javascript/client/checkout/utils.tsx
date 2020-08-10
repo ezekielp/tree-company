@@ -110,6 +110,7 @@ export const initialValues = {
     taxExempt: false,
     localPickup: false,
     sameAddress: false,
+    mailInOrder: false,
     shippingName: '',
     shippingAddress: '',
     shippingCity: '',
