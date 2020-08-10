@@ -1,12 +1,12 @@
 import React, { FC, useState, useRef } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, useSendErrorMailerMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
-import { Field, Form, Formik, FormikHelpers, useFormikContext } from "formik";
+import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, useSendErrorMailerMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc, CreateBillingCustomerInput, CreateShippingCustomerInput } from '../graphqlTypes';
+import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { InputWrapper, Label } from '../form/withFormik';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
-import { CheckoutProduct, CheckoutContainer } from './CheckoutContainer';
+import { CheckoutProduct } from './CheckoutContainer';
 import { STATE_OPTIONS, displayPrice, initialValues, validationSchema, setShippingAddress } from './utils';
 import { device } from '../styles';
 import gql from 'graphql-tag';
@@ -59,7 +59,8 @@ gql`
         email
         zipCode
         phoneNumber
-        taxExempt        
+        taxExempt
+        taxId
     }
 `;
 
@@ -259,6 +260,7 @@ export interface CheckoutFormData {
     shippingPhoneNumber?: string;
     attn?: string;
     shippingCost?: number;
+    taxId?: string;
 }
 
 const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
@@ -331,7 +333,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 					billingPhoneNumber,
                     email,
                     localPickup,
-					taxExempt,
+                    taxExempt,
+                    taxId,
 					shippingName,
 					shippingAddress,
 					shippingCity,
@@ -384,7 +387,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
             return;
         }
 
-        const billingCustomerInput = {
+        const billingCustomerInput: CreateBillingCustomerInput = {
             name: billingName,
             address: billingAddress,
             city: billingCity,
@@ -394,8 +397,11 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
             email,
             taxExempt
         }
+        if (taxId && taxId.length > 0) {
+            billingCustomerInput['taxId'] = taxId;
+        };
 
-        const shippingCustomerInput = {
+        const shippingCustomerInput: CreateShippingCustomerInput = {
             companyName: shippingName,
             address: shippingAddress,
             city: shippingCity,
@@ -492,7 +498,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 				>
 					{({ values, isSubmitting, setFieldValue }) => {
                         const shippingCost: number = values.localPickup ? 0 : 1000;
-                        const taxCost: number = values.shippingState === "MD" ? parseFloat((subtotal * .06).toFixed(4)) : 0;
+                        const taxCost: number = values.shippingState === "MD" && !values.taxExempt ? parseFloat((subtotal * .06).toFixed(4)) : 0;
                         const totalCost: number = subtotal + taxCost + shippingCost;
 
                         return (
@@ -548,6 +554,18 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             innerRef={formRefs["billing-phone-number"]}
                                         />
                                     </FormFieldsContainer>
+                                    <InputWrapper>
+                                        <Label>
+                                            Check below if you're making a tax-exempt order.
+                                        </Label>
+                                        <Field name="taxExempt" type="checkbox" />
+                                    </InputWrapper>
+                                    {values.taxId && (
+                                        <Field
+                                            name="taxId"
+                                            label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
+                                        />
+                                    )}
                                 </AddressFormContainer>
                                 <InputWrapper>
                                     <Label>

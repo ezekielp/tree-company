@@ -15,6 +15,7 @@ type BillingCustomer {
   phoneNumber: String
   state: String!
   taxExempt: Boolean!
+  taxId: String
   zipCode: String!
 }
 
@@ -55,6 +56,7 @@ input CreateBillingCustomerInput {
   phoneNumber: String
   state: String!
   taxExempt: Boolean
+  taxId: String
   zipCode: String!
 }
 

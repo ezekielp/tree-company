@@ -47,6 +47,12 @@ export const validationSchema = yup.object({
 						.nullable(),
 					email: yup.string().required().email().label("Email"),
 					taxExempt: yup.boolean(),
+					taxId: yup.string().when("taxExempt", {
+						is: true,
+						then: yup
+							.string()
+							.required("A Maryland Sales and Use Tax Number or Exemption Certificate Number is required for a tax-exempt order"),
+					}),
 					sameAddress: yup.boolean(),
 					localPickup: yup.boolean(),
 					shippingName: yup.string().when("localPickup", {
@@ -108,6 +114,7 @@ export const initialValues = {
     billingZipCode: '',
     email: '',
     taxExempt: false,
+    taxId: '',
     localPickup: false,
     sameAddress: false,
     mailInOrder: false,
