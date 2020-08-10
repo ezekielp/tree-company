@@ -449,7 +449,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 					onSubmit={handleSubmit}
 					validationSchema={validationSchema}
 				>
-					{({ values, isSubmitting, setFieldValue, setValues }) => (
+					{({ values, isSubmitting, setFieldValue }) => (
 						<Form>
                             <AddressFormHeader>Billing Address</AddressFormHeader>
 							<AddressFormContainer>
@@ -524,6 +524,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                                     }}
 								/>
 							)}
+                            <p>{values.shippingZipCode}</p>
 							{localPickup === false && (
                                 <>
                                 <AddressFormHeader>Shipping Address</AddressFormHeader>
@@ -558,7 +559,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                                         <Field
                                             name="shippingZipCode"
                                             label="Zip Code"
-                                            component={sameAddress ? FormikTextInput : FormikZipCodeInput}
+                                            component={FormikZipCodeInput}
                                             innerRef={formRefs["shipping-zip-code"]}
                                         />
                                         <Field
