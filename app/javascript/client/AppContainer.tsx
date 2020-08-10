@@ -1,5 +1,6 @@
-import React, { SFC, useState, createContext } from 'react';
+import React, { SFC, useState, useEffect, createContext } from 'react';
 import { Redirect, Route, RouteComponentProps, Switch, withRouter } from 'react-router';
+import { useGetCartForCartContainerQuery, GetCartForCartContainerDocument } from './graphqlTypes';
 import { HomeContainer } from './home/HomeContainer';
 import { CartContainer } from './cart/CartContainer';
 import { CheckoutContainer } from './checkout/CheckoutContainer';
@@ -32,7 +33,7 @@ interface ModalContextState {
 }
 
 interface CartContextState {
-	cart: {};
+	cart: any[]
 }
 
 export const ModalContext = createContext<ModalContextState>({
@@ -47,23 +48,37 @@ export const ModalContext = createContext<ModalContextState>({
 });
 
 export const CartContext = createContext<CartContextState>({
-	cart: {}
+	cart: []
 });
 
 interface InternalAppContainerProps extends RouteComponentProps {}
 
+const updateCart = async ()=>{
+	const { data } = useGetCartForCartContainerQuery();
+	const cartData = data?.cart;
+
+	return cartData;
+}
+
 const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
 
+	const { data } = useGetCartForCartContainerQuery();
+	const cartData = data?.cart;
 	const [modalIsShowing, setModalIsShowing] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: ""} );
     const [displayedModal, setDisplayedModal] = useState("");
 	const [flashMessage, setFlashMessage] = useState("");
-	const [cart, setCart] = useState({});
+	debugger
+	const [cart, setCart] = useState([cartData]);
+	debugger
+
+	if (!cart) return null;
 
     return (
 			<>
 				<CartContext.Provider value={{
 					cart: cart
+					// fetchCart: ()=>setCart(updateCart())
 				}}>
 				<ModalContext.Provider value={{
 					openModal: (modalName)=>{setDisplayedModal(modalName);setModalIsShowing(true);},
