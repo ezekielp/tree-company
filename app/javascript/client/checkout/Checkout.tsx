@@ -639,7 +639,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     <PaymentHeader>Payment</PaymentHeader>
                                     <Field
                                             name="mailInOrder"
-                                            label="Check below if you'd like to pay by check."
+                                            label="If you'd like to pay by credit or debit card, please enter your card details below. If you'd like pay by check instead, check the box below for further instructions."
                                             component={FormikCheckbox}
                                             checked={mailInOrder}
                                             onChange={() => {
