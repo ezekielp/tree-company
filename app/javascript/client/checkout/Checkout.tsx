@@ -1,7 +1,7 @@
-import React, { FC, useState, useEffect, useRef } from 'react';
-import { Switch, Redirect, RouteComponentProps, withRouter } from 'react-router-dom';
+import React, { FC, useState, useRef } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, useSendErrorMailerMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc } from '../graphqlTypes';
-import { Field, Form, Formik, FormikHelpers } from "formik";
+import { Field, Form, Formik, FormikHelpers, useFormikContext } from "formik";
 import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
 import { InputWrapper, Label } from '../form/withFormik';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
@@ -211,7 +211,7 @@ export interface CheckoutFormData {
     shippingCost?: number;
 }
 
-const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, cart, subtotal }) => {
+const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
 
     if (cart.length === 0) history.push('/home');
 
@@ -222,6 +222,9 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
     
     const [sameAddress, setSameAddress] = useState(false);
     const [localPickup, setLocalPickup] = useState(false);
+
+    // const { values } = useFormikContext<CheckoutFormData>();
+
     const [stripeErrorMessage, setStripeErrorMessage] = useState<string | null>(null);
 
     const [createBillingCustomer] = useCreateBillingCustomerMutation();
@@ -230,13 +233,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
     const [clearCart] = useClearCartMutation();
     const [sendErrorMailer] = useSendErrorMailerMutation();
 
-    let shippingCost: number = localPickup ? 0 : 1000;
-    useEffect(() => {
-        shippingCost = localPickup ? 0 : 1000;
-    }, [localPickup]);
-
     const taxCost: number = parseFloat((subtotal * .06).toFixed(4));
-    const totalCost: number = subtotal + shippingCost + taxCost;
+    const totalCostMinusShipping: number = subtotal + taxCost;
 
     const productIds: string[] = [];
     const productIdToQuantityMap = {} as { [key: string]: number };
@@ -286,7 +284,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 					billingState,
 					billingZipCode,
 					billingPhoneNumber,
-					email,
+                    email,
+                    localPickup,
 					taxExempt,
 					shippingName,
 					shippingAddress,
@@ -297,6 +296,9 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 					attn
                 }
         = data;
+
+        const shippingCost = localPickup ? 0 : 1000;
+        const totalCost =  totalCostMinusShipping + shippingCost;
 
         const createPaymentIntentResponse = await createStripePaymentIntent({
             variables: {
@@ -347,15 +349,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
             taxExempt
         }
 
-        const shippingCustomerInput = sameAddress ? {
-            companyName: billingName,
-            address: billingAddress,
-            city: billingCity,
-            state: billingState,
-            zipCode: billingZipCode,
-            phoneNumber: billingPhoneNumber,
-            attn
-        } : {
+        const shippingCustomerInput = {
             companyName: shippingName,
             address: shippingAddress,
             city: shippingCity,
@@ -450,7 +444,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 					onSubmit={handleSubmit}
 					validationSchema={validationSchema}
 				>
-					{({ values, isSubmitting, setFieldValue, validateField }) => (
+					{({ values, isSubmitting, setFieldValue }) => (
 						<Form>
                             <AddressFormHeader>Billing Address</AddressFormHeader>
 							<AddressFormContainer>
@@ -583,11 +577,11 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 							</PriceContainer>
 							<PriceContainer>
 								<div>Shipping</div>
-								<div>${displayPrice(shippingCost)}</div>
+								<div>${values.localPickup ? displayPrice(0) : displayPrice(1000)}</div>
 							</PriceContainer>
 							<PriceContainer>
 								<div>Total</div>
-								<div>${displayPrice(totalCost)}</div>
+								<div>${values.localPickup ? displayPrice(totalCostMinusShipping + 0) : displayPrice(totalCostMinusShipping + 1000)}</div>
 							</PriceContainer>
 							<CardElement
 								onFocus={() => setStripeErrorMessage(null)}
