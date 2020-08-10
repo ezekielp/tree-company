@@ -29,8 +29,6 @@ export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ hi
     // const cart = data?.cart;
     
     if (!cart) return null;
-
-    debugger
     
     const totalQuantity = cart.reduce((acc, cartItem) => acc + cartItem.quantity, 0);
     const unitPrice = determinePrice(totalQuantity);

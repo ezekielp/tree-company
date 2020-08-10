@@ -11,6 +11,7 @@ import { Footer } from './Footer';
 import Modal from '../client/modal/Modal';
 import { ProductInfoFragment } from '../client/graphqlTypes';
 import gql from 'graphql-tag';
+import { setUncaughtExceptionCaptureCallback } from 'process';
 
 gql`
     query GetCartForCartContainer {
@@ -33,7 +34,8 @@ interface ModalContextState {
 }
 
 interface CartContextState {
-	cart: any[]
+	cart: any[];
+	fetchCart: () => void;
 }
 
 export const ModalContext = createContext<ModalContextState>({
@@ -48,16 +50,16 @@ export const ModalContext = createContext<ModalContextState>({
 });
 
 export const CartContext = createContext<CartContextState>({
-	cart: []
+	cart: [],
+	fetchCart: () => null
 });
 
 interface InternalAppContainerProps extends RouteComponentProps {}
 
-const updateCart = async ()=>{
+const updateCart = ()=>{
 	const { data } = useGetCartForCartContainerQuery();
 	const cartData = data?.cart;
-
-	return cartData;
+	setCart(cartData);
 }
 
 const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
@@ -68,17 +70,22 @@ const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
     const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: ""} );
     const [displayedModal, setDisplayedModal] = useState("");
 	const [flashMessage, setFlashMessage] = useState("");
-	debugger
-	const [cart, setCart] = useState([cartData]);
-	debugger
+
+	const [cart, setCart] = useState(null);
+	
+	useEffect(() => {
+		if (cartData != cart){
+			setCart(cartData);
+		}
+	}, [cartData])
 
 	if (!cart) return null;
 
     return (
 			<>
 				<CartContext.Provider value={{
-					cart: cart
-					// fetchCart: ()=>setCart(updateCart())
+					cart: cart,
+					fetchCart: ()=>setCart(updateCart())
 				}}>
 				<ModalContext.Provider value={{
 					openModal: (modalName)=>{setDisplayedModal(modalName);setModalIsShowing(true);},
