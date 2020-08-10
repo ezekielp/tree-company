@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import { TextInput } from './TextInput';
 
 interface ZipCodeInputProps {
@@ -10,6 +10,10 @@ export const ZipCodeInput = React.forwardRef(({ onChange, value, ...rest}: ZipCo
     const unmaskValue = (v: string) => v.replace(/[^\d]/g, '');
     const maskValue = (v: string) => unmaskValue(v).replace(/(\d{5})(\d{4})/, '$1-$2');
     const [zipCodeInputValue, setZipCodeInputValue] = useState(value ? maskValue(value) : '');
+
+    useEffect(() => {
+        value && setZipCodeInputValue(maskValue(value));
+    }, [value]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;

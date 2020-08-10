@@ -29,6 +29,7 @@ export type BillingCustomer = {
   phoneNumber?: Maybe<Scalars['String']>;
   state: Scalars['String'];
   taxExempt: Scalars['Boolean'];
+  taxId?: Maybe<Scalars['String']>;
   zipCode: Scalars['String'];
 };
 
@@ -71,6 +72,7 @@ export type CreateBillingCustomerInput = {
   phoneNumber?: Maybe<Scalars['String']>;
   state: Scalars['String'];
   taxExempt?: Maybe<Scalars['Boolean']>;
+  taxId?: Maybe<Scalars['String']>;
   zipCode: Scalars['String'];
 };
 
@@ -350,7 +352,7 @@ export type CreateBillingCustomerMutation = (
 
 export type BillingCustomerInfoFragment = (
   { __typename?: 'BillingCustomer' }
-  & Pick<BillingCustomer, 'id' | 'name' | 'address' | 'city' | 'state' | 'email' | 'zipCode' | 'phoneNumber' | 'taxExempt'>
+  & Pick<BillingCustomer, 'id' | 'name' | 'address' | 'city' | 'state' | 'email' | 'zipCode' | 'phoneNumber' | 'taxExempt' | 'taxId'>
 );
 
 export type CreateShippingCustomerMutationVariables = Exact<{
@@ -491,6 +493,7 @@ export const BillingCustomerInfoFragmentDoc = gql`
   zipCode
   phoneNumber
   taxExempt
+  taxId
 }
     `;
 export const ShippingCustomerInfoFragmentDoc = gql`

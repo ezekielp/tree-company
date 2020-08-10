@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState, useEffect } from 'react';
 import { TextInput } from './TextInput';
 
 interface PhoneNumberInputProps {
@@ -10,6 +10,10 @@ export const PhoneNumberInput = React.forwardRef(({ onChange, value, ...rest }: 
     const unmaskValue = (v: string) => v.replace(/[^\d]/g, '');
     const maskValue = (v: string) => unmaskValue(v).replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     const [inputValue, setInputValue] = useState(value ? maskValue(value) : '');
+
+    useEffect(() => {
+        value && setInputValue(maskValue(value));
+    }, [value]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const newValue = e.target.value;

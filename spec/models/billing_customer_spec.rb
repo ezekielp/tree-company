@@ -13,6 +13,7 @@
 #  zip_code     :string           not null
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
+#  tax_id       :string
 #
 # Indexes
 #
