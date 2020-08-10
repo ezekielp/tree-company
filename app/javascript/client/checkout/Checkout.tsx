@@ -6,7 +6,7 @@ import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberIn
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct, CheckoutContainer } from './CheckoutContainer';
-import { STATE_OPTIONS, displayPrice, initialValues, validationSchema } from './utils';
+import { STATE_OPTIONS, displayPrice, initialValues, validationSchema, setShippingAddress } from './utils';
 import { device } from '../styles';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -189,7 +189,7 @@ interface CheckoutProps extends RouteComponentProps {
     cart: CheckoutProduct[];
 }
 
-interface CheckoutFormData {
+export interface CheckoutFormData {
     billingName: string;
     billingAddress: string;
     billingCity: string;
@@ -212,8 +212,7 @@ interface CheckoutFormData {
 
 const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, cart, subtotal }) => {
 
-    // Comment in the line below once you can add stuff to the cart
-    // if (cart.length === 0) history.push('/home');
+    if (cart.length === 0) history.push('/home');
 
     const [createStripePaymentIntent] = useCreateStripePaymentIntentMutation();
 
@@ -450,7 +449,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 					onSubmit={handleSubmit}
 					validationSchema={validationSchema}
 				>
-					{({ isSubmitting }) => (
+					{({ values, isSubmitting, setFieldValue, setValues }) => (
 						<Form>
                             <AddressFormHeader>Billing Address</AddressFormHeader>
 							<AddressFormContainer>
@@ -519,10 +518,13 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
 									label="Check below to use your billing address as your shipping address."
 									component={FormikCheckbox}
 									checked={sameAddress}
-									onChange={() => setSameAddress(!sameAddress)}
+									onChange={() => {
+                                        setSameAddress(!sameAddress);
+                                        setShippingAddress(values, setFieldValue);
+                                    }}
 								/>
 							)}
-							{localPickup === false && sameAddress === false && (
+							{localPickup === false && (
                                 <>
                                 <AddressFormHeader>Shipping Address</AddressFormHeader>
 								<AddressFormContainer>
@@ -556,13 +558,13 @@ const InternalCheckout: FC<CheckoutProps> = ({ location, history, unitPrice, car
                                         <Field
                                             name="shippingZipCode"
                                             label="Zip Code"
-                                            component={FormikZipCodeInput}
+                                            component={sameAddress ? FormikTextInput : FormikZipCodeInput}
                                             innerRef={formRefs["shipping-zip-code"]}
                                         />
                                         <Field
                                             name="shippingPhoneNumber"
                                             label="Phone Number"
-                                            component={FormikPhoneNumberInput}
+                                            component={sameAddress ? FormikTextInput : FormikPhoneNumberInput}
                                             innerRef={formRefs["shipping-phone-number"]}
                                         />
                                     </FormFieldsContainer>

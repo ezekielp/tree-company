@@ -1,8 +1,21 @@
+import { CheckoutFormData } from './Checkout';
 import * as yup from 'yup';
 
 export const displayPrice = (price: number): string => {
     return (price / 100).toFixed(2);
 };
+
+export const setShippingAddress = (values: CheckoutFormData, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void): void => {
+    const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber } = values;
+
+    setFieldValue('shippingName', billingName);
+    setFieldValue('shippingAddress', billingAddress);
+    setFieldValue('shippingCity', billingCity);
+    setFieldValue('shippingState', billingState);
+    setFieldValue('shippingZipCode', billingZipCode);
+
+    billingPhoneNumber && setFieldValue('shippingPhoneNumber', billingPhoneNumber);
+}
 
 export const validationSchema = yup.object({
 					billingName: yup.string().required().label("Name"),
@@ -60,8 +73,8 @@ export const validationSchema = yup.object({
 								"Shipping city is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
 							),
 					}),
-					shippingZipCode: yup.string().when(["sameAddress", "localPickup"], {
-						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
+					shippingZipCode: yup.string().when(["localPickup"], {
+						is: (localPickup) => localPickup === false,
 						then: yup
 							.string()
 							.required(
