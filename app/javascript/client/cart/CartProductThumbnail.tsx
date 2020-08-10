@@ -123,7 +123,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                         </CartProductDetails>
                         <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
                         <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
-                        <div>${totalPrice}.00</div>
+                        <div>${totalPrice / 100}.00</div>
                     </ItemContainer>
                 </Form>
             )}

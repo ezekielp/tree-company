@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
-import { ModalContext } from '../../home/HomePage';
+import { ModalContext } from '../../AppContainer';
 import { ProductInfoFragment } from 'client/graphqlTypes';
 
 const ProductThumbnailContainer = styled.div`

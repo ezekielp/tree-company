@@ -1,20 +1,11 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, useContext } from 'react';
 import { RouteComponentProps } from "react-router-dom";
 import { CartProductThumbnailContainer } from './CartProductThumbnailContainer';
 import { useGetCartForCartContainerQuery, GetCartForCartContainerDocument } from '../graphqlTypes';
 import { determinePrice } from './utils';
 import { client } from '../../packs/client';
-import gql from 'graphql-tag';
 import styled from 'styled-components';
-
-gql`
-    query GetCartForCartContainer {
-        cart {
-            productId
-            quantity
-        }
-    }
-`;
+import { CartContext } from '../AppContainer';
 
 const CartDisplayContainer = styled.div`
 
@@ -22,17 +13,20 @@ const CartDisplayContainer = styled.div`
 
 const SubtotalContainer = styled.div`
     display: flex;
+    justify-content: space-evenly;
 `;
 
 interface CartContainerProps {}
 
 export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }) => {
-    const { data, refetch } = useGetCartForCartContainerQuery();
-    client().watchQuery({ query: GetCartForCartContainerDocument }).subscribe({
-        next(data) { refetch() }
-    });
+    // const { data, refetch } = useGetCartForCartContainerQuery();
+    // client().watchQuery({ query: GetCartForCartContainerDocument }).subscribe({
+    //     next(data) { refetch() }
+    // });
 
-    const cart = data?.cart;
+    const {cart} = useContext(CartContext);
+
+    // const cart = data?.cart;
 
     if (!cart) return null;
 
@@ -43,14 +37,17 @@ export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ hi
         <CartProductThumbnailContainer quantity={quantity} productId={productId} key={productId} unitPrice={unitPrice} />
     ));
 
-    const subtotal = totalQuantity * unitPrice;
+    const subtotal = (totalQuantity * unitPrice);
 
     return (
-        <CartDisplayContainer>
-            {cartItems}
-            <SubtotalContainer>
-                ${subtotal}.00
-            </SubtotalContainer>
-        </CartDisplayContainer>
+        <>
+        <span>Shopping Cart</span><i className="fas fa-shopping-cart"></i>
+            <CartDisplayContainer>
+                {cartItems}
+                <SubtotalContainer>
+                    <span>Subtotal: </span><span>${subtotal / 100}.00</span>
+                </SubtotalContainer>
+            </CartDisplayContainer>
+        </>
     );
 }
