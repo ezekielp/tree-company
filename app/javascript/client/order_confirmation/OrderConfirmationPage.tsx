@@ -172,7 +172,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     )}
                 </AddressContainer>
             )}
-            <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} />
+            <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} shippingCost={shippingCost} taxCost={taxCost} totalCost={totalCost} />
             {/* Price totals to go here */}
         </OrderConfirmationContainer>
     )
