@@ -26,6 +26,10 @@ gql`
             id
             name
         }
+        category {
+            id
+            name
+        }
         imageUrl
     }
 `;

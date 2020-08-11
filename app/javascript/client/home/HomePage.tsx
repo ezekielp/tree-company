@@ -87,6 +87,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     // TODO currenly O(2n), maybe refactor to O(n)
     const PriorityProductThumbnails = Object.entries(products).map((product)=>{
+        debugger
         if (product[1].counties?.some(belongsToCounty) || (countyFilter == "default" && product[1].counties?.length != 0)){
             return (
                 <ProductThumbnail key={product[0]} product={product[1]} />
