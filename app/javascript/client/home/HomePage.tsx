@@ -91,8 +91,6 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
             <ProductThumbnail key={product[0]} product={product[1]} />
         )
     })
-        
-    
 
     return (
         <>

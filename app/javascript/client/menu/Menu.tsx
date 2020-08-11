@@ -37,6 +37,10 @@ const MenuContainer = styled.div`
     
 `;
 
+const StyledSelect = styled.select`
+    width: 3rem;
+`;
+
 interface MenuContainerProps extends RouteComponentProps {}
 
 const Menu: FC<MenuContainerProps> = ({ history }) => {
@@ -59,16 +63,16 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
     return (
         <MenuContainer>
             <span>County</span>
-            <select name="county" id="county">
+            <StyledSelect name="county" id="county">
                 <option value="default">Filter by County</option>
                 {countyOptions}
-            </select>
+            </StyledSelect>
             <span>Material</span>
-            <select name="category" id="category">
+            <StyledSelect name="category" id="category">
                 <option value="default">Filter by Category</option>
                 <option value="wetlands_stream_buffer">Wetlands Stream Buffer</option>
                 <option value="forest_conservation">Forest Conservation/Tree Protection</option>
-            </select>
+            </StyledSelect>
             <span><span>Shopping Cart</span><i onClick={()=>handleClick("cart")} className="fas fa-shopping-cart"></i></span>
         </MenuContainer>
     );
