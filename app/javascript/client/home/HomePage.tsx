@@ -1,14 +1,7 @@
-<<<<<<< HEAD
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
 import Menu from '../menu/Menu';
-=======
-import React, { FC } from 'react';
-import styled from 'styled-components';
-import { ProductInfoFragment } from '../graphqlTypes';
-
->>>>>>> 009615fe9f6a65dd84561a39a69fb07c1a022027
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { HomepageContext } from '../AppContainer';
 import { device } from '../styles';
