@@ -117,7 +117,6 @@ export const initialValues = {
     taxId: '',
     localPickup: false,
     sameAddress: false,
-    mailInOrder: false,
     shippingName: '',
     shippingAddress: '',
     shippingCity: '',

@@ -272,6 +272,11 @@ const AmexLogo = styled(LogoImage)`
     height: 50px;
 `;
 
+const CardPaymentText = styled.div`
+    margin-bottom: 15px;
+    line-height: 130%;
+`;
+
 interface CheckoutProps extends RouteComponentProps {
     unitPrice: number;
     subtotal: number;
@@ -289,7 +294,6 @@ export interface CheckoutFormData {
     taxExempt?: boolean;
     localPickup: boolean;
     sameAddress: boolean;
-    mailInOrder: boolean;
     shippingName: string;
     shippingAddress: string;
     shippingCity: string;
@@ -312,7 +316,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     const stripeElements = useElements();
     
     const [sameAddress, setSameAddress] = useState(false);
-    const [mailInOrder, setMailInOrder] = useState(false);
 
     const [stripeErrorMessage, setStripeErrorMessage] = useState<string | null>(null);
 
@@ -720,6 +723,9 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     )}
                                     {values.paymentMethod === "card" && (
                                         <>
+                                            <CardPaymentText>
+                                                We offer secure payments by major credit and debit cards, powered by one of the world's largest online payment providers, Stripe.
+                                            </CardPaymentText>
                                             <CardLogosContainer>
                                                 <VisaLogo src={visa} />
                                                 <MastercardLogo src={mastercard} />
