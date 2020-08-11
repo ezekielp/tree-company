@@ -117,13 +117,13 @@ export const initialValues = {
     taxId: '',
     localPickup: false,
     sameAddress: false,
-    mailInOrder: false,
     shippingName: '',
     shippingAddress: '',
     shippingCity: '',
     shippingState: 'MD',
     shippingZipCode: '',
-    attn: ''
+    attn: '',
+    paymentMethod: 'card'
 };
 
 export const STATE_OPTIONS = [

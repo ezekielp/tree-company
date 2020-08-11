@@ -7,7 +7,12 @@ import { InputWrapper, Label } from '../form/withFormik';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct } from './CheckoutContainer';
-import { STATE_OPTIONS, displayPrice, initialValues, validationSchema, setShippingAddress } from './utils';
+import { STATE_OPTIONS, initialValues, validationSchema, setShippingAddress } from './utils';
+import amex from '../assets/amex.png';
+import discover from '../assets/discover.png';
+import mastercard from '../assets/mastercard.svg';
+import { StripeBadge } from '../assets/StripeBadge';
+import visa from '../assets/visa.png';
 import { device } from '../styles';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -215,6 +220,15 @@ const SpacedRequiredLabel = styled(RequiredLabel)`
     margin-bottom: 15px;
 `;
 
+const PaymentMethodContainer = styled.div`
+    margin-bottom: 20px;
+`;
+
+const PaymentMethodHeader = styled.div`
+    margin-bottom: 5px;
+    font-variation-settings: 'wght' 550;
+`;
+
 const stripeCardInputStyle = {
     base: {
         color: '#32325d',
@@ -234,6 +248,35 @@ const StripeCardContainer = styled.div`
     margin-bottom: 15px;
 `;
 
+const CardLogosContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 350px;
+    margin-bottom: 10px;
+`;
+
+const LogoImage = styled.img`
+    height: 30px;
+`;
+
+const DiscoverLogo = styled(LogoImage)``;
+
+const MastercardLogo = styled(LogoImage)``;
+
+const VisaLogo = styled(LogoImage)`
+    height: 20px;
+`;
+
+const AmexLogo = styled(LogoImage)`
+    height: 50px;
+`;
+
+const CardPaymentText = styled.div`
+    margin-bottom: 15px;
+    line-height: 130%;
+`;
+
 interface CheckoutProps extends RouteComponentProps {
     unitPrice: number;
     subtotal: number;
@@ -251,7 +294,6 @@ export interface CheckoutFormData {
     taxExempt?: boolean;
     localPickup: boolean;
     sameAddress: boolean;
-    mailInOrder: boolean;
     shippingName: string;
     shippingAddress: string;
     shippingCity: string;
@@ -261,6 +303,7 @@ export interface CheckoutFormData {
     attn?: string;
     shippingCost?: number;
     taxId?: string;
+    paymentMethod: string;
 }
 
 const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
@@ -273,7 +316,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     const stripeElements = useElements();
     
     const [sameAddress, setSameAddress] = useState(false);
-    const [mailInOrder, setMailInOrder] = useState(false);
 
     const [stripeErrorMessage, setStripeErrorMessage] = useState<string | null>(null);
 
@@ -509,7 +551,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
                         return (
                             <Form>
-                                <AddressFormHeader>Billing Address</AddressFormHeader>
+                                <AddressFormHeader>Billing address</AddressFormHeader>
                                 <AddressFormContainer>
                                     <FormFieldsContainer>
                                         <Field
@@ -594,7 +636,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                         }}
                                     />
                                     <ShippingAddressFormContainer>
-                                        <AddressFormHeader>Shipping Address</AddressFormHeader>
+                                        <AddressFormHeader>Shipping address</AddressFormHeader>
                                         <Field
                                             name="shippingName"
                                             label="Name (individual or company)*"
@@ -654,19 +696,23 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                 />
                                 <PaymentContainer>
                                     <PaymentHeader>Payment</PaymentHeader>
-                                    <Field
-                                            name="mailInOrder"
-                                            label="If you'd like to pay by credit or debit card, please enter your card details below. If you'd like pay by check instead, check the box below for further instructions."
-                                            component={FormikCheckbox}
-                                            checked={mailInOrder}
-                                            onChange={() => {
-                                                setMailInOrder(!mailInOrder);
-                                            }}
-                                        />
-                                    {mailInOrder && (
+                                    <PaymentMethodContainer>
+                                        <PaymentMethodHeader>
+                                            Payment method
+                                        </PaymentMethodHeader>
+                                        <label>
+                                            <Field type="radio" name="paymentMethod" value="card" />
+                                            Card
+                                        </label>
+                                        <label>
+                                            <Field type="radio" name="paymentMethod" value="check" />
+                                            Check
+                                        </label>
+                                    </PaymentMethodContainer>
+                                    {values.paymentMethod === "check" && (
                                         <MailInOrderTextContainer>
                                             <MailInOrderText>
-                                                Please print out this checkout page (multiple pages is fine) and send it with your check, payable to The Tree Company, to the address below:
+                                                Please print this checkout page (over multiple pages is fine) and send it with your check, payable to The Tree Company, to the following address:
                                             </MailInOrderText>
                                             <AddressTextContainer>
                                                 <AddressLine>The Tree Company</AddressLine>
@@ -675,8 +721,20 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             </AddressTextContainer>
                                         </MailInOrderTextContainer>
                                     )}
-                                    {!mailInOrder && (
+                                    {values.paymentMethod === "card" && (
                                         <>
+                                            <CardPaymentText>
+                                                We offer secure payments by major credit and debit cards, powered by one of the world's largest online payment providers, Stripe.
+                                            </CardPaymentText>
+                                            <CardLogosContainer>
+                                                <VisaLogo src={visa} />
+                                                <MastercardLogo src={mastercard} />
+                                                <AmexLogo src={amex} />
+                                                <DiscoverLogo src={discover} />
+                                                <a target="_blank" rel="noopener noreferrer" href="https://stripe.com/">
+                                                    <StripeBadge height="20px" display="block" />
+                                                </a>
+                                            </CardLogosContainer>
                                             <StripeCardContainer>
                                                 <CardElement
                                                     options={{
