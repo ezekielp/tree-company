@@ -12,6 +12,7 @@ const MenuContainer = styled.div`
     height: 100%;
     color: white;
     display: flex;
+    flex-direction: column;
     padding: 1rem;
     justify-content: space-evenly;
     ${`@media ${device.mobileLarge}`} {
@@ -20,19 +21,43 @@ const MenuContainer = styled.div`
 `;
 
 const CountySelectContainer = styled.div`
-
+    width: 100%;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: space-between;
 `
 const CategorySelectContainer = styled.div`
-
+    width: 100%;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: space-between;
 `
 const ShoppingCartContainer = styled.div`
-
+    width: 100%;
+    margin: 0.5rem;
+    display: flex;
+    justify-content: center;
+    cursor: pointer;
+    span{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    i{
+        border: 1px solid white;
+        width: 1.5rem;
+        height: 1.5rem;
+        display: flex;
+        border-radius: 0.5rem;
+        justify-content: center;
+        align-items: center;
+    }
 `
 
 const StyledSelect = styled.select`
-    width: 5rem;
+    width: 50%;
     height: 100%;
-    margin: 0.5rem;
+    margin-right: 4rem;
 `;
 
 interface MenuContainerProps extends RouteComponentProps {}
@@ -44,9 +69,9 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
     
     if (!cart) return null;
 
-    const handleClick = (path: string)=>{
-        history.push(`/${path}`);
-    }
+    const handleClick = (path: string)=>(
+        history.push(`/${path}`)
+    );
 
     const countyOptions = countyList.map((countyName)=>{
         return (
@@ -79,8 +104,8 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
                     <option value="forest_conservation">Forest Conservation/Tree Protection</option>
                 </StyledSelect>
             </CategorySelectContainer>
-            <ShoppingCartContainer>
-                <span>Shopping Cart</span><i onClick={()=>handleClick("cart")} className="fas fa-shopping-cart"></i>
+            <ShoppingCartContainer onClick={()=>handleClick("cart")}>
+                <span>Shopping Cart</span><i className="fas fa-shopping-cart"></i>
             </ShoppingCartContainer>
         </MenuContainer>
     );
