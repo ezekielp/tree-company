@@ -7,7 +7,12 @@ import { InputWrapper, Label } from '../form/withFormik';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
 import { CheckoutProduct } from './CheckoutContainer';
-import { STATE_OPTIONS, displayPrice, initialValues, validationSchema, setShippingAddress } from './utils';
+import { STATE_OPTIONS, initialValues, validationSchema, setShippingAddress } from './utils';
+import amex from '../assets/amex.png';
+import discover from '../assets/discover.png';
+import mastercard from '../assets/mastercard.svg';
+import { StripeBadge } from '../assets/StripeBadge';
+import visa from '../assets/visa.png';
 import { device } from '../styles';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
@@ -232,6 +237,30 @@ const StripeCardContainer = styled.div`
     border-radius: 5%;
     padding: 10px;
     margin-bottom: 15px;
+`;
+
+const CardLogosContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 350px;
+    margin-bottom: 10px;
+`;
+
+const LogoImage = styled.img`
+    height: 30px;
+`;
+
+const DiscoverLogo = styled(LogoImage)``;
+
+const MastercardLogo = styled(LogoImage)``;
+
+const VisaLogo = styled(LogoImage)`
+    height: 20px;
+`;
+
+const AmexLogo = styled(LogoImage)`
+    height: 50px;
 `;
 
 interface CheckoutProps extends RouteComponentProps {
@@ -509,7 +538,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
                         return (
                             <Form>
-                                <AddressFormHeader>Billing Address</AddressFormHeader>
+                                <AddressFormHeader>Billing address</AddressFormHeader>
                                 <AddressFormContainer>
                                     <FormFieldsContainer>
                                         <Field
@@ -594,7 +623,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                         }}
                                     />
                                     <ShippingAddressFormContainer>
-                                        <AddressFormHeader>Shipping Address</AddressFormHeader>
+                                        <AddressFormHeader>Shipping address</AddressFormHeader>
                                         <Field
                                             name="shippingName"
                                             label="Name (individual or company)*"
@@ -677,6 +706,15 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     )}
                                     {!mailInOrder && (
                                         <>
+                                            <CardLogosContainer>
+                                                <VisaLogo src={visa} />
+                                                <MastercardLogo src={mastercard} />
+                                                <AmexLogo src={amex} />
+                                                <DiscoverLogo src={discover} />
+                                                <a target="_blank" rel="noopener noreferrer" href="https://stripe.com/">
+                                                    <StripeBadge height="20px" display="block" />
+                                                </a>
+                                            </CardLogosContainer>
                                             <StripeCardContainer>
                                                 <CardElement
                                                     options={{
