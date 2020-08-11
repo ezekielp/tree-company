@@ -511,6 +511,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
         if (!createOrderResponse.errors) {
             await clearCart();
 
+            const orderId = createOrderResponse?.data?.createOrder.order.id;
+
             history.push({
                 pathname: '/order-confirmation',
                 state: { 
@@ -521,7 +523,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                     subtotal,
                     shippingCost,
                     taxCost,
-                    totalCost
+                    totalCost,
+                    orderId
                 }
             });
         } else {
@@ -537,52 +540,127 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     };
 
     return (
-			<CheckoutFormContainer>
-                <CheckoutHeader>Checkout</CheckoutHeader>
-				<Formik
-					initialValues={initialValues}
-					onSubmit={handleSubmit}
-					validationSchema={validationSchema}
-				>
-					{({ values, isSubmitting, setFieldValue }) => {
-                        const shippingCost: number = values.localPickup ? 0 : 1000;
-                        const taxCost: number = values.shippingState === "MD" && !values.taxExempt ? parseFloat((subtotal * .06).toFixed(4)) : 0;
-                        const totalCost: number = subtotal + taxCost + shippingCost;
+        <CheckoutFormContainer>
+            <CheckoutHeader>Checkout</CheckoutHeader>
+            <Formik
+                initialValues={initialValues}
+                onSubmit={handleSubmit}
+                validationSchema={validationSchema}
+            >
+                {({ values, isSubmitting, setFieldValue }) => {
+                    const shippingCost: number = values.localPickup ? 0 : 1000;
+                    const taxCost: number = values.shippingState === "MD" && !values.taxExempt ? parseFloat((subtotal * .06).toFixed(4)) : 0;
+                    const totalCost: number = subtotal + taxCost + shippingCost;
 
-                        return (
-                            <Form>
-                                <AddressFormHeader>Billing address</AddressFormHeader>
-                                <AddressFormContainer>
-                                    <FormFieldsContainer>
-                                        <Field
-                                            name="billingName"
-                                            label="Name (individual or company)*"
-                                            component={FormikTextInput}
-                                            innerRef={formRefs["billing-name"]}
-                                        />
-                                        <Field
-                                            name="email"
-                                            label="Email*"
-                                            component={FormikTextInput}
-                                            type="email"
-                                            innerRef={formRefs.email}
-                                        />
-                                    </FormFieldsContainer>
+                    return (
+                        <Form>
+                            <AddressFormHeader>Billing address</AddressFormHeader>
+                            <AddressFormContainer>
+                                <FormFieldsContainer>
                                     <Field
-                                        name="billingAddress"
+                                        name="billingName"
+                                        label="Name (individual or company)*"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs["billing-name"]}
+                                    />
+                                    <Field
+                                        name="email"
+                                        label="Email*"
+                                        component={FormikTextInput}
+                                        type="email"
+                                        innerRef={formRefs.email}
+                                    />
+                                </FormFieldsContainer>
+                                <Field
+                                    name="billingAddress"
+                                    label="Address*"
+                                    component={FormikTextInput}
+                                    innerRef={formRefs["billing-address"]}
+                                />
+                                <FormFieldsContainer>
+                                    <Field
+                                        name="billingCity"
+                                        label="City*"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs["billing-city"]}
+                                    />
+                                    <Field
+                                        name="billingState"
+                                        label="State*"
+                                        component={FormikSelectInput}
+                                        options={STATE_OPTIONS}
+                                    />
+                                </FormFieldsContainer>
+                                <FormFieldsContainer>
+                                    <Field
+                                        name="billingZipCode"
+                                        label="Zip code*"
+                                        component={FormikZipCodeInput}
+                                        innerRef={formRefs["billing-zip-code"]}
+                                    />
+                                    <Field
+                                        name="billingPhoneNumber"
+                                        label="Phone number (digits only)"
+                                        component={FormikPhoneNumberInput}
+                                        innerRef={formRefs["billing-phone-number"]}
+                                    />
+                                </FormFieldsContainer>
+                                <SpacedRequiredLabel>* Required</SpacedRequiredLabel>
+                                <InputWrapper>
+                                    <Label>
+                                        Check below if you're making a tax-exempt order.
+                                    </Label>
+                                    <Field name="taxExempt" type="checkbox" />
+                                </InputWrapper>
+                                {values.taxExempt && (
+                                    <Field
+                                        name="taxId"
+                                        label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
+                                        component={FormikTextInput}
+                                    />
+                                )}
+                            </AddressFormContainer>
+                            <InputWrapper>
+                                <Label>
+                                    Check below if you'd like to pick up the signs instead of having them shipped to you.
+                                </Label>
+                                <Field name="localPickup" type="checkbox" />
+                            </InputWrapper>
+                            {values.localPickup === false && (
+                                <>
+                                <Field
+                                    name="sameAddress"
+                                    label="Check below to use your billing address as your shipping address."
+                                    component={FormikCheckbox}
+                                    checked={sameAddress}
+                                    onChange={() => {
+                                        !sameAddress && setShippingAddress(values, setFieldValue);
+                                        setSameAddress(!sameAddress);
+                                    }}
+                                />
+                                <ShippingAddressFormContainer>
+                                    <AddressFormHeader>Shipping address</AddressFormHeader>
+                                    <Field
+                                        name="shippingName"
+                                        label="Name (individual or company)*"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs["shipping-name"]}
+                                    />
+                                    <Field
+                                        name="shippingAddress"
                                         label="Address*"
                                         component={FormikTextInput}
-                                        innerRef={formRefs["billing-address"]}
+                                        innerRef={formRefs["shipping-address"]}
                                     />
                                     <FormFieldsContainer>
                                         <Field
-                                            name="billingCity"
+                                            name="shippingCity"
                                             label="City*"
                                             component={FormikTextInput}
-                                            innerRef={formRefs["billing-city"]}
+                                            innerRef={formRefs["shipping-city"]}
                                         />
                                         <Field
-                                            name="billingState"
+                                            name="shippingState"
                                             label="State*"
                                             component={FormikSelectInput}
                                             options={STATE_OPTIONS}
@@ -590,178 +668,102 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     </FormFieldsContainer>
                                     <FormFieldsContainer>
                                         <Field
-                                            name="billingZipCode"
+                                            name="shippingZipCode"
                                             label="Zip code*"
                                             component={FormikZipCodeInput}
-                                            innerRef={formRefs["billing-zip-code"]}
+                                            innerRef={formRefs["shipping-zip-code"]}
                                         />
                                         <Field
-                                            name="billingPhoneNumber"
+                                            name="shippingPhoneNumber"
                                             label="Phone number (digits only)"
                                             component={FormikPhoneNumberInput}
-                                            innerRef={formRefs["billing-phone-number"]}
+                                            innerRef={formRefs["shipping-phone-number"]}
                                         />
                                     </FormFieldsContainer>
-                                    <SpacedRequiredLabel>* Required</SpacedRequiredLabel>
-                                    <InputWrapper>
-                                        <Label>
-                                            Check below if you're making a tax-exempt order.
-                                        </Label>
-                                        <Field name="taxExempt" type="checkbox" />
-                                    </InputWrapper>
-                                    {values.taxExempt && (
-                                        <Field
-                                            name="taxId"
-                                            label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
-                                            component={FormikTextInput}
-                                        />
-                                    )}
-                                </AddressFormContainer>
-                                <InputWrapper>
-                                    <Label>
-                                        Check below if you'd like to pick up the signs instead of having them shipped to you.
-                                    </Label>
-                                    <Field name="localPickup" type="checkbox" />
-                                </InputWrapper>
-                                {values.localPickup === false && (
-                                    <>
                                     <Field
-                                        name="sameAddress"
-                                        label="Check below to use your billing address as your shipping address."
-                                        component={FormikCheckbox}
-                                        checked={sameAddress}
-                                        onChange={() => {
-                                            !sameAddress && setShippingAddress(values, setFieldValue);
-                                            setSameAddress(!sameAddress);
-                                        }}
+                                        name="attn"
+                                        label="Attn"
+                                        component={FormikTextInput}
+                                        innerRef={formRefs.attn}
                                     />
-                                    <ShippingAddressFormContainer>
-                                        <AddressFormHeader>Shipping address</AddressFormHeader>
-                                        <Field
-                                            name="shippingName"
-                                            label="Name (individual or company)*"
-                                            component={FormikTextInput}
-                                            innerRef={formRefs["shipping-name"]}
-                                        />
-                                        <Field
-                                            name="shippingAddress"
-                                            label="Address*"
-                                            component={FormikTextInput}
-                                            innerRef={formRefs["shipping-address"]}
-                                        />
-                                        <FormFieldsContainer>
-                                            <Field
-                                                name="shippingCity"
-                                                label="City*"
-                                                component={FormikTextInput}
-                                                innerRef={formRefs["shipping-city"]}
+                                </ShippingAddressFormContainer>
+                                <RequiredLabel>* Required</RequiredLabel>
+                                </>
+                            )}
+                            <CheckoutProducts
+                                checkoutItems={checkoutItems}
+                                unitPrice={unitPrice}
+                                shippingCost={shippingCost}
+                                taxCost={taxCost}
+                                totalCost={totalCost}
+                            />
+                            <PaymentContainer>
+                                <PaymentHeader>Payment</PaymentHeader>
+                                <PaymentMethodContainer>
+                                    <PaymentMethodHeader>
+                                        Payment method
+                                    </PaymentMethodHeader>
+                                    <label>
+                                        <Field type="radio" name="paymentMethod" value="card" />
+                                        Card
+                                    </label>
+                                    <label>
+                                        <Field type="radio" name="paymentMethod" value="check" />
+                                        Check
+                                    </label>
+                                </PaymentMethodContainer>
+                                {values.paymentMethod === "check" && (
+                                    <MailInOrderTextContainer>
+                                        <MailInOrderText>
+                                            Please print this checkout page (over multiple pages is fine) and send it with your check, payable to The Tree Company, to the following address:
+                                        </MailInOrderText>
+                                        <AddressTextContainer>
+                                            <AddressLine>The Tree Company</AddressLine>
+                                            <AddressLine>20 N. Beaumont Ave.</AddressLine>
+                                            <AddressLine>Catonsville, MD 21228</AddressLine>
+                                        </AddressTextContainer>
+                                    </MailInOrderTextContainer>
+                                )}
+                                {values.paymentMethod === "card" && (
+                                    <>
+                                        <CardPaymentText>
+                                            We offer secure payments by major credit and debit cards, powered by one of the world's largest online payment providers, Stripe.
+                                        </CardPaymentText>
+                                        <CardLogosContainer>
+                                            <VisaLogo src={visa} />
+                                            <MastercardLogo src={mastercard} />
+                                            <AmexLogo src={amex} />
+                                            <DiscoverLogo src={discover} />
+                                            <a target="_blank" rel="noopener noreferrer" href="https://stripe.com/">
+                                                <StripeBadge height="20px" display="block" />
+                                            </a>
+                                        </CardLogosContainer>
+                                        <StripeCardContainer>
+                                            <CardElement
+                                                options={{
+                                                    style: stripeCardInputStyle
+                                                }}
+                                                onFocus={() => setStripeErrorMessage(null)}
+                                                onChange={(e) =>
+                                                    e.error && setStripeErrorMessage(e.error.message)
+                                                }
                                             />
-                                            <Field
-                                                name="shippingState"
-                                                label="State*"
-                                                component={FormikSelectInput}
-                                                options={STATE_OPTIONS}
-                                            />
-                                        </FormFieldsContainer>
-                                        <FormFieldsContainer>
-                                            <Field
-                                                name="shippingZipCode"
-                                                label="Zip code*"
-                                                component={FormikZipCodeInput}
-                                                innerRef={formRefs["shipping-zip-code"]}
-                                            />
-                                            <Field
-                                                name="shippingPhoneNumber"
-                                                label="Phone number (digits only)"
-                                                component={FormikPhoneNumberInput}
-                                                innerRef={formRefs["shipping-phone-number"]}
-                                            />
-                                        </FormFieldsContainer>
-                                        <Field
-                                            name="attn"
-                                            label="Attn"
-                                            component={FormikTextInput}
-                                            innerRef={formRefs.attn}
-                                        />
-                                    </ShippingAddressFormContainer>
-                                    <RequiredLabel>* Required</RequiredLabel>
+                                            {stripeErrorMessage && (
+                                                <StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
+                                            )}
+                                        </StripeCardContainer>
+                                        <button type="submit" disabled={isSubmitting}>
+                                            Place order
+                                        </button>
                                     </>
                                 )}
-                                <CheckoutProducts
-                                    checkoutItems={checkoutItems}
-                                    unitPrice={unitPrice}
-                                    shippingCost={shippingCost}
-                                    taxCost={taxCost}
-                                    totalCost={totalCost}
-                                />
-                                <PaymentContainer>
-                                    <PaymentHeader>Payment</PaymentHeader>
-                                    <PaymentMethodContainer>
-                                        <PaymentMethodHeader>
-                                            Payment method
-                                        </PaymentMethodHeader>
-                                        <label>
-                                            <Field type="radio" name="paymentMethod" value="card" />
-                                            Card
-                                        </label>
-                                        <label>
-                                            <Field type="radio" name="paymentMethod" value="check" />
-                                            Check
-                                        </label>
-                                    </PaymentMethodContainer>
-                                    {values.paymentMethod === "check" && (
-                                        <MailInOrderTextContainer>
-                                            <MailInOrderText>
-                                                Please print this checkout page (over multiple pages is fine) and send it with your check, payable to The Tree Company, to the following address:
-                                            </MailInOrderText>
-                                            <AddressTextContainer>
-                                                <AddressLine>The Tree Company</AddressLine>
-                                                <AddressLine>20 N. Beaumont Ave.</AddressLine>
-                                                <AddressLine>Catonsville, MD 21228</AddressLine>
-                                            </AddressTextContainer>
-                                        </MailInOrderTextContainer>
-                                    )}
-                                    {values.paymentMethod === "card" && (
-                                        <>
-                                            <CardPaymentText>
-                                                We offer secure payments by major credit and debit cards, powered by one of the world's largest online payment providers, Stripe.
-                                            </CardPaymentText>
-                                            <CardLogosContainer>
-                                                <VisaLogo src={visa} />
-                                                <MastercardLogo src={mastercard} />
-                                                <AmexLogo src={amex} />
-                                                <DiscoverLogo src={discover} />
-                                                <a target="_blank" rel="noopener noreferrer" href="https://stripe.com/">
-                                                    <StripeBadge height="20px" display="block" />
-                                                </a>
-                                            </CardLogosContainer>
-                                            <StripeCardContainer>
-                                                <CardElement
-                                                    options={{
-                                                        style: stripeCardInputStyle
-                                                    }}
-                                                    onFocus={() => setStripeErrorMessage(null)}
-                                                    onChange={(e) =>
-                                                        e.error && setStripeErrorMessage(e.error.message)
-                                                    }
-                                                />
-                                                {stripeErrorMessage && (
-                                                    <StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
-                                                )}
-                                            </StripeCardContainer>
-                                            <button type="submit" disabled={isSubmitting}>
-                                                Place order
-                                            </button>
-                                        </>
-                                    )}
-                                </PaymentContainer>
-                            </Form>
-                        )
-                    }}
-				</Formik>
-			</CheckoutFormContainer>
-		);
+                            </PaymentContainer>
+                        </Form>
+                    )
+                }}
+            </Formik>
+        </CheckoutFormContainer>
+    );
 }
 
-    // taxExempt?: string;
 export const Checkout = withRouter(InternalCheckout);

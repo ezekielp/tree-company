@@ -4,17 +4,49 @@ import { BillingCustomerInfoFragment, ShippingCustomerInfoFragment } from '../gr
 import { CheckoutProducts, CheckoutItem } from '../checkout/CheckoutProducts';
 import styled from 'styled-components';
 
-const OrderConfirmationContainer = styled.div``;
+const OrderConfirmationContainer = styled.div`
+    width: 80%;
+    margin: 0 auto;
+`;
 
-const AddressContainer = styled.div``;
+const OrderConfirmationHeader = styled.h1`
+    font-size: 36px;
+    margin-bottom: 24px;
+`;
 
-const AddressHeader = styled.div``;
+const Text = styled.div`
+    line-height: 130%;
+    margin-bottom: 10px;
+`;
+
+const ThankYouText = styled(Text)``;
+
+const ShippingText = styled(Text)``;
+
+const ConfirmationNumberContainer = styled.div`
+    display: flex;
+    margin-top: 25px;
+    margin-bottom: 30px;
+`;
+
+const AddressContainer = styled.div`
+    margin-bottom: 30px;
+`;
+
+const AddressHeader = styled.div`
+    font-size: 24px;
+    margin-bottom: 15px;
+`;
 
 const InfoFieldContainer = styled.div`
     display: flex;
+    margin-bottom: 5px;
 `;
 
-const InfoFieldLabel = styled.div``;
+const InfoFieldLabel = styled.div`
+    margin-right: 10px;
+    font-variation-settings: 'wght' 600;
+`;
 
 const InfoField = styled.div``;
 
@@ -27,6 +59,7 @@ interface OrderConfirmationPageProps {
     shippingCost: number;
     taxCost: number;
     totalCost: number;
+    orderId: number | null;
 }
 
 export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirmationPageProps>> = ({ history, location }) => {
@@ -35,20 +68,38 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
         return null;
     };
 
-    const { billingCustomer, shippingCustomer, checkoutItems, unitPrice, subtotal, shippingCost, taxCost, totalCost } = location.state;
+    const { billingCustomer, shippingCustomer, checkoutItems, unitPrice, shippingCost, taxCost, totalCost, orderId } = location.state;
     if (!billingCustomer) return null;
 
     const { name: billingName, address: billingAddress, city: billingCity, state: billingState, email, zipCode: billingZipCode, phoneNumber: billingPhoneNumber } = billingCustomer;
 
     return (
         <OrderConfirmationContainer>
+            <OrderConfirmationHeader>
+                Order confirmation
+            </OrderConfirmationHeader>
+            <ThankYouText>
+                Thank you for your order! You'll also receive an email with your order information.
+            </ThankYouText>
+            <ShippingText>
+                If your order is being shipped to you, shipping information will be sent separately to the email address indicated in your order.
+            </ShippingText>
+            <ConfirmationNumberContainer>
+                <InfoFieldLabel>
+                    Confirmation number:
+                </InfoFieldLabel>
+                <InfoField>
+                    {orderId ? orderId : "We'll contact you shortly with a confirmation number"}
+                </InfoField>
+            </ConfirmationNumberContainer>
+            <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} shippingCost={shippingCost} taxCost={taxCost} totalCost={totalCost} />
             <AddressContainer>
                 <AddressHeader>
                     Billing address
                 </AddressHeader>
                 <InfoFieldContainer>
                     <InfoFieldLabel>
-                        Name
+                        Name:
                     </InfoFieldLabel>
                     <InfoField>
                         {billingName}
@@ -56,7 +107,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                 </InfoFieldContainer>
                 <InfoFieldContainer>
                     <InfoFieldLabel>
-                        Address
+                        Address:
                     </InfoFieldLabel>
                     <InfoField>
                         {billingAddress}
@@ -64,7 +115,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                 </InfoFieldContainer>
                 <InfoFieldContainer>
                     <InfoFieldLabel>
-                        City
+                        City:
                     </InfoFieldLabel>
                     <InfoField>
                         {billingCity}
@@ -72,7 +123,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                 </InfoFieldContainer>
                 <InfoFieldContainer>
                     <InfoFieldLabel>
-                        State
+                        State:
                     </InfoFieldLabel>
                     <InfoField>
                         {billingState}
@@ -80,7 +131,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                 </InfoFieldContainer>
                 <InfoFieldContainer>
                     <InfoFieldLabel>
-                        Zip code
+                        Zip code:
                     </InfoFieldLabel>
                     <InfoField>
                         {billingZipCode}
@@ -98,7 +149,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                 )}
                 <InfoFieldContainer>
                     <InfoFieldLabel>
-                        Email
+                        Email:
                     </InfoFieldLabel>
                     <InfoField>
                         {email}
@@ -112,7 +163,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     </AddressHeader>
                     <InfoFieldContainer>
                         <InfoFieldLabel>
-                            Company name
+                            Company name:
                         </InfoFieldLabel>
                         <InfoField>
                             {shippingCustomer.companyName}
@@ -120,7 +171,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     </InfoFieldContainer>
                     <InfoFieldContainer>
                         <InfoFieldLabel>
-                            Address
+                            Address:
                         </InfoFieldLabel>
                         <InfoField>
                             {shippingCustomer.address}
@@ -128,7 +179,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     </InfoFieldContainer>
                     <InfoFieldContainer>
                         <InfoFieldLabel>
-                            City
+                            City:
                         </InfoFieldLabel>
                         <InfoField>
                             {shippingCustomer.city}
@@ -136,7 +187,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     </InfoFieldContainer>
                     <InfoFieldContainer>
                         <InfoFieldLabel>
-                            State
+                            State:
                         </InfoFieldLabel>
                         <InfoField>
                             {shippingCustomer.state}
@@ -144,7 +195,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     </InfoFieldContainer>
                     <InfoFieldContainer>
                         <InfoFieldLabel>
-                            Zip code
+                            Zip code:
                         </InfoFieldLabel>
                         <InfoField>
                             {shippingCustomer.zipCode}
@@ -153,7 +204,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     {shippingCustomer.phoneNumber && (
                         <InfoFieldContainer>
                             <InfoFieldLabel>
-                                Phone number
+                                Phone number:
                             </InfoFieldLabel>
                             <InfoField>
                                 {shippingCustomer.phoneNumber}
@@ -163,7 +214,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     {shippingCustomer.attn && (
                         <InfoFieldContainer>
                             <InfoFieldLabel>
-                                Attn
+                                Attn:
                             </InfoFieldLabel>
                             <InfoField>
                                 {shippingCustomer.attn}
@@ -172,8 +223,6 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     )}
                 </AddressContainer>
             )}
-            <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} shippingCost={shippingCost} taxCost={taxCost} totalCost={totalCost} />
-            {/* Price totals to go here */}
         </OrderConfirmationContainer>
     )
 };
