@@ -1,7 +1,7 @@
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { ModalContext } from '../home/HomePage';
+import { ModalContext } from '../AppContainer';
 
 const CloseModalButton = styled.button`
     width: 100%;

@@ -1,9 +1,10 @@
-import React, { FC, useState, ChangeEvent, useRef } from 'react';
+import React, { FC, useState, ChangeEvent, useRef, useContext } from 'react';
 import { useGetCartForCartContainerQuery, ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikUpdateNumberInput, FormikTextInput} from '../form/inputs';
 import { range } from 'lodash';
 import styled from 'styled-components';
+import { CartContext } from '../AppContainer';
 
 const ItemContainer = styled.section`
     display: grid;
@@ -76,6 +77,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     });
 
     const [updateItemQuantity] = useUpdateCartMutation();  
+    const {fetchCart} = useContext(CartContext);
 
     const handleSubmit = async (values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
 
@@ -93,6 +95,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
         }).then(
             (event)=>{
                 console.log(event);
+                fetchCart();
             }
         );
     };
@@ -123,7 +126,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                         </CartProductDetails>
                         <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
                         <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
-                        <div>${totalPrice}.00</div>
+                        <div>${totalPrice / 100}.00</div>
                     </ItemContainer>
                 </Form>
             )}

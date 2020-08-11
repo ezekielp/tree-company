@@ -3,7 +3,7 @@ import { ProductInfoFragment, useAddToCartMutation } from '../../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikNumberInput, FormikTextInput} from '../../form/inputs';
 import styled from 'styled-components';
-import { ModalContext } from '../../home/HomePage';
+import { ModalContext } from '../../AppContainer';
 
 const AddToCartButton = styled.button`
 

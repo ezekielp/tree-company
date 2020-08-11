@@ -1,6 +1,6 @@
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
-import { ModalContext } from '../home/HomePage';
+import { ModalContext } from '../AppContainer';
 import ProductModalContainer from 'client/product/modals/ProductModalContainer';
 import SuccessModal from './SuccessModal';
 
@@ -37,10 +37,6 @@ const Modal: FC<ModalProps> = () => {
             break;
         case "successModal":
             clickEffect = () => null;
-            component = (<SuccessModal />);
-            break;
-        case "successModal":
-            clickEffect = () => closeModal();
             component = (<SuccessModal />);
             break;
         default:
