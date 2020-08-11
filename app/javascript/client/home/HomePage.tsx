@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
 import Menu from '../menu/Menu';
+=======
+import React, { FC } from 'react';
+import styled from 'styled-components';
+import { ProductInfoFragment } from '../graphqlTypes';
+
+>>>>>>> 009615fe9f6a65dd84561a39a69fb07c1a022027
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { HomepageContext } from '../AppContainer';
 import { device } from '../styles';
@@ -94,9 +101,8 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
         return category.name == categoryFilter;
     };
 
-    // TODO currenly O(2n), maybe refactor to O(n)
     const PriorityProductThumbnails = Object.entries(products).map((product)=>{
-        if ((product[1].counties?.some(belongsToCounty) && categoryFilter=="default") || (countyFilter=="default" && product[1].counties?.length!=0) || (categoryFilter!="default" && product[1].categories?.some(belongsToCategory))){
+        if ((product[1].counties?.some(belongsToCounty) && categoryFilter=="default") || (countyFilter=="default" && categoryFilter=="default" && product[1].counties?.length!=0) || (categoryFilter!="default" && product[1].categories?.some(belongsToCategory))){
             return (
                 <ProductThumbnail key={product[0]} product={product[1]} />
             )
@@ -104,7 +110,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
     })
 
     const AllProductThumbnails = Object.entries(products).map((product)=>{
-        if (product[1].counties?.length == 0 && categoryFilter == "default")
+        if (product[1].counties?.length == 0 && categoryFilter=="default")
         return (
             <ProductThumbnail key={product[0]} product={product[1]} />
         )

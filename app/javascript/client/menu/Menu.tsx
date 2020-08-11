@@ -37,7 +37,6 @@ const ShoppingCartContainer = styled.div`
     margin: 0.5rem;
     display: flex;
     justify-content: center;
-    /* cursor: pointer; */
 `
 
 const ShoppingCartButton = styled.button`
@@ -118,7 +117,7 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
                 <span>Category</span>
                 <StyledSelect name="category" id="category" onChange={handleCategoryChange} ref={selectCategoryRef}>
                     <option value="default">Filter by Category</option>
-                    <option value="wetland_stream_buffer">Wetlands Stream Buffer</option>
+                    <option value="wetland_stream_buffer">Wetland Stream Buffer</option>
                     <option value="forest_conservation">Forest Conservation/Tree Protection</option>
                 </StyledSelect>
             </CategorySelectContainer>
