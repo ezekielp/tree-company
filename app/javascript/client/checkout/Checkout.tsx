@@ -157,24 +157,20 @@ const AddressFormContainer = styled.section`
     flex-wrap: wrap;
 `;
 
-const PriceContainer = styled.div`
-    display: flex;
-    margin-bottom: 10px;
-`;
-
-const PaymentHeader = styled.div`
-    font-size: 24px;
-    margin-bottom: 16px;
+const ShippingAddressFormContainer = styled(AddressFormContainer)`
+    margin-top: 50px;
 `;
 
 const PaymentContainer = styled.div`
-
+    margin-top: 50px;
 `;
 
 const AddressFormHeader = styled.div`
     font-size: 24px;
-    margin-bottom: 16px;
+    margin-bottom: 30px;
 `;
+
+const PaymentHeader = AddressFormHeader;
 
 const StyledErrorMessage = styled.div`
     color: red;
@@ -183,7 +179,7 @@ const StyledErrorMessage = styled.div`
 
 const CheckoutHeader = styled.h1`
     font-size: 36px;
-    margin-bottom: 24px;
+    margin-bottom: 36px;
     margin-top: 16px;
 `;
 
@@ -213,6 +209,10 @@ const AddressLine = styled.div``;
 
 const RequiredLabel = styled.div`
     font-size: 12px;
+`;
+
+const SpacedRequiredLabel = styled(RequiredLabel)`
+    margin-bottom: 15px;
 `;
 
 const stripeCardInputStyle = {
@@ -560,6 +560,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             innerRef={formRefs["billing-phone-number"]}
                                         />
                                     </FormFieldsContainer>
+                                    <SpacedRequiredLabel>* Required</SpacedRequiredLabel>
                                     <InputWrapper>
                                         <Label>
                                             Check below if you're making a tax-exempt order.
@@ -592,8 +593,8 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             setSameAddress(!sameAddress);
                                         }}
                                     />
-                                    <AddressFormHeader>Shipping Address</AddressFormHeader>
-                                    <AddressFormContainer>
+                                    <ShippingAddressFormContainer>
+                                        <AddressFormHeader>Shipping Address</AddressFormHeader>
                                         <Field
                                             name="shippingName"
                                             label="Name (individual or company)*"
@@ -640,26 +641,17 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             component={FormikTextInput}
                                             innerRef={formRefs.attn}
                                         />
-                                    </AddressFormContainer>
+                                    </ShippingAddressFormContainer>
                                     <RequiredLabel>* Required</RequiredLabel>
                                     </>
                                 )}
                                 <CheckoutProducts
                                     checkoutItems={checkoutItems}
                                     unitPrice={unitPrice}
+                                    shippingCost={shippingCost}
+                                    taxCost={taxCost}
+                                    totalCost={totalCost}
                                 />
-                                <PriceContainer>
-                                    <div>Tax</div>
-                                    <div>${displayPrice(taxCost)}</div>
-                                </PriceContainer>
-                                <PriceContainer>
-                                    <div>Shipping</div>
-                                    <div>${displayPrice(shippingCost)}</div>
-                                </PriceContainer>
-                                <PriceContainer>
-                                    <div>Total</div>
-                                    <div>${displayPrice(totalCost)}</div>
-                                </PriceContainer>
                                 <PaymentContainer>
                                     <PaymentHeader>Payment</PaymentHeader>
                                     <Field
