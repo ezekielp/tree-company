@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
-
+import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { device } from '../styles';
 
@@ -111,6 +111,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
                     </PricingChartColumn>
                 </PricingChartContainer>
             </IntroductionContainer>
+            <Menu />
             <ThumbnailIndexContainer>
                 {ProductThumbnails}
             </ThumbnailIndexContainer>
