@@ -9,6 +9,7 @@ module Types
         field :zip_code, String, null: false
         field :phone_number, String, null: true
         field :tax_exempt, Boolean, null: false
+        field :tax_id, String, null: true
         field :orders, [Types::OrderType], null: true
 
         def orders

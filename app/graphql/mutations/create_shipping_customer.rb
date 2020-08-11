@@ -26,7 +26,7 @@ module Mutations
             )
 
             # debugger
-            new_shipping_customer.phone_number = input.phone_number if input.phone_number
+            new_shipping_customer.phone_number = "1" + input.phone_number if input.phone_number && input.phone_number.length > 0
             new_shipping_customer.attn = input.attn if input.attn
 
             { shipping_customer: new_shipping_customer }

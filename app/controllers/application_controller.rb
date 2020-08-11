@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
     end
 
     def set_session_expiration
-        session[:expires_at] = Time.current + 7.days
+        session[:expires_at] = Time.current + 14.days
     end
 
 end

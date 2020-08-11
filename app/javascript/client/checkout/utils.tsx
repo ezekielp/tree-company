@@ -1,17 +1,30 @@
+import { CheckoutFormData } from './Checkout';
 import * as yup from 'yup';
 
 export const displayPrice = (price: number): string => {
     return (price / 100).toFixed(2);
 };
 
+export const setShippingAddress = (values: CheckoutFormData, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void): void => {
+    const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber } = values;
+
+    setFieldValue('shippingName', billingName);
+    setFieldValue('shippingAddress', billingAddress);
+    setFieldValue('shippingCity', billingCity);
+    setFieldValue('shippingState', billingState);
+    setFieldValue('shippingZipCode', billingZipCode);
+
+    billingPhoneNumber && setFieldValue('shippingPhoneNumber', billingPhoneNumber);
+}
+
 export const validationSchema = yup.object({
-					billingName: yup.string().required().label("Name"),
-					billingAddress: yup.string().required().label("Address"),
-					billingCity: yup.string().required().label("City"),
+					billingName: yup.string().required().label("Billing name"),
+					billingAddress: yup.string().required().label("Billing address"),
+					billingCity: yup.string().required().label("Billing city"),
 					billingZipCode: yup
 						.string()
 						.required()
-						.label("Zip code")
+						.label("Billing zip code")
 						.nullable()
 						.test({
 							name: "isAZipCode1",
@@ -34,39 +47,41 @@ export const validationSchema = yup.object({
 						.nullable(),
 					email: yup.string().required().email().label("Email"),
 					taxExempt: yup.boolean(),
+					taxId: yup.string().when("taxExempt", {
+						is: true,
+						then: yup
+							.string()
+							.required("A Maryland Sales and Use Tax Number or Exemption Certificate Number is required for a tax-exempt order"),
+					}),
 					sameAddress: yup.boolean(),
 					localPickup: yup.boolean(),
-					shippingName: yup.string().when(["sameAddress", "localPickup"], {
-						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
+					shippingName: yup.string().when("localPickup", {
+						is: false,
 						then: yup
 							.string()
-							.required(
-								"Shipping name is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
-							),
+                            .required()
+                            .label("Company name"),
 					}),
-					shippingAddress: yup.string().when(["sameAddress", "localPickup"], {
-						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
+					shippingAddress: yup.string().when("localPickup", {
+						is: false,
 						then: yup
 							.string()
-							.required(
-								"Shipping address is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
-							),
+							.required()
+                            .label("Shipping address"),
 					}),
-					shippingCity: yup.string().when(["sameAddress", "localPickup"], {
-						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
+					shippingCity: yup.string().when("localPickup", {
+						is: false,
 						then: yup
 							.string()
-							.required(
-								"Shipping city is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
-							),
+							.required()
+                            .label("Shipping city"),
 					}),
-					shippingZipCode: yup.string().when(["sameAddress", "localPickup"], {
-						is: (sameAddress, localPickup) => sameAddress === false && localPickup === false,
+					shippingZipCode: yup.string().when("localPickup", {
+						is: false,
 						then: yup
 							.string()
-							.required(
-								"Shipping zip code is required if your billing address and shipping address are not the same. Please check the box above if they are the same."
-							)
+							.required()
+                            .label("Shipping zip code")
 							.nullable()
 							.test({
 								name: "isAZipCode1",
@@ -99,8 +114,10 @@ export const initialValues = {
     billingZipCode: '',
     email: '',
     taxExempt: false,
+    taxId: '',
     localPickup: false,
     sameAddress: false,
+    mailInOrder: false,
     shippingName: '',
     shippingAddress: '',
     shippingCity: '',
