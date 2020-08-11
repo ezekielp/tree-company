@@ -1,17 +1,16 @@
 import React, { SFC, useState, useEffect, createContext } from 'react';
 import { Redirect, Route, RouteComponentProps, Switch, withRouter } from 'react-router';
-import { useGetCartForCartContainerQuery, GetCartForCartContainerDocument } from './graphqlTypes';
+import { useGetCartForCartContainerQuery } from './graphqlTypes';
 import { HomeContainer } from './home/HomeContainer';
-import { CartContainer } from './cart/CartContainer';
+import CartContainer from './cart/CartContainer';
 import { CheckoutContainer } from './checkout/CheckoutContainer';
 import { OrderConfirmationPage } from './order_confirmation/OrderConfirmationPage';
 import { ErrorPage } from './error/ErrorPage';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { ProductInfoFragment, CartItem } from '../client/graphqlTypes';
 import Modal from '../client/modal/Modal';
-import { ProductInfoFragment } from '../client/graphqlTypes';
 import gql from 'graphql-tag';
-import { setUncaughtExceptionCaptureCallback } from 'process';
 
 gql`
     query GetCartForCartContainer {
@@ -34,7 +33,7 @@ interface ModalContextState {
 }
 
 interface CartContextState {
-	cart: any[];
+	cart: CartItem[];
 	fetchCart: () => void;
 }
 
@@ -64,8 +63,7 @@ const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
     const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: ""} );
     const [displayedModal, setDisplayedModal] = useState("");
 	const [flashMessage, setFlashMessage] = useState("");
-
-	const [cart, setCart] = useState(null);
+	const [cart, setCart] = useState(cartData);
 	
 	useEffect(() => {
 		if (cartData != cart){

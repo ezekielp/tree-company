@@ -1,15 +1,23 @@
 import React, { FC, useContext } from 'react';
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { CartProductThumbnailContainer } from './CartProductThumbnailContainer';
-import { useGetCartForCartContainerQuery, GetCartForCartContainerDocument } from '../graphqlTypes';
 import { determinePrice } from './utils';
-import { client } from '../../packs/client';
 import styled from 'styled-components';
 import { CartContext } from '../AppContainer';
 
 const CartDisplayContainer = styled.div`
 
 `;
+
+const CheckoutButton = styled.button`
+    width: 100%;
+    height: 2rem;
+    cursor: pointer;
+    border: 1px solid black;
+    font-weight: bold;
+    margin-top: 1rem;
+    border-radius: 1rem;
+`
 
 const SubtotalContainer = styled.div`
     display: flex;
@@ -18,15 +26,9 @@ const SubtotalContainer = styled.div`
 
 interface CartContainerProps {}
 
-export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }) => {
-    // const { data, refetch } = useGetCartForCartContainerQuery();
-    // client().watchQuery({ query: GetCartForCartContainerDocument }).subscribe({
-    //     next(data) { refetch() }
-    // });
+const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }) => {
 
     const {cart} = useContext(CartContext);
-
-    // const cart = data?.cart;
     
     if (!cart) return null;
     
@@ -39,6 +41,10 @@ export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ hi
 
     const subtotal = (totalQuantity * unitPrice);
 
+    const handleClick = (path: string)=>{
+        history.push(`/${path}`);
+    }
+
     return (
         <>
         <span>Shopping Cart</span><i className="fas fa-shopping-cart"></i>
@@ -47,7 +53,10 @@ export const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ hi
                 <SubtotalContainer>
                     <span>Subtotal: </span><span>${subtotal / 100}.00</span>
                 </SubtotalContainer>
+                <CheckoutButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</CheckoutButton>
             </CartDisplayContainer>
         </>
     );
 }
+
+export default withRouter(CartContainer);
