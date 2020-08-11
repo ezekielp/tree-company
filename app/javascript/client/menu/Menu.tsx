@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react';
+import React, { FC, useContext, ChangeEvent } from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { colors } from '../styles';
 import styled from 'styled-components';
@@ -38,7 +38,9 @@ const MenuContainer = styled.div`
 `;
 
 const StyledSelect = styled.select`
-    width: 3rem;
+    width: 5rem;
+    height: 100%;
+    margin: 0.5rem;
 `;
 
 interface MenuContainerProps extends RouteComponentProps {}
@@ -60,15 +62,25 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
         )
     })
 
+    const handleCountyChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setCountyFilter(event.target.value);
+        console.log(event.target.value);
+    }
+
+    const handleCategoryChange = (event: ChangeEvent<HTMLSelectElement>) => {
+        setCategoryFilter(event.target.value);
+        console.log(event.target.value);
+    }
+
     return (
         <MenuContainer>
             <span>County</span>
-            <StyledSelect name="county" id="county">
+            <StyledSelect name="county" id="county" onChange={handleCountyChange}>
                 <option value="default">Filter by County</option>
                 {countyOptions}
             </StyledSelect>
             <span>Material</span>
-            <StyledSelect name="category" id="category">
+            <StyledSelect name="category" id="category" onChange={handleCategoryChange}>
                 <option value="default">Filter by Category</option>
                 <option value="wetlands_stream_buffer">Wetlands Stream Buffer</option>
                 <option value="forest_conservation">Forest Conservation/Tree Protection</option>

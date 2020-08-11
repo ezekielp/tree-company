@@ -85,12 +85,20 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
         return county.name == countyFilter;
     };
     
-    const ProductThumbnails = Object.entries(products).map((product)=>{
-        if (product[1].counties?.some(belongsToCounty) || countyFilter=="default")
+    const PriorityProductThumbnails = Object.entries(products).map((product)=>{
+        if (product[1].counties?.some(belongsToCounty) || (countyFilter == "default" && product[1].counties?.length != 0)){
+            return (
+                <ProductThumbnail key={product[0]} product={product[1]} />
+            )
+        }
+    })
+
+    const AllProductThumbnails = Object.entries(products).map((product)=>{
+        if (product[1].counties?.length == 0)
         return (
             <ProductThumbnail key={product[0]} product={product[1]} />
         )
-    })
+    });
 
     return (
         <>
@@ -128,7 +136,8 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
             </IntroductionContainer>
             <Menu />
             <ThumbnailIndexContainer>
-                {ProductThumbnails}
+                {PriorityProductThumbnails}
+                {AllProductThumbnails}
             </ThumbnailIndexContainer>
         </>
     )
