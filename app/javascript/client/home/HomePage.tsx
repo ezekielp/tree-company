@@ -84,7 +84,8 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
     const belongsToCounty = (county: County) => {
         return county.name == countyFilter;
     };
-    
+
+    // TODO currenly O(2n), maybe refactor to O(n)
     const PriorityProductThumbnails = Object.entries(products).map((product)=>{
         if (product[1].counties?.some(belongsToCounty) || (countyFilter == "default" && product[1].counties?.length != 0)){
             return (
