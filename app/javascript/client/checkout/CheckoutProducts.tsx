@@ -14,6 +14,20 @@ const CheckoutProductsColumnHeader = styled.li`
     margin-bottom: 15px;
 `;
 
+interface CheckoutProductsTableCellProps {
+    gridColumn: string;
+    gridRow: string;
+    center?: boolean;
+    bold?: boolean;
+}
+
+const CheckoutProductsTableCell = styled.div`
+    text-align: ${({ center }: CheckoutProductsTableCellProps) => (center ? 'center' : 'left')};
+    grid-column: ${({ gridColumn }: CheckoutProductsTableCellProps) => gridColumn};
+    grid-row: ${({ gridRow }: CheckoutProductsTableCellProps) => gridRow};
+    font-variation-settings: ${({ bold }: CheckoutProductsTableCellProps) => (bold ? '"wght" 600' : '"wght" 400')};
+`;
+
 const ProductDescriptionCell = styled.li`
     text-align: center;
     grid-column: 1;
@@ -69,34 +83,34 @@ export const CheckoutProducts: FC<CheckoutProductsProps> = ({ unitPrice, checkou
         const countyList = counties?.map(county => county.name).join(", ");
 
         return (
-            <ProductDescriptionCell key={id}>
+            <CheckoutProductsTableCell gridColumn='1' gridRow={(idx + 2).toString()} center key={id}>
                 <ProductNameContainer>{name}</ProductNameContainer>
                 <div>
                     {size}, {material}
                 </div>
                 {counties && counties.length > 0 && <div>Counties: {countyList}</div>}
-            </ProductDescriptionCell>
+            </CheckoutProductsTableCell>
         )
     });
-    const checkoutProductQuantities = checkoutItems.map(item => {
+    const checkoutProductQuantities = checkoutItems.map((item, idx) => {
         const { product, quantity } = item;
         const { id } = product;
 
         return (
-            <ProductQuantityCell key={id}>
+            <CheckoutProductsTableCell gridColumn='2' gridRow={(idx + 2).toString()} key={id}>
                 {quantity}
-            </ProductQuantityCell>
+            </CheckoutProductsTableCell>
         )
     });
-    const checkoutProductPrices = checkoutItems.map(item => {
+    const checkoutProductPrices = checkoutItems.map((item, idx) => {
         const { product, quantity } = item;
         const { id } = product;
         const totalPrice = unitPrice * quantity;
 
         return (
-            <ProductSubtotalCell key={id}>
+            <CheckoutProductsTableCell gridColumn='3' gridRow={(idx + 2).toString()} key={id}>
                 {totalPrice}
-            </ProductSubtotalCell>
+            </CheckoutProductsTableCell >
         )
     });
 
@@ -107,21 +121,21 @@ export const CheckoutProducts: FC<CheckoutProductsProps> = ({ unitPrice, checkou
             </CheckoutProductsHeader>
             <FlexContainer>
                 {/* <CheckoutProductsColumn> */}
-                    <CheckoutProductsColumnHeader>
+                    <CheckoutProductsTableCell gridColumn='1' gridRow='1' bold>
                         Sign type
-                    </CheckoutProductsColumnHeader>
+                    </CheckoutProductsTableCell>
                     {checkoutProductDescriptions}
                 {/* </CheckoutProductsColumn> */}
                 {/* <CheckoutProductsColumn> */}
-                    <CheckoutProductsColumnHeader>
+                    <CheckoutProductsTableCell gridColumn='2' gridRow='1' bold>
                         Quantity
-                    </CheckoutProductsColumnHeader>
+                    </CheckoutProductsTableCell>
                     {checkoutProductQuantities}
                 {/* </CheckoutProductsColumn> */}
                 {/* <CheckoutProductsColumn> */}
-                    <CheckoutProductsColumnHeader>
+                    <CheckoutProductsTableCell gridColumn='3' gridRow='1' bold>
                         Subtotal
-                    </CheckoutProductsColumnHeader>
+                    </CheckoutProductsTableCell>
                     {checkoutProductPrices}
                 {/* </CheckoutProductsColumn> */}
             </FlexContainer>
