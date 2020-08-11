@@ -123,7 +123,8 @@ export const initialValues = {
     shippingCity: '',
     shippingState: 'MD',
     shippingZipCode: '',
-    attn: ''
+    attn: '',
+    paymentMethod: 'card'
 };
 
 export const STATE_OPTIONS = [

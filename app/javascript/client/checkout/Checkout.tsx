@@ -220,6 +220,15 @@ const SpacedRequiredLabel = styled(RequiredLabel)`
     margin-bottom: 15px;
 `;
 
+const PaymentMethodContainer = styled.div`
+    margin-bottom: 20px;
+`;
+
+const PaymentMethodHeader = styled.div`
+    margin-bottom: 5px;
+    font-variation-settings: 'wght' 550;
+`;
+
 const stripeCardInputStyle = {
     base: {
         color: '#32325d',
@@ -290,6 +299,7 @@ export interface CheckoutFormData {
     attn?: string;
     shippingCost?: number;
     taxId?: string;
+    paymentMethod: string;
 }
 
 const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtotal }) => {
@@ -683,19 +693,23 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                 />
                                 <PaymentContainer>
                                     <PaymentHeader>Payment</PaymentHeader>
-                                    <Field
-                                            name="mailInOrder"
-                                            label="If you'd like to pay by credit or debit card, please enter your card details below. If you'd like pay by check instead, check the box below for further instructions."
-                                            component={FormikCheckbox}
-                                            checked={mailInOrder}
-                                            onChange={() => {
-                                                setMailInOrder(!mailInOrder);
-                                            }}
-                                        />
-                                    {mailInOrder && (
+                                    <PaymentMethodContainer>
+                                        <PaymentMethodHeader>
+                                            Payment method
+                                        </PaymentMethodHeader>
+                                        <label>
+                                            <Field type="radio" name="paymentMethod" value="card" />
+                                            Card
+                                        </label>
+                                        <label>
+                                            <Field type="radio" name="paymentMethod" value="check" />
+                                            Check
+                                        </label>
+                                    </PaymentMethodContainer>
+                                    {values.paymentMethod === "check" && (
                                         <MailInOrderTextContainer>
                                             <MailInOrderText>
-                                                Please print out this checkout page (multiple pages is fine) and send it with your check, payable to The Tree Company, to the address below:
+                                                Please print this checkout page (over multiple pages is fine) and send it with your check, payable to The Tree Company, to the following address:
                                             </MailInOrderText>
                                             <AddressTextContainer>
                                                 <AddressLine>The Tree Company</AddressLine>
@@ -704,7 +718,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             </AddressTextContainer>
                                         </MailInOrderTextContainer>
                                     )}
-                                    {!mailInOrder && (
+                                    {values.paymentMethod === "card" && (
                                         <>
                                             <CardLogosContainer>
                                                 <VisaLogo src={visa} />
