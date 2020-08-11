@@ -56,15 +56,9 @@ export const CartContext = createContext<CartContextState>({
 
 interface InternalAppContainerProps extends RouteComponentProps {}
 
-const updateCart = ()=>{
-	const { data } = useGetCartForCartContainerQuery();
-	const cartData = data?.cart;
-	setCart(cartData);
-}
-
 const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
 
-	const { data } = useGetCartForCartContainerQuery();
+	const { data, refetch } = useGetCartForCartContainerQuery();
 	const cartData = data?.cart;
 	const [modalIsShowing, setModalIsShowing] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState({ name: "", id: "", size: "", material: ""} );
@@ -85,7 +79,7 @@ const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
 			<>
 				<CartContext.Provider value={{
 					cart: cart,
-					fetchCart: ()=>setCart(updateCart())
+					fetchCart: ()=>refetch()
 				}}>
 				<ModalContext.Provider value={{
 					openModal: (modalName)=>{setDisplayedModal(modalName);setModalIsShowing(true);},

@@ -85,8 +85,6 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
 
         const newQuantity = parseInt(inputRef.current.value);
 
-        
-
         updateItemQuantity({
             variables: {
                 input: {
