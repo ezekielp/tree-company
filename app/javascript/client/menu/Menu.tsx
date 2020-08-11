@@ -2,7 +2,8 @@ import React, { FC, useContext } from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { colors } from '../styles';
 import styled from 'styled-components';
-import { CartContext } from '../AppContainer';
+import { CartContext, HomepageContext } from '../AppContainer';
+import {countyList} from './utils';
 
 const MenuContainer = styled.div`
     width: 100%;
@@ -41,6 +42,7 @@ interface MenuContainerProps extends RouteComponentProps {}
 const Menu: FC<MenuContainerProps> = ({ history }) => {
 
     const {cart} = useContext(CartContext);
+    const {setCountyFilter, setCategoryFilter} = useContext(HomepageContext);
     
     if (!cart) return null;
 
@@ -48,34 +50,6 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
         history.push(`/${path}`);
     }
 
-    const countyList = [
-        "Allegany County",
-        "Arlington County",
-        "Anne Arundel County",
-        "Baltimore County",
-        "Baltimore City",
-        "Calvert County",
-        "Caroline County",
-        "Carroll County",
-        "Cecil County",
-        "Charles County",
-        "Dorchester County",
-        "Frederick County",
-        "Garrett County",
-        "Harford County",
-        "Howard County",
-        "Kent County",
-        "Montgomery County",
-        "Prince George's County",
-        "Queen Anne's County",
-        "Somerset County",
-        "St. Mary's County",
-        "Talbot County",
-        "Washington County",
-        "Wicomico County",
-        "Worcester County",
-    ];
-    
     const countyOptions = countyList.map((countyName)=>{
         return (
         <option key={countyName} value={countyName}>{countyName}</option>

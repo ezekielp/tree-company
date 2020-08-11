@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
 import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
+import { HomepageContext } from '../AppContainer';
 import { device } from '../styles';
 
 const IntroductionContainer = styled.div`
@@ -71,11 +72,27 @@ interface HomePageProps {
     products: ProductInfoFragment[];
 }
 
+interface County {
+    id: string,
+    name: string
+}
+
 export const HomePage: FC<HomePageProps> = ({ products }) => {
+
+    const {countyFilter, categoryFilter} = useContext(HomepageContext);
+
+    const belongsToCounty = (county: County) => {
+        return county.name == countyFilter;
+    };
     
-    const ProductThumbnails = Object.entries(products).map((product)=>(
-        <ProductThumbnail key={product[0]} product={product[1]} />
-    ))
+    const ProductThumbnails = Object.entries(products).map((product)=>{
+        if (product[1].counties?.some(belongsToCounty) || countyFilter=="default")
+        return (
+            <ProductThumbnail key={product[0]} product={product[1]} />
+        )
+    })
+        
+    
 
     return (
         <>
