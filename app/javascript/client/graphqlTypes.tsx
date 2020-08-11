@@ -463,6 +463,9 @@ export type ProductInfoFragment = (
   & { counties?: Maybe<Array<(
     { __typename?: 'County' }
     & Pick<County, 'id' | 'name'>
+  )>>, categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
   )>> }
 );
 
@@ -543,6 +546,10 @@ export const ProductInfoFragmentDoc = gql`
   description
   styleNumber
   counties {
+    id
+    name
+  }
+  categories {
     id
     name
   }

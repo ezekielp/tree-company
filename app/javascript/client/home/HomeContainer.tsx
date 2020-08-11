@@ -26,7 +26,7 @@ gql`
             id
             name
         }
-        category {
+        categories {
             id
             name
         }

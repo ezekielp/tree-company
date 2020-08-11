@@ -77,6 +77,11 @@ interface County {
     name: string
 }
 
+interface Category {
+    id: string,
+    name: string
+}
+
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const {countyFilter, categoryFilter} = useContext(HomepageContext);
@@ -85,10 +90,13 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
         return county.name == countyFilter;
     };
 
+    const belongsToCategory = (category: Category) => {
+        return category.name == categoryFilter;
+    };
+
     // TODO currenly O(2n), maybe refactor to O(n)
     const PriorityProductThumbnails = Object.entries(products).map((product)=>{
-        debugger
-        if (product[1].counties?.some(belongsToCounty) || (countyFilter == "default" && product[1].counties?.length != 0)){
+        if ((product[1].counties?.some(belongsToCounty) && categoryFilter=="default") || (countyFilter=="default" && product[1].counties?.length!=0) || (categoryFilter!="default" && product[1].categories?.some(belongsToCategory))){
             return (
                 <ProductThumbnail key={product[0]} product={product[1]} />
             )
@@ -96,7 +104,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
     })
 
     const AllProductThumbnails = Object.entries(products).map((product)=>{
-        if (product[1].counties?.length == 0)
+        if (product[1].counties?.length == 0 && categoryFilter == "default")
         return (
             <ProductThumbnail key={product[0]} product={product[1]} />
         )
