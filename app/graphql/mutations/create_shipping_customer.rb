@@ -25,7 +25,6 @@ module Mutations
                 zip_code: input.zip_code
             )
 
-            # debugger
             new_shipping_customer.phone_number = "1" + input.phone_number if input.phone_number && input.phone_number.length > 0
             new_shipping_customer.attn = input.attn if input.attn
 
