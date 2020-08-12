@@ -1,7 +1,7 @@
 import React, { FC, useContext, useRef } from 'react';
-import { ProductInfoFragment, useAddToCartMutation } from '../../graphqlTypes';
+import { useAddToCartMutation } from '../../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikNumberInput, FormikTextInput} from '../../form/inputs';
+import { FormikNumberInput } from '../../form/inputs';
 import styled from 'styled-components';
 import { ModalContext, CartContext } from '../../AppContainer';
 

@@ -1,7 +1,7 @@
-import React, { FC, useState, ChangeEvent, useRef, useContext } from 'react';
-import { useGetCartForCartContainerQuery, ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
+import React, { FC, useState, useRef, useContext } from 'react';
+import { ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikUpdateNumberInput, FormikTextInput} from '../form/inputs';
+import { FormikUpdateNumberInput } from '../form/inputs';
 import { range } from 'lodash';
 import styled from 'styled-components';
 import { CartContext } from '../AppContainer';
@@ -88,8 +88,8 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     const handleSubmit = async (values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
 
         if (!inputRef.current) return initialValues;
-
-        const newQuantity = parseInt(inputRef.current.value);
+        
+        const newQuantity =  (inputRef.current.value) ? parseInt(inputRef.current.value) : (0);
 
         updateItemQuantity({
             variables: {
