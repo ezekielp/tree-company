@@ -4,6 +4,7 @@ import { AppContainer } from '../client/AppContainer';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { ScrollToTop } from '../client/ScrollToTop';
 import { render } from 'react-dom';
 import { client } from './client';
 
@@ -15,6 +16,7 @@ const RootApp = () => {
     return (
 			<ApolloProvider client={client()}>
 				<Router>
+					<ScrollToTop />
 					{stripePromise ? (
 						<Elements stripe={stripePromise}>
 							<AppContainer />
