@@ -1,4 +1,4 @@
-import React, { FC, useContext, ChangeEvent, useRef } from 'react';
+import React, { FC, useContext, ChangeEvent, useRef, useEffect } from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { colors } from '../styles';
 import styled from 'styled-components';
@@ -74,7 +74,7 @@ interface MenuContainerProps extends RouteComponentProps {}
 const Menu: FC<MenuContainerProps> = ({ history }) => {
 
     const {cart} = useContext(CartContext);
-    const {setCountyFilter, setCategoryFilter} = useContext(HomepageContext);
+    const {countyFilter, categoryFilter, setCountyFilter, setCategoryFilter} = useContext(HomepageContext);
     const selectCountyRef: React.RefObject<HTMLSelectElement> = useRef(null);
     const selectCategoryRef: React.RefObject<HTMLSelectElement> = useRef(null);
     
@@ -108,14 +108,14 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
         <MenuContainer>
             <CountySelectContainer>
                 <span>County</span>
-                <StyledSelect name="county" id="county" onChange={handleCountyChange} ref={selectCountyRef}>
+                <StyledSelect name="county" id="county" onChange={handleCountyChange} ref={selectCountyRef} value={countyFilter}>
                     <option value="default">Filter by County</option>
                     {countyOptions}
                 </StyledSelect>
             </CountySelectContainer>
             <CategorySelectContainer>
                 <span>Category</span>
-                <StyledSelect name="category" id="category" onChange={handleCategoryChange} ref={selectCategoryRef}>
+                <StyledSelect name="category" id="category" onChange={handleCategoryChange} ref={selectCategoryRef} value={categoryFilter}>
                     <option value="default">Filter by Category</option>
                     <option value="wetland_stream_buffer">Wetland Stream Buffer</option>
                     <option value="forest_conservation">Forest Conservation/Tree Protection</option>
