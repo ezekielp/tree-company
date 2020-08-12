@@ -1,7 +1,7 @@
-import React, { FC, useState, ChangeEvent, useRef, useContext } from 'react';
-import { useGetCartForCartContainerQuery, ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
+import React, { FC, useState, useRef, useContext } from 'react';
+import { ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikUpdateNumberInput, FormikTextInput} from '../form/inputs';
+import { FormikUpdateNumberInput } from '../form/inputs';
 import { range } from 'lodash';
 import styled from 'styled-components';
 import { CartContext } from '../AppContainer';
@@ -21,6 +21,10 @@ const ItemContainer = styled.section`
 const ImageContainer = styled.figure`
     min-width: 100px;
     max-width: 250px;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
 `;
 
 const Image = styled.img`
@@ -37,8 +41,46 @@ const ImageStandIn = styled.div`
 
 const UpdateCartButton = styled.button`
     border-radius: 1rem;
-    width: 100%;
-    height: 50%;
+    width: 10rem;
+    height: 2rem;
+`
+
+const RemoveFromCartButton = styled.button`
+    color: gray;
+    border-radius: 1rem;
+    width: 10rem;
+    height: 1rem;
+    background-color: white;
+    border: 1px solid gray;
+    margin-top: 1rem;
+`
+
+const UpdateCartOptionsContainer = styled.div`
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+`
+
+const ButtonsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    padding: 1rem;
+`
+
+const ButtonsAndPriceContainer = styled.div`
+    display: flex;
+    justify-content: space-evenly;
+`
+
+const PriceContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 export const CartProductDetails = styled.div`
@@ -46,6 +88,11 @@ export const CartProductDetails = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+    padding: 1rem;
 `;
 
 export const ProductNameContainer = styled.div`
@@ -79,11 +126,11 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     const [updateItemQuantity] = useUpdateCartMutation();  
     const {fetchCart} = useContext(CartContext);
 
-    const handleSubmit = async (values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
+    const handleSubmit = async ( values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
 
         if (!inputRef.current) return initialValues;
 
-        const newQuantity = parseInt(inputRef.current.value);
+        const newQuantity =  (!inputRef.current.value) ? (0) : parseInt(inputRef.current.value);
 
         updateItemQuantity({
             variables: {
@@ -92,13 +139,19 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                     quantity: newQuantity
                 }
             }
-        }).then(
-            (event)=>{
-                console.log(event);
-                fetchCart();
-            }
-        );
+        }).then((event)=>{fetchCart()});
     };
+
+    const handleReset = async ()=> {
+        updateItemQuantity({
+            variables: {
+                input: {
+                    productId: id,
+                    quantity: 0
+                }
+            }
+        }).then((event)=>{fetchCart()});
+    }
 
     const initialValues = {
         productId: id,
@@ -106,27 +159,33 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     };
 
     return (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} onReset={handleReset}>
             {({ isSubmitting }) => (
                 <Form>
                     <ItemContainer>
                         <ImageContainer>
-                            {imageUrl ? (
-                                <Image src={imageUrl} alt={name} />
-                            ) : (
-                                <ImageStandIn>The Tree Company sign</ImageStandIn>
-                            )}
+                            {imageUrl ? (<Image src={imageUrl} alt={name} />) : (<ImageStandIn>The Tree Company sign</ImageStandIn>)}
                         </ImageContainer>
                         <CartProductDetails>
                             <ProductNameContainer>{name}</ProductNameContainer>
                             <div>
-                                {size}, {material}
+                                Size: <br />{size}
+                                <br />
+                                <br />
+                                Material: <br />{material}
                             </div>
-                            {counties && <div>Counties: {countyList}</div>}
+                            {counties && <div>Counties: <br />{countyList}</div>}
                         </CartProductDetails>
-                        <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
-                        <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
-                        <div>${totalPrice / 100}.00</div>
+                        <UpdateCartOptionsContainer>
+                            <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
+                            <ButtonsAndPriceContainer>
+                                <ButtonsContainer>
+                                    <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
+                                    <RemoveFromCartButton type="reset" disabled={isSubmitting} id="remove_from_cart" >Remove From Cart</RemoveFromCartButton>
+                                </ButtonsContainer>
+                                <PriceContainer>${totalPrice / 100}.00</PriceContainer>
+                            </ButtonsAndPriceContainer>
+                        </UpdateCartOptionsContainer>
                     </ItemContainer>
                 </Form>
             )}

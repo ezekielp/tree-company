@@ -151,12 +151,28 @@ ProductCounty.create!(product_id: sign_61.id, county_id: montgomery.id)
 
 
 # Create the only separate category we have at the moment, and the relevant associations
+# All signs not associated with wetland_stream_buffer will be associated with forest_conservation
 
 Category.destroy_all
 
 Category.create(name: "wetland_stream_buffer")
+Category.create!(name: "forest_conservation")
 c1 = Category.first
+c2 = Category.second
 
 ProductCategory.create!(product_id: sign_23.id, category_id: c1.id)
 ProductCategory.create!(product_id: sign_25.id, category_id: c1.id)
 ProductCategory.create!(product_id: sign_26.id, category_id: c1.id)
+
+ProductCategory.create!(product_id: sign_19.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_21.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_22.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_24.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_31.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_35.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_47.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_48.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_49.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_50.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_51.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_61.id, category_id: c2.id)

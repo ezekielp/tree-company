@@ -1,9 +1,9 @@
-import React, { FC, useContext, useState, useRef, useEffect, FocusEvent } from 'react';
-import { ProductInfoFragment, useAddToCartMutation } from '../../graphqlTypes';
+import React, { FC, useContext, useRef } from 'react';
+import { useAddToCartMutation } from '../../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikNumberInput, FormikTextInput} from '../../form/inputs';
+import { FormikNumberInput } from '../../form/inputs';
 import styled from 'styled-components';
-import { ModalContext } from '../../AppContainer';
+import { ModalContext, CartContext } from '../../AppContainer';
 
 const AddToCartButton = styled.button`
 
@@ -53,6 +53,7 @@ interface AddToCartData {
 const ProductModal: FC<ProductModalProps> = () => {
 
     const { selectedProduct, setFlashMessage, closeModal, openModal } = useContext(ModalContext);
+    const { fetchCart } = useContext(CartContext);
     
     const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
@@ -72,8 +73,8 @@ const ProductModal: FC<ProductModalProps> = () => {
             }
         }).then(
             (event)=>{
-                console.log(event);
                 setFlashMessage(productQuantity.toString());
+                fetchCart();
                 openModal("successModal");    
             }
         );
