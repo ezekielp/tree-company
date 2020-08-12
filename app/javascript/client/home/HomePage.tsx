@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
-
+import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
+import { HomepageContext } from '../AppContainer';
 import { device } from '../styles';
 
 const IntroductionContainer = styled.div`
@@ -71,11 +72,42 @@ interface HomePageProps {
     products: ProductInfoFragment[];
 }
 
+interface County {
+    id: string,
+    name: string
+}
+
+interface Category {
+    id: string,
+    name: string
+}
+
 export const HomePage: FC<HomePageProps> = ({ products }) => {
-    
-    const ProductThumbnails = Object.entries(products).map((product)=>(
-        <ProductThumbnail key={product[0]} product={product[1]} />
-    ))
+
+    const {countyFilter, categoryFilter} = useContext(HomepageContext);
+
+    const belongsToCounty = (county: County) => {
+        return county.name == countyFilter;
+    };
+
+    const belongsToCategory = (category: Category) => {
+        return category.name == categoryFilter;
+    };
+
+    const PriorityProductThumbnails = Object.entries(products).map((product)=>{
+        if ((product[1].counties?.some(belongsToCounty) && categoryFilter=="default") || (countyFilter=="default" && categoryFilter=="default" && product[1].counties?.length!=0) || (categoryFilter!="default" && product[1].categories?.some(belongsToCategory))){
+            return (
+                <ProductThumbnail key={product[0]} product={product[1]} />
+            )
+        }
+    })
+
+    const AllProductThumbnails = Object.entries(products).map((product)=>{
+        if (product[1].counties?.length == 0 && categoryFilter=="default")
+        return (
+            <ProductThumbnail key={product[0]} product={product[1]} />
+        )
+    });
 
     return (
         <>
@@ -111,8 +143,10 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
                     </PricingChartColumn>
                 </PricingChartContainer>
             </IntroductionContainer>
+            <Menu />
             <ThumbnailIndexContainer>
-                {ProductThumbnails}
+                {PriorityProductThumbnails}
+                {AllProductThumbnails}
             </ThumbnailIndexContainer>
         </>
     )

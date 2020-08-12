@@ -37,6 +37,13 @@ interface CartContextState {
 	fetchCart: () => void;
 }
 
+interface HomepageContextState {
+	countyFilter: string;
+	categoryFilter: string;
+	setCountyFilter: (filter: string) => void;
+	setCategoryFilter: (filter: string) => void;
+}
+
 export const ModalContext = createContext<ModalContextState>({
     openModal: (modalName) => null,
     closeModal: () => null,
@@ -53,6 +60,13 @@ export const CartContext = createContext<CartContextState>({
 	fetchCart: () => null
 });
 
+export const HomepageContext = createContext<HomepageContextState>({
+	countyFilter: "default",
+	categoryFilter: "default",
+	setCountyFilter: (filter) => null,
+	setCategoryFilter: (filter) => null
+});
+
 interface InternalAppContainerProps extends RouteComponentProps {}
 
 const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
@@ -64,6 +78,8 @@ const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
     const [displayedModal, setDisplayedModal] = useState("");
 	const [flashMessage, setFlashMessage] = useState("");
 	const [cart, setCart] = useState(cartData);
+	const [countyFilter, setCountyFilter] = useState("default");
+	const [categoryFilter, setCategoryFilter] = useState("default");
 	
 	useEffect(() => {
 		if (cartData != cart){
@@ -89,19 +105,26 @@ const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
 					selectedProduct: selectedProduct,
 					displayedModal: displayedModal
 				}}>
+				<HomepageContext.Provider value={{
+					countyFilter: countyFilter,
+					categoryFilter: categoryFilter,
+					setCountyFilter: (filter) => setCountyFilter(filter),
+					setCategoryFilter: (filter) => setCategoryFilter(filter)
+				}}>
 					<Modal />
-				<Header />
-				<Switch>
-					<Route path="/home" component={HomeContainer} />
-					<Route path="/cart" component={CartContainer} />
-					<Route path="/checkout" component={CheckoutContainer} />
-					<Route path="/order-confirmation" component={OrderConfirmationPage} />
-					<Route exact path="/error" component={ErrorPage} />
-					<Route path="*">
-						<Redirect to="/home" />
-					</Route>
-				</Switch>
-				<Footer />
+					<Header />
+					<Switch>
+						<Route path="/home" component={HomeContainer} />
+						<Route path="/cart" component={CartContainer} />
+						<Route path="/checkout" component={CheckoutContainer} />
+						<Route path="/order-confirmation" component={OrderConfirmationPage} />
+						<Route exact path="/error" component={ErrorPage} />
+						<Route path="*">
+							<Redirect to="/home" />
+						</Route>
+					</Switch>
+					<Footer />
+				</HomepageContext.Provider>
 				</ModalContext.Provider>
 				</CartContext.Provider>
 			</>
