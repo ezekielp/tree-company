@@ -52,6 +52,7 @@ const RemoveFromCartButton = styled.button`
     height: 1rem;
     background-color: white;
     border: 1px solid gray;
+    margin-top: 1rem;
 `
 
 const UpdateCartOptionsContainer = styled.div`
@@ -74,7 +75,12 @@ const ButtonsContainer = styled.div`
 const ButtonsAndPriceContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
-    padding: 1rem;
+`
+
+const PriceContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `
 
 export const CartProductDetails = styled.div`
@@ -120,11 +126,11 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     const [updateItemQuantity] = useUpdateCartMutation();  
     const {fetchCart} = useContext(CartContext);
 
-    const handleSubmit = async (values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
+    const handleSubmit = async ( values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
 
         if (!inputRef.current) return initialValues;
-        
-        const newQuantity =  (inputRef.current.value) ? parseInt(inputRef.current.value) : (0);
+
+        const newQuantity =  (!inputRef.current.value) ? (0) : parseInt(inputRef.current.value);
 
         updateItemQuantity({
             variables: {
@@ -133,13 +139,19 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                     quantity: newQuantity
                 }
             }
-        }).then(
-            (event)=>{
-                console.log(event);
-                fetchCart();
-            }
-        );
+        }).then((event)=>{fetchCart()});
     };
+
+    const handleReset = async ()=> {
+        updateItemQuantity({
+            variables: {
+                input: {
+                    productId: id,
+                    quantity: 0
+                }
+            }
+        }).then((event)=>{fetchCart()});
+    }
 
     const initialValues = {
         productId: id,
@@ -147,7 +159,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     };
 
     return (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <Formik initialValues={initialValues} onSubmit={handleSubmit} onReset={handleReset}>
             {({ isSubmitting }) => (
                 <Form>
                     <ItemContainer>
@@ -169,9 +181,9 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             <ButtonsAndPriceContainer>
                                 <ButtonsContainer>
                                     <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
-                                    <RemoveFromCartButton>Remove From Cart</RemoveFromCartButton>
+                                    <RemoveFromCartButton type="reset" disabled={isSubmitting} id="remove_from_cart" >Remove From Cart</RemoveFromCartButton>
                                 </ButtonsContainer>
-                                <div>${totalPrice / 100}.00</div>
+                                <PriceContainer>${totalPrice / 100}.00</PriceContainer>
                             </ButtonsAndPriceContainer>
                         </UpdateCartOptionsContainer>
                     </ItemContainer>

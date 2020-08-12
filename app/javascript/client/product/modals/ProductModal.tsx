@@ -73,7 +73,6 @@ const ProductModal: FC<ProductModalProps> = () => {
             }
         }).then(
             (event)=>{
-                console.log(event);
                 setFlashMessage(productQuantity.toString());
                 fetchCart();
                 openModal("successModal");    

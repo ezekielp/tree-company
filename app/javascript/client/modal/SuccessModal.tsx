@@ -71,7 +71,6 @@ const SuccessModal: FC<SuccessModalProps> = ({ history }) => {
     const handleClick = (path: string)=>{
         closeModal();
         history.push(`/${path}`);
-        console.log(path);
     }
 
     return (
