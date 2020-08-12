@@ -40,7 +40,6 @@ export const withFormik = <P extends object>(WrappedComponent: ComponentType<P>)
         const newVal = arg && arg.target ? arg.target.value : arg;
         const withOnChange = onChange ? onChange(newVal) : newVal;
         form.setFieldValue(name, withOnChange);
-        // debugger;
     };
 
     const onBlur = () => {
