@@ -162,6 +162,10 @@ const AddressFormContainer = styled.section`
     flex-wrap: wrap;
 `;
 
+const BillingAddressFormContainer = styled(AddressFormContainer)`
+    margin-bottom: 30px;
+`;
+
 const ShippingAddressFormContainer = styled(AddressFormContainer)`
     margin-top: 50px;
 `;
@@ -559,7 +563,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                     return (
                         <Form>
                             <AddressFormHeader>Billing address</AddressFormHeader>
-                            <AddressFormContainer>
+                            <BillingAddressFormContainer>
                                 <FormFieldsContainer>
                                     <Field
                                         name="billingName"
@@ -610,20 +614,20 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     />
                                 </FormFieldsContainer>
                                 <SpacedRequiredLabel>* Required</SpacedRequiredLabel>
-                                <InputWrapper>
-                                    <Label>
-                                        <Field name="taxExempt" type="checkbox" />
-                                        <LabelText>Tax-exempt order?</LabelText>
-                                    </Label>
-                                </InputWrapper>
-                                {values.taxExempt && (
-                                    <Field
-                                        name="taxId"
-                                        label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
-                                        component={FormikTextInput}
-                                    />
-                                )}
-                            </AddressFormContainer>
+                            </BillingAddressFormContainer>
+                            <InputWrapper>
+                                <Label>
+                                    <Field name="taxExempt" type="checkbox" />
+                                    <LabelText>Tax-exempt order?</LabelText>
+                                </Label>
+                            </InputWrapper>
+                            {values.taxExempt && (
+                                <Field
+                                    name="taxId"
+                                    label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
+                                    component={FormikTextInput}
+                                />
+                            )}
                             <InputWrapper>
                                 <Label>
                                     <Field name="localPickup" type="checkbox" />
