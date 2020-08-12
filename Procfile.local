@@ -1,0 +1,3 @@
+web: bin/server
+worker: bin/sidekiq
+webpack: bin/webpack-dev-server
