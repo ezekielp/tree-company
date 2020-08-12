@@ -41,6 +41,12 @@ const UpdateCartButton = styled.button`
     height: 50%;
 `
 
+const RemoveFromCartButton = styled.button`
+    border-radius: 0.5rem;
+    width: 2rem;
+    height: 1rem;
+`
+
 export const CartProductDetails = styled.div`
     max-width: 400px;
     display: flex;
