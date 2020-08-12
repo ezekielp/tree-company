@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+heroku local --procfile Procfile.local --port 3000

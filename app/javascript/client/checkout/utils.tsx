@@ -6,7 +6,7 @@ export const displayPrice = (price: number): string => {
 };
 
 export const setShippingAddress = (values: CheckoutFormData, setFieldValue: (field: string, value: any, shouldValidate?: boolean) => void): void => {
-    const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber } = values;
+    const { billingName, billingAddress, billingCity, billingState, billingZipCode, billingPhoneNumber, sameAddress } = values;
 
     setFieldValue('shippingName', billingName);
     setFieldValue('shippingAddress', billingAddress);
@@ -15,6 +15,8 @@ export const setShippingAddress = (values: CheckoutFormData, setFieldValue: (fie
     setFieldValue('shippingZipCode', billingZipCode);
 
     billingPhoneNumber && setFieldValue('shippingPhoneNumber', billingPhoneNumber);
+
+    setFieldValue('sameAddress', !sameAddress);
 }
 
 export const validationSchema = yup.object({

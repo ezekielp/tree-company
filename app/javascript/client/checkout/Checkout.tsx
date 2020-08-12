@@ -162,6 +162,10 @@ const AddressFormContainer = styled.section`
     flex-wrap: wrap;
 `;
 
+const BillingAddressFormContainer = styled(AddressFormContainer)`
+    margin-bottom: 30px;
+`;
+
 const ShippingAddressFormContainer = styled(AddressFormContainer)`
     margin-top: 50px;
 `;
@@ -211,6 +215,10 @@ const AddressTextContainer = styled.div`
 `;
 
 const AddressLine = styled.div``;
+
+const LabelText = styled.span`
+    margin-left: 8px;
+`;
 
 const RequiredLabel = styled.div`
     font-size: 12px;
@@ -555,7 +563,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                     return (
                         <Form>
                             <AddressFormHeader>Billing address</AddressFormHeader>
-                            <AddressFormContainer>
+                            <BillingAddressFormContainer>
                                 <FormFieldsContainer>
                                     <Field
                                         name="billingName"
@@ -606,38 +614,42 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     />
                                 </FormFieldsContainer>
                                 <SpacedRequiredLabel>* Required</SpacedRequiredLabel>
-                                <InputWrapper>
-                                    <Label>
-                                        Check below if you're making a tax-exempt order.
-                                    </Label>
-                                    <Field name="taxExempt" type="checkbox" />
-                                </InputWrapper>
-                                {values.taxExempt && (
-                                    <Field
-                                        name="taxId"
-                                        label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
-                                        component={FormikTextInput}
-                                    />
-                                )}
-                            </AddressFormContainer>
+                            </BillingAddressFormContainer>
                             <InputWrapper>
                                 <Label>
-                                    Check below if you'd like to pick up the signs instead of having them shipped to you.
+                                    <Field name="taxExempt" type="checkbox" />
+                                    <LabelText>Tax-exempt order?</LabelText>
                                 </Label>
-                                <Field name="localPickup" type="checkbox" />
+                            </InputWrapper>
+                            {values.taxExempt && (
+                                <Field
+                                    name="taxId"
+                                    label="Maryland Sales and Use Tax Number or Exemption Certificate Number"
+                                    component={FormikTextInput}
+                                />
+                            )}
+                            <InputWrapper>
+                                <Label>
+                                    <Field name="localPickup" type="checkbox" />
+                                    <LabelText>Local pickup?</LabelText>
+                                </Label>
                             </InputWrapper>
                             {values.localPickup === false && (
                                 <>
-                                <Field
-                                    name="sameAddress"
-                                    label="Check below to use your billing address as your shipping address."
-                                    component={FormikCheckbox}
-                                    checked={sameAddress}
-                                    onChange={() => {
-                                        !sameAddress && setShippingAddress(values, setFieldValue);
-                                        setSameAddress(!sameAddress);
-                                    }}
-                                />
+                                <InputWrapper>
+                                    <Label>
+                                        <Field
+                                            name="sameAddress"
+                                            type="checkbox"
+                                            checked={sameAddress}
+                                            onChange={() => {
+                                                !sameAddress && setShippingAddress(values, setFieldValue);
+                                                setSameAddress(!sameAddress);
+                                            }}
+                                        />
+                                        <LabelText>Use billing address as shipping address?</LabelText>
+                                    </Label>
+                                </InputWrapper>
                                 <ShippingAddressFormContainer>
                                     <AddressFormHeader>Shipping address</AddressFormHeader>
                                     <Field
