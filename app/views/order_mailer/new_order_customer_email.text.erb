@@ -13,7 +13,7 @@ Order details
 -------------------------------
 <% @order.order_items.each do |item| %>
 
-<%= item[:product].name %> (style <%= item[:product].style_number %>)
+<%= item[:product].name %> sign (style <%= item[:product].style_number %>)
 Quantity: <%= item[:quantity] %>
 <% end %>
 
@@ -23,8 +23,10 @@ Tax cost: $<%= @order.price_in_dollars(@order.tax_cost) %>
 Shipping cost: $<%= @order.price_in_dollars(@order.shipping_cost) %> 
 Total charge: $<%= @order.price_in_dollars(@order.total_cost) %> 
 
+
 <% if @order.shipping_customer %>
-Shipping information:
+Shipping information
+
 Company name: <%= @order.shipping_customer.company_name %> 
 Address: <%= @order.shipping_customer.address %> 
 City: <%= @order.shipping_customer.city %> 
@@ -38,7 +40,9 @@ Phone number: <%= @order.shipping_customer.attn %>
 <% end %>
 <% end %>
 
-Billing information:
+
+Billing information
+
 Name: <%= @order.billing_customer.name %>
 Email address: <%= @order.billing_customer.email %>
 Address: <%= @order.billing_customer.address %>
