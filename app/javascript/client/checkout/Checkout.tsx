@@ -154,7 +154,7 @@ gql`
 
 const CheckoutFormContainer = styled.div`
     width: 80%;
-    margin: 0 auto;
+    margin: 40px auto 50px auto;
 `;
 
 const AddressFormContainer = styled.section`
