@@ -2,12 +2,22 @@ import React, { FC, useContext, useRef } from 'react';
 import { useAddToCartMutation } from '../../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikNumberInput } from '../../form/inputs';
-import styled from 'styled-components';
 import { ModalContext, CartContext } from '../../AppContainer';
+import { XMark } from '../../assets/XMark';
+import { device } from '../../styles';
+import styled from 'styled-components';
 
-const AddToCartButton = styled.button`
+const CloseModalButtonContainer = styled.div`
 
-`
+
+    ${`@media ${device.larger}`} {
+        display: flex;
+        grid-row: 1;
+        grid-column: 2;
+        flex-direction: column;
+    }
+
+`;
 
 const CloseModalButton = styled.button`
     width: 20px;
@@ -17,17 +27,41 @@ const CloseModalButton = styled.button`
     border: 1px solid black;
     border-radius: 1rem;
     font-weight: bold;
-`
+
+    ${`@media ${device.larger}`} {
+        grid-row: 1;
+        grid-column: 2;
+        align-self: flex-end;
+    }
+`;
+
+const ProductName = styled.div`
+    font-size: 18px;
+    font-weight: bold;
+`;
 
 const ProductInformation = styled.div`
     display: flex;
     flex-direction: column;
-`
+
+    ${`@media ${device.larger}`} {
+        grid-column: 2;
+        grid-row: 2;
+        margin-left: 35px;
+    }
+`;
 
 const ProductImageContainer = styled.img`
     object-fit: cover;
     width: 290px;
     height: 390px;
+
+    ${`@media ${device.larger}`} {
+        width: 450px;
+        height: auto;
+        grid-column: 1;
+        grid-row-start: span 2;
+    }
 `;
 
 const ProductModalContainer = styled.div`
@@ -36,12 +70,16 @@ const ProductModalContainer = styled.div`
     background: white;
     border-radius: 10px;
     padding: 10px;
+
+    ${`@media ${device.larger}`} {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 50px 1fr;
+    }
 `;
 
-const ProductName = styled.div`
-    font-size: 18px;
-    font-weight: bold;
-`
+const AddToCartButton = styled.button`
+
+`;
 
 interface ProductModalProps {}
 
@@ -93,16 +131,20 @@ const ProductModal: FC<ProductModalProps> = () => {
             {({ isSubmitting }) => (
                 <Form>
                     <ProductModalContainer onClick={(e) => e.stopPropagation()}>
-                        <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
-                        <ProductName>{selectedProduct.name}</ProductName>
-                        {selectedProduct.imageUrl && <ProductImageContainer src={selectedProduct.imageUrl} />}
+                        <CloseModalButtonContainer>
+                            <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
+                        </CloseModalButtonContainer>
+                        {selectedProduct.imageUrl && (
+                            <ProductImageContainer src={selectedProduct.imageUrl} />
+                        )}
                         <ProductInformation>
-                            <span>Material: {selectedProduct.material}</span>
-                            <span>Size: {selectedProduct.size}</span>
-                            {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
+                            <ProductName>{selectedProduct.name}</ProductName>
+                            <div>Material: {selectedProduct.material}</div>
+                            <div>Size: {selectedProduct.size}</div>
+                            {selectedProduct.description != "" && <div>Description: {selectedProduct.description}</div>}
+                            <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput}/>
+                            <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
                         </ProductInformation>
-                        <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput}/>
-                        <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
                     </ProductModalContainer>
                 </Form>    
             )}
