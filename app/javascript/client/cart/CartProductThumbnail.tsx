@@ -5,17 +5,21 @@ import { FormikUpdateNumberInput } from '../form/inputs';
 import { range } from 'lodash';
 import styled from 'styled-components';
 import { CartContext } from '../AppContainer';
+import { device } from '../styles';
 
 const ItemContainer = styled.section`
     display: grid;
     justify-content: space-between;
     max-width: 800px;
-    max-height: 400px;
+    max-height: auto;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     margin-top: 1rem;
     padding: 1rem;
     border-bottom: 1px solid black;
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
 `;
 
 const ImageContainer = styled.figure`

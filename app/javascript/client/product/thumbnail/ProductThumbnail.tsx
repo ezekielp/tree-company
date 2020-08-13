@@ -13,10 +13,11 @@ const ProductThumbnailContainer = styled.div`
     width: 300px;
     height: auto;
     align-items: center;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 10px;    
+    background: green;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    margin: 1rem 0.1rem 0 0.1rem;
 `;
 
 const ProductImageContainer = styled.img`

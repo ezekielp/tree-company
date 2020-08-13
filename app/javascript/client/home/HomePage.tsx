@@ -4,7 +4,7 @@ import { ProductInfoFragment } from '../graphqlTypes';
 import { Navbar } from '../navbar/Navbar';
 import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
-import { HomepageContext } from '../AppContainer';
+import { HomepageContext, CartContext } from '../AppContainer';
 import { device } from '../styles';
 import styled from 'styled-components';
 
@@ -65,9 +65,14 @@ const PricingChartHeaderCell = styled(PricingChartCell)`
 const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
-    width: 100%;
+    max-width: 950px;
     height: 100%;
     flex-wrap: wrap;
+`
+
+const ThumbnailIndexWrapper = styled.div`
+    display: flex;
+    justify-content: center;
 `
 
 interface HomePageProps {
@@ -87,6 +92,7 @@ interface Category {
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const {countyFilter, categoryFilter} = useContext(HomepageContext);
+    const {cart} = useContext(CartContext);
 
     const belongsToCounty = (county: County) => {
         return county.name == countyFilter;
@@ -147,10 +153,12 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
                 </PricingChartContainer>
             </IntroductionContainer>
             <Menu />
-            <ThumbnailIndexContainer>
-                {PriorityProductThumbnails}
-                {AllProductThumbnails}
-            </ThumbnailIndexContainer>
+            <ThumbnailIndexWrapper>
+                <ThumbnailIndexContainer>
+                    {PriorityProductThumbnails}
+                    {AllProductThumbnails}
+                </ThumbnailIndexContainer>
+            </ThumbnailIndexWrapper>
         </>
     )
 }
