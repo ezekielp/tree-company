@@ -41,7 +41,7 @@ const CloseModalButtonContainer = styled.div`
 
 `;
 
-const CloseModalButton = styled.button`
+const CloseModalButton = styled.div`
     cursor: pointer;
     background: none;
     border: none;
@@ -104,7 +104,8 @@ const FieldContainer = styled.div`
 `;
 
 const AddToCartButton = styled.button`
-
+    width: 150px;
+    align-self: flex-end;
 `;
 
 interface ProductModalProps {}

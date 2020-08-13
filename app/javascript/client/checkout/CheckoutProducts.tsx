@@ -25,6 +25,11 @@ const CheckoutProductsTableCell = styled.div`
     padding: 15px 0;
     border-top: ${({ borderTop }: CheckoutProductsTableCellProps) => (borderTop ? '1px solid black' : 'none')};
     border-right: ${({ borderRight }: CheckoutProductsTableCellProps) => (borderRight ? '1px solid black' : 'none')};
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    line-height: 130%;
 `;
 
 const CheckoutProductsHeader = styled.div`
@@ -39,8 +44,8 @@ interface GridContainerProps {
 const GridContainer = styled.div`
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: ${({ numRows }: GridContainerProps) => (`repeat(${numRows}, 1fr)`)};
-    height: 400px;
+    grid-template-rows: ${({ numRows }: GridContainerProps) => (`repeat(${numRows}, minmax(0, auto))`)};
+    height: auto;
 
     ${`@media ${device.mobileSmaller}`} {
         font-size: 12px;
@@ -76,7 +81,7 @@ export const CheckoutProducts: FC<CheckoutProductsProps> = ({ unitPrice, checkou
                 <div>
                     {size}, {material}
                 </div>
-                {counties && counties.length > 0 && <div>Counties: {countyList}</div>}
+                {counties && counties.length > 0 && <div>{countyList}</div>}
             </CheckoutProductsTableCell>
         )
     });
@@ -86,7 +91,9 @@ export const CheckoutProducts: FC<CheckoutProductsProps> = ({ unitPrice, checkou
 
         return (
             <CheckoutProductsTableCell gridColumn='2' gridRow={(idx + 2).toString()} key={id} borderTop borderRight>
-                {quantity}
+                <div>
+                    {quantity}
+                </div>
             </CheckoutProductsTableCell>
         )
     });
@@ -97,7 +104,9 @@ export const CheckoutProducts: FC<CheckoutProductsProps> = ({ unitPrice, checkou
 
         return (
             <CheckoutProductsTableCell gridColumn='3' gridRow={(idx + 2).toString()} key={id} borderTop>
-                ${displayPrice(totalPrice)}
+                <div>
+                    ${displayPrice(totalPrice)}
+                </div>
             </CheckoutProductsTableCell >
         )
     });
