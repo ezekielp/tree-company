@@ -1,9 +1,20 @@
 import React, { FC, useContext } from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { CartProductThumbnailContainer } from './CartProductThumbnailContainer';
+import { SlideoutCartProductThumbnailContainer } from './SlideoutCartProductThumbnailContainer';
 import { determinePrice } from './utils';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { CartContext } from '../AppContainer';
+
+const slideAnimation = keyframes`
+    from{
+        margin-left: 100%;
+        width: 300%;
+    }
+    to{
+        margin-left: 0%;
+        width: 100%;
+    }
+}`;
 
 const CartDisplayContainer = styled.div`
     display: flex;
@@ -26,7 +37,7 @@ const CheckoutButton = styled.button`
     font-weight: bold;
     margin-top: 1rem;
     border-radius: 1rem;
-`
+`;
 
 const SubtotalContainer = styled.div`
     display: flex;
@@ -35,7 +46,7 @@ const SubtotalContainer = styled.div`
 
 const ShoppingCartLabel = styled.div`
     margin-top: 1rem;
-`
+`;
 
 const SlideoutCartWrapper = styled.div`
     width: 100%;
@@ -43,6 +54,8 @@ const SlideoutCartWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
     grid-column-start: 3;
+    animation: ${slideAnimation} 1s ease;
+    overflow: hidden;
 `
 
 interface CartContainerProps {}
@@ -57,7 +70,7 @@ const SlideoutCartContainer: FC<CartContainerProps & RouteComponentProps> = ({ h
     const unitPrice = determinePrice(totalQuantity);
 
     const cartItems = cart.map(({ quantity, productId }) => (
-        <CartProductThumbnailContainer quantity={quantity} productId={productId} key={productId} unitPrice={unitPrice} />
+        <SlideoutCartProductThumbnailContainer quantity={quantity} productId={productId} key={productId} unitPrice={unitPrice} />
     ));
 
     const subtotal = (totalQuantity * unitPrice);

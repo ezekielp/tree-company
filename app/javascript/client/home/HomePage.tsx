@@ -6,8 +6,11 @@ import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { HomepageContext, CartContext } from '../AppContainer';
 import { device } from '../styles';
+<<<<<<< HEAD
 import styled from 'styled-components';
 import CartContainer from '../cart/CartContainer';
+=======
+>>>>>>> add slide animation and components
 import SlideoutCartContainer from '../cart/SlideoutCartContainer';
 import { useWindowSize } from './utils';
 
@@ -67,8 +70,8 @@ const PricingChartHeaderCell = styled(PricingChartCell)`
 
 const ThumbnailIndexContainer = styled.div`
     display: flex;
-    justify-content: space-evenly;
-    max-width: 950px;
+    justify-content: center;
+    max-width: 910px;
     height: 100%;
     flex-wrap: wrap;
     grid-column-start: 2;
@@ -76,7 +79,8 @@ const ThumbnailIndexContainer = styled.div`
 
 const ThumbnailIndexWrapper = styled.div`
     display: grid;
-    grid-template-columns: 0.25fr 1fr 0.25fr;
+    width: 100%;
+    grid-template-columns: 0.2fr 0.8fr 0.2fr;
 `
 
 interface HomePageProps {
