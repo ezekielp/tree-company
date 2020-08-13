@@ -7,37 +7,56 @@ import { XMark } from '../../assets/XMark';
 import { device } from '../../styles';
 import styled from 'styled-components';
 
-const CloseModalButtonContainer = styled.div`
+const FormContainer = styled.div`
+    width: 95%;
 
+    ${`@media ${device.largest}`} {
+        width: 75%;
+    }
+`;
+
+const ProductModalContainer = styled.div`
+    display: grid;
+    align-items: center;
+    background: white;
+    border-radius: 10px;
+    padding: 25px;
 
     ${`@media ${device.larger}`} {
-        display: flex;
+        grid-template-columns: 450px 1fr;
+        grid-template-rows: 50px 1fr;
+        width: 97%;
+        padding: 10px;
+    }
+`;
+
+const CloseModalButtonContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    ${`@media ${device.larger}`} {
         grid-row: 1;
         grid-column: 2;
-        flex-direction: column;
     }
 
 `;
 
 const CloseModalButton = styled.button`
-    width: 20px;
-    height: 20px;
     cursor: pointer;
     background: none;
-    border: 1px solid black;
-    border-radius: 1rem;
-    font-weight: bold;
+    border: none;
+    align-self: flex-end;
 
     ${`@media ${device.larger}`} {
         grid-row: 1;
         grid-column: 2;
-        align-self: flex-end;
     }
 `;
 
 const ProductName = styled.div`
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
+    margin-bottom: 20px;
 `;
 
 const ProductInformation = styled.div`
@@ -48,33 +67,40 @@ const ProductInformation = styled.div`
         grid-column: 2;
         grid-row: 2;
         margin-left: 35px;
+        margin-right: 20px;
     }
+`;
+
+const ProductDetails = styled.div`
+    margin-bottom: 20px;
+`;
+
+const ProductDetail = styled.div`
+    margin-bottom: 3px;
+    line-height: 130%;
 `;
 
 const ProductImageContainer = styled.img`
     object-fit: cover;
-    width: 290px;
-    height: 390px;
+
+    ${`@media ${device.mobileLarge}`} {
+        width: 250px;
+        height: auto;
+        margin: 10px auto 20px auto;
+    }
 
     ${`@media ${device.larger}`} {
         width: 450px;
         height: auto;
         grid-column: 1;
         grid-row-start: span 2;
+        margin: 10px auto;
     }
 `;
 
-const ProductModalContainer = styled.div`
-    display: grid;
-    align-items: center;
-    background: white;
-    border-radius: 10px;
-    padding: 10px;
-
-    ${`@media ${device.larger}`} {
-        grid-template-columns: 1fr 1fr;
-        grid-template-rows: 50px 1fr;
-    }
+const FieldContainer = styled.div`
+    width: 67px;
+    align-self: flex-end;
 `;
 
 const AddToCartButton = styled.button`
@@ -127,28 +153,36 @@ const ProductModal: FC<ProductModalProps> = () => {
     };
 
     return (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-            {({ isSubmitting }) => (
-                <Form>
-                    <ProductModalContainer onClick={(e) => e.stopPropagation()}>
-                        <CloseModalButtonContainer>
-                            <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
-                        </CloseModalButtonContainer>
-                        {selectedProduct.imageUrl && (
-                            <ProductImageContainer src={selectedProduct.imageUrl} />
-                        )}
-                        <ProductInformation>
-                            <ProductName>{selectedProduct.name}</ProductName>
-                            <div>Material: {selectedProduct.material}</div>
-                            <div>Size: {selectedProduct.size}</div>
-                            {selectedProduct.description != "" && <div>Description: {selectedProduct.description}</div>}
-                            <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput}/>
-                            <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
-                        </ProductInformation>
-                    </ProductModalContainer>
-                </Form>    
-            )}
-        </Formik>
+        <FormContainer>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+                {({ isSubmitting }) => (
+                    <Form>
+                        <ProductModalContainer onClick={(e) => e.stopPropagation()}>
+                            <CloseModalButtonContainer>
+                                <CloseModalButton onClick={()=>closeModal()}>
+                                    <XMark width="15px" />
+                                </CloseModalButton>
+                            </CloseModalButtonContainer>
+                            {selectedProduct.imageUrl && (
+                                <ProductImageContainer src={selectedProduct.imageUrl} />
+                            )}
+                            <ProductInformation>
+                                <ProductName>{selectedProduct.name}</ProductName>
+                                <ProductDetails>
+                                    <ProductDetail>Material: {selectedProduct.material}</ProductDetail>
+                                    <ProductDetail>Size: {selectedProduct.size}</ProductDetail>
+                                    {selectedProduct.description != "" && <ProductDetail>Description: {selectedProduct.description}</ProductDetail>}
+                                </ProductDetails>
+                                <FieldContainer>
+                                    <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput} alignRight />
+                                </FieldContainer>
+                                <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
+                            </ProductInformation>
+                        </ProductModalContainer>
+                    </Form>    
+                )}
+            </Formik>
+        </FormContainer>
     )
 }
 
