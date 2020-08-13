@@ -3,45 +3,9 @@ import styled from 'styled-components';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ModalContext } from '../AppContainer';
 
-const CloseModalButton = styled.button`
+const StyledButton = styled.button`
     width: 100%;
-    height: 2rem;
-    cursor: pointer;
-    border: 1px solid black;
-    font-weight: bold;
     margin-top: 1rem;
-    border-radius: 1rem;
-`
-
-const CheckoutButton = styled.button`
-    width: 100%;
-    height: 2rem;
-    cursor: pointer;
-    border: 1px solid black;
-    font-weight: bold;
-    margin-top: 1rem;
-    border-radius: 1rem;
-`
-
-const ViewCartButton = styled.button`
-    width: 100%;
-    height: 2rem;
-    cursor: pointer;
-    border: 1px solid black;
-    font-weight: bold;
-    margin-top: 1rem;
-    border-radius: 1rem;
-`
-
-const ProductInformation = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
-const ProductImageContainer = styled.img`
-    object-fit: cover;
-    width: 290px;
-    height: 390px;
 `;
 
 const SuccessModalContainer = styled.div`
@@ -74,11 +38,11 @@ const SuccessModal: FC<SuccessModalProps> = ({ history }) => {
     }
 
     return (
-        <SuccessModalContainer>
+        <SuccessModalContainer onClick={e => e.stopPropagation()}>
             <h1>You have added: <br/><br/>{`${flashMessage}x ${selectedProduct.name}`} <br/><br/> to the cart! </h1>
-            <ViewCartButton onClick={()=>handleClick("cart")}>View Cart</ViewCartButton>
-            <CheckoutButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</CheckoutButton>
-            <CloseModalButton onClick={()=>closeModal()}>Continue Shopping</CloseModalButton>
+            <StyledButton onClick={()=>handleClick("cart")}>View Cart</StyledButton>
+            <StyledButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</StyledButton>
+            <StyledButton onClick={()=>closeModal()}>Continue Shopping</StyledButton>
         </SuccessModalContainer>
     )
 }

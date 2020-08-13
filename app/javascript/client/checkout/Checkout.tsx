@@ -248,14 +248,6 @@ const stripeCardInputStyle = {
     invalid: { color: '#fa755a', iconColor: '#fa755a' },
 };
 
-const StripeCardContainer = styled.div`
-    width: 350px;
-    border: 1px solid lightgray;
-    border-radius: 5%;
-    padding: 10px;
-    margin-bottom: 15px;
-`;
-
 const CardLogosContainer = styled.div`
     display: flex;
     align-items: center;
@@ -283,6 +275,24 @@ const AmexLogo = styled(LogoImage)`
 const CardPaymentText = styled.div`
     margin-bottom: 15px;
     line-height: 130%;
+`;
+
+const StripeCardContainer = styled.div`
+    max-width: 350px;
+    min-width: 300px;
+    border: 1px solid lightgray;
+    border-radius: 5%;
+    padding: 10px;
+    margin-bottom: 30px;
+`;
+
+const CheckoutButton = styled.button`
+    max-width: 350px;
+    min-width: 300px;
+    height: 45px;
+    font-size: 20px;
+    margin: 0 auto;
+    display: block;
 `;
 
 interface CheckoutProps extends RouteComponentProps {
@@ -764,9 +774,9 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                                 <StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
                                             )}
                                         </StripeCardContainer>
-                                        <button type="submit" disabled={isSubmitting}>
+                                        <CheckoutButton type="submit" disabled={isSubmitting}>
                                             Place order
-                                        </button>
+                                        </CheckoutButton>
                                     </>
                                 )}
                             </PaymentContainer>

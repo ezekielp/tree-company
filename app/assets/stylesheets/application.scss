@@ -52,6 +52,27 @@ body {
 	font-style: normal;
 	line-height: 1;
 }
+
+select {
+	font-family: 'Mulish';
+	height: 100%;
+}
+
+button {
+	background: white;
+	color: #004e00;
+	border: 2px solid #004e00;
+	cursor: pointer;
+	font-weight: bold;
+	border-radius: 1rem;
+	height: 2rem;
+}
+
+button:hover {
+	background: #004e00;
+	color: white;
+}
+
 ol, ul {
 	list-style: none;
 }

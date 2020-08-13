@@ -36,7 +36,7 @@ const Modal: FC<ModalProps> = () => {
             component = (<ProductModalContainer />);
             break;
         case "successModal":
-            clickEffect = () => null;
+            clickEffect = () => closeModal();
             component = (<SuccessModal />);
             break;
         default:
