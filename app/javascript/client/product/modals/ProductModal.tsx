@@ -2,32 +2,17 @@ import React, { FC, useContext, useRef } from 'react';
 import { useAddToCartMutation } from '../../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikNumberInput } from '../../form/inputs';
-import styled from 'styled-components';
 import { ModalContext, CartContext } from '../../AppContainer';
+import { XMark } from '../../assets/XMark';
+import { device } from '../../styles';
+import styled from 'styled-components';
 
-const AddToCartButton = styled.button`
+const FormContainer = styled.div`
+    width: 95%;
 
-`
-
-const CloseModalButton = styled.button`
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    background: none;
-    border: 1px solid black;
-    border-radius: 1rem;
-    font-weight: bold;
-`
-
-const ProductInformation = styled.div`
-    display: flex;
-    flex-direction: column;
-`
-
-const ProductImageContainer = styled.img`
-    object-fit: cover;
-    width: 290px;
-    height: 390px;
+    ${`@media ${device.largest}`} {
+        width: 75%;
+    }
 `;
 
 const ProductModalContainer = styled.div`
@@ -35,13 +20,92 @@ const ProductModalContainer = styled.div`
     align-items: center;
     background: white;
     border-radius: 10px;
-    padding: 10px;
+    padding: 25px;
+
+    ${`@media ${device.larger}`} {
+        grid-template-columns: 450px 1fr;
+        grid-template-rows: 50px 1fr;
+        width: 97%;
+        padding: 10px;
+    }
+`;
+
+const CloseModalButtonContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    ${`@media ${device.larger}`} {
+        grid-row: 1;
+        grid-column: 2;
+    }
+
+`;
+
+const CloseModalButton = styled.button`
+    cursor: pointer;
+    background: none;
+    border: none;
+    align-self: flex-end;
+
+    ${`@media ${device.larger}`} {
+        grid-row: 1;
+        grid-column: 2;
+    }
 `;
 
 const ProductName = styled.div`
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
-`
+    margin-bottom: 20px;
+`;
+
+const ProductInformation = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    ${`@media ${device.larger}`} {
+        grid-column: 2;
+        grid-row: 2;
+        margin-left: 35px;
+        margin-right: 20px;
+    }
+`;
+
+const ProductDetails = styled.div`
+    margin-bottom: 20px;
+`;
+
+const ProductDetail = styled.div`
+    margin-bottom: 3px;
+    line-height: 130%;
+`;
+
+const ProductImageContainer = styled.img`
+    object-fit: cover;
+
+    ${`@media ${device.mobileLarge}`} {
+        width: 250px;
+        height: auto;
+        margin: 10px auto 20px auto;
+    }
+
+    ${`@media ${device.larger}`} {
+        width: 450px;
+        height: auto;
+        grid-column: 1;
+        grid-row-start: span 2;
+        margin: 10px auto;
+    }
+`;
+
+const FieldContainer = styled.div`
+    width: 67px;
+    align-self: flex-end;
+`;
+
+const AddToCartButton = styled.button`
+
+`;
 
 interface ProductModalProps {}
 
@@ -89,24 +153,36 @@ const ProductModal: FC<ProductModalProps> = () => {
     };
 
     return (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
-            {({ isSubmitting }) => (
-                <Form>
-                    <ProductModalContainer onClick={(e) => e.stopPropagation()}>
-                        <CloseModalButton onClick={()=>closeModal()}>X</CloseModalButton>
-                        <ProductName>{selectedProduct.name}</ProductName>
-                        {selectedProduct.imageUrl && <ProductImageContainer src={selectedProduct.imageUrl} />}
-                        <ProductInformation>
-                            <span>Material: {selectedProduct.material}</span>
-                            <span>Size: {selectedProduct.size}</span>
-                            {selectedProduct.description != "" && <span>Description: {selectedProduct.description}</span>}
-                        </ProductInformation>
-                        <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput}/>
-                        <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
-                    </ProductModalContainer>
-                </Form>    
-            )}
-        </Formik>
+        <FormContainer>
+            <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+                {({ isSubmitting }) => (
+                    <Form>
+                        <ProductModalContainer onClick={(e) => e.stopPropagation()}>
+                            <CloseModalButtonContainer>
+                                <CloseModalButton onClick={()=>closeModal()}>
+                                    <XMark width="15px" />
+                                </CloseModalButton>
+                            </CloseModalButtonContainer>
+                            {selectedProduct.imageUrl && (
+                                <ProductImageContainer src={selectedProduct.imageUrl} />
+                            )}
+                            <ProductInformation>
+                                <ProductName>{selectedProduct.name}</ProductName>
+                                <ProductDetails>
+                                    <ProductDetail>Material: {selectedProduct.material}</ProductDetail>
+                                    <ProductDetail>Size: {selectedProduct.size}</ProductDetail>
+                                    {selectedProduct.description != "" && <ProductDetail>Description: {selectedProduct.description}</ProductDetail>}
+                                </ProductDetails>
+                                <FieldContainer>
+                                    <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput} alignRight />
+                                </FieldContainer>
+                                <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
+                            </ProductInformation>
+                        </ProductModalContainer>
+                    </Form>    
+                )}
+            </Formik>
+        </FormContainer>
     )
 }
 
