@@ -7,6 +7,9 @@ import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { HomepageContext, CartContext } from '../AppContainer';
 import { device } from '../styles';
 import styled from 'styled-components';
+import CartContainer from '../cart/CartContainer';
+import SlideoutCartContainer from '../cart/SlideoutCartContainer';
+import { useWindowSize } from './utils';
 
 const IntroductionContainer = styled.div`
     display: flex;
@@ -93,6 +96,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const {countyFilter, categoryFilter} = useContext(HomepageContext);
     const {cart} = useContext(CartContext);
+    const windowSize = useWindowSize();
 
     const belongsToCounty = (county: County) => {
         return county.name == countyFilter;
@@ -158,6 +162,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
                     {PriorityProductThumbnails}
                     {AllProductThumbnails}
                 </ThumbnailIndexContainer>
+                {(cart.length!=0 && (windowSize.width>=800)) && <SlideoutCartContainer />}
             </ThumbnailIndexWrapper>
         </>
     )

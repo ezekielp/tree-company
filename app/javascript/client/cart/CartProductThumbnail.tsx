@@ -17,9 +17,7 @@ const ItemContainer = styled.section`
     margin-top: 1rem;
     padding: 1rem;
     border-bottom: 1px solid black;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
+
 `;
 
 const ImageContainer = styled.figure`

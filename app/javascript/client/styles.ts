@@ -4,7 +4,7 @@ interface Sizes {
     largest: string;
 }
 
-const sizes: Sizes = {
+export const sizes: Sizes = {
     smaller: '450px',
     larger: '800px',
     largest: '1100px'
