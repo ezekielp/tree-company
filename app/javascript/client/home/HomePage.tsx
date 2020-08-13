@@ -71,11 +71,12 @@ const ThumbnailIndexContainer = styled.div`
     max-width: 950px;
     height: 100%;
     flex-wrap: wrap;
+    grid-column-start: 2;
 `
 
 const ThumbnailIndexWrapper = styled.div`
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 0.25fr 1fr 0.25fr;
 `
 
 interface HomePageProps {

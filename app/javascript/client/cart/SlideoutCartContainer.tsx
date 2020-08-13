@@ -39,9 +39,10 @@ const ShoppingCartLabel = styled.div`
 
 const SlideoutCartWrapper = styled.div`
     width: 100%;
-    height: 100%;
+    height: fit-content;
     display: flex;
     justify-content: flex-end;
+    grid-column-start: 3;
 `
 
 interface CartContainerProps {}
