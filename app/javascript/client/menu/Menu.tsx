@@ -64,9 +64,7 @@ const ShoppingCartButton = styled.button`
 
 const StyledSelect = styled.select`
     width: 50%;
-    height: 100%;
     margin-right: 4rem;
-    font-family: 'Mulish';
 `;
 
 interface MenuContainerProps extends RouteComponentProps {}
