@@ -23,7 +23,7 @@ interface ModalProps {}
 
 const Modal: FC<ModalProps> = () => {
 
-    const {modalIsShowing, openModal, closeModal, displayedModal} = useContext(ModalContext);
+    const {modalIsShowing, closeModal, displayedModal} = useContext(ModalContext);
 
     if (!modalIsShowing) return null;
 
