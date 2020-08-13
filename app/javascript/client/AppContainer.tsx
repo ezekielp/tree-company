@@ -8,6 +8,7 @@ import { OrderConfirmationPage } from './order_confirmation/OrderConfirmationPag
 import { ErrorPage } from './error/ErrorPage';
 import { Header } from './Header';
 import { Footer } from './Footer';
+import { Navbar } from './navbar/Navbar';
 import { ProductInfoFragment, CartItem } from '../client/graphqlTypes';
 import Modal from '../client/modal/Modal';
 import gql from 'graphql-tag';
@@ -95,37 +96,40 @@ const InternalAppContainer: SFC<InternalAppContainerProps> = (props) => {
 					cart: cart,
 					fetchCart: ()=>refetch()
 				}}>
-				<ModalContext.Provider value={{
-					openModal: (modalName)=>{setDisplayedModal(modalName);setModalIsShowing(true);},
-					closeModal: ()=>setModalIsShowing(false),
-					setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
-					setFlashMessage: (message)=>setFlashMessage(message),
-					flashMessage: flashMessage,
-					modalIsShowing: modalIsShowing,
-					selectedProduct: selectedProduct,
-					displayedModal: displayedModal
-				}}>
-				<HomepageContext.Provider value={{
-					countyFilter: countyFilter,
-					categoryFilter: categoryFilter,
-					setCountyFilter: (filter) => setCountyFilter(filter),
-					setCategoryFilter: (filter) => setCategoryFilter(filter)
-				}}>
-					<Modal />
-					<Header />
-					<Switch>
-						<Route path="/home" component={HomeContainer} />
-						<Route path="/cart" component={CartContainer} />
-						<Route path="/checkout" component={CheckoutContainer} />
-						<Route path="/order-confirmation" component={OrderConfirmationPage} />
-						<Route exact path="/error" component={ErrorPage} />
-						<Route path="*">
-							<Redirect to="/home" />
-						</Route>
-					</Switch>
-					<Footer />
-				</HomepageContext.Provider>
-				</ModalContext.Provider>
+					<ModalContext.Provider value={{
+						openModal: (modalName)=>{setDisplayedModal(modalName);setModalIsShowing(true);},
+						closeModal: ()=>setModalIsShowing(false),
+						setSelectedProduct: (selectedProduct: ProductInfoFragment)=>setSelectedProduct(selectedProduct),
+						setFlashMessage: (message)=>setFlashMessage(message),
+						flashMessage: flashMessage,
+						modalIsShowing: modalIsShowing,
+						selectedProduct: selectedProduct,
+						displayedModal: displayedModal
+					}}>
+						<HomepageContext.Provider value={{
+							countyFilter: countyFilter,
+							categoryFilter: categoryFilter,
+							setCountyFilter: (filter) => setCountyFilter(filter),
+							setCategoryFilter: (filter) => setCategoryFilter(filter)
+						}}>
+							<Modal />
+							<Header />
+							<Switch>
+								<Route path="/home" component={HomeContainer} />
+								<Route path="/cart" component={CartContainer} />
+								<Route path="/checkout" component={CheckoutContainer} />
+								<Route path="/order-confirmation" component={OrderConfirmationPage} />
+								<Route exact path="/error" component={ErrorPage} />
+								<Route path="/contact">
+									<Navbar />
+								</Route>
+								<Route path="*">
+									<Redirect to="/home" />
+								</Route>
+							</Switch>
+							<Footer />
+						</HomepageContext.Provider>
+					</ModalContext.Provider>
 				</CartContext.Provider>
 			</>
 		);

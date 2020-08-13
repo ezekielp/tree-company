@@ -1,14 +1,16 @@
+
 import React, { FC, useContext } from 'react';
-import styled from 'styled-components';
 import { ProductInfoFragment } from '../graphqlTypes';
+import { Navbar } from '../navbar/Navbar';
 import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { HomepageContext } from '../AppContainer';
 import { device } from '../styles';
+import styled from 'styled-components';
 
 const IntroductionContainer = styled.div`
     display: flex;
-    margin: 0 50px;
+    margin: 0 50px 35px 50px;
 
     ${`@media ${device.mobileLarge}`} {
         flex-direction: column;
@@ -111,6 +113,7 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     return (
         <>
+            <Navbar />
             <IntroductionContainer>
                 <IntroductionTextContainer>
                     <IntroductionTextParagraph>
