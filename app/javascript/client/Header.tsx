@@ -9,7 +9,7 @@ interface HeaderProps {}
 const HeaderContainer = styled.div`
     background-color: ${colors.darkGreen};
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 2px;
 `;
 
 const HeaderContentContainer = styled.div``;
@@ -52,7 +52,7 @@ const HeaderSubheading = styled.div`
 
 const TreePhoto = styled.img`
     width: 40%;
-    border-left: 5px solid white;
+    border-left: 2px solid white;
 
     ${`@media ${device.mobileLarge}`} {
         width: 100%;

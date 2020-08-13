@@ -5,7 +5,6 @@ import { device } from './styles';
 import styled from 'styled-components';
 
 const FooterContainer = styled.div`
-    margin-top: 50px;
     width: 100%;
     background-color: ${colors.darkGreen};
 `;
