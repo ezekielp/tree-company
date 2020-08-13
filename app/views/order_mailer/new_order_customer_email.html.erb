@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+        body {
+            font-family: Sans-Serif;
+        }
+
+        span {
+            font-weight: bold;
+        }
+    </style>
+  </head>
+  <body>
+        <h1>The Tree Company</h1>
+        <p>Conservation and Environmental Resource Signage</p>
+        <%= image_tag "treecologo.png" %>
+
+        <br />
+        <h2>ORDER CONFIRMATION</h2>
+
+        <p>Thank you for your order, <span><%= @order.billing_customer.name%></span>!</p>
+        <p>Shipping information will be sent separately to the email address included in your order.</p>
+        <br />
+
+        <p><span>Order date</span>: <%= Date.current %></p>
+        <p><span>Confirmation number</span>: <%= @order.id %></p>
+        <br />
+
+        <h3>Order details</h3>
+        <p>-------------------------------</p>
+        <% @order.order_items.each do |item| %>
+
+        <p><%= item[:product].name %> sign (style <%= item[:product].style_number %>)</p>
+        <p>Quantity: <%= item[:quantity] %></p>
+        <br />
+        <% end %>
+
+        <p>Unit price: $<%= @order.price_in_dollars(@order.unit_price) %>.00</p>
+        <p>Subtotal: $<%= @order.price_in_dollars(@order.subtotal) %></p>
+        <p>Tax cost: $<%= @order.price_in_dollars(@order.tax_cost) %></p>
+        <p>Shipping cost: $<%= @order.price_in_dollars(@order.shipping_cost) %></p>
+        <p>Total charge: $<%= @order.price_in_dollars(@order.total_cost) %></p>
+        <br />
+
+        <% if @order.shipping_customer %>
+        <h4>Shipping information</h4>
+        <p>Company name: <%= @order.shipping_customer.company_name %></p>
+        <p>Address: <%= @order.shipping_customer.address %></p>
+        <p>City: <%= @order.shipping_customer.city %></p>
+        <p>State: <%= @order.shipping_customer.state %></p>
+        <p>Zip code: <%= @order.shipping_customer.zip_code %></p>
+        <% if @order.shipping_customer.phone_number %></p>
+        <p>Phone number: <%= @order.shipping_customer.phone_number %></p>
+        <% end %>
+        <% if @order.shipping_customer.attn %>
+        <p>Phone number: <%= @order.shipping_customer.attn %></p>
+        <% end %>
+        <% end %>
+        <br />
+
+        <h4>Billing information</h4>
+        <p>Name: <%= @order.billing_customer.name %></p>
+        <p>Email address: <%= @order.billing_customer.email %></p>
+        <p>Address: <%= @order.billing_customer.address %></p>
+        <p>City: <%= @order.billing_customer.city %></p>
+        <p>State: <%= @order.billing_customer.state %></p>
+        <p>Zip code: <%= @order.billing_customer.zip_code %></p>
+        <% if @order.billing_customer.phone_number %></p>
+        <p>Phone number: <%= @order.billing_customer.phone_number %></p>
+        <% end %>
+    </body>
+</html>
+
+
+
