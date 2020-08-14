@@ -1,10 +1,19 @@
 import React, { FC, useContext } from 'react';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { ModalContext, CartContext } from '../../AppContainer';
 import { ProductInfoFragment, useAddToCartMutation } from 'client/graphqlTypes';
 import { FormikNumberInput } from '../../form/inputs';
 import { colors } from '../../styles';
+
+const fadeInAnimation = keyframes`
+    0%{
+        opactiy: 0;
+    }
+    100%{
+        opactiy: 1;
+    }
+}`;
 
 const ProductThumbnailContainer = styled.div`
     display: flex;
@@ -13,10 +22,12 @@ const ProductThumbnailContainer = styled.div`
     width: 300px;
     height: auto;
     align-items: center;
-    margin: 20px;
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 10px;    
+    background: green;
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    margin: 1rem 0.1rem 0 0.1rem;
+    animation: ${fadeInAnimation} 1s ease;
 `;
 
 const ProductImageContainer = styled.img`

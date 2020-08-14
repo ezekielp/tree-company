@@ -4,9 +4,11 @@ import { ProductInfoFragment } from '../graphqlTypes';
 import { Navbar } from '../navbar/Navbar';
 import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
-import { HomepageContext } from '../AppContainer';
+import { HomepageContext, CartContext } from '../AppContainer';
 import { device } from '../styles';
 import styled from 'styled-components';
+import SlideoutCartContainer from '../cart/SlideoutCartContainer';
+import { useWindowSize } from './utils';
 
 const IntroductionContainer = styled.div`
     display: flex;
@@ -64,10 +66,28 @@ const PricingChartHeaderCell = styled(PricingChartCell)`
 
 const ThumbnailIndexContainer = styled.div`
     display: flex;
-    justify-content: space-evenly;
-    width: 100%;
+    justify-content: center;
+    min-width: 66%;
+    max-width: 910px;
     height: 100%;
     flex-wrap: wrap;
+    /* grid-column-start: 2; */
+`
+
+const ThumbnailIndexWrapper = styled.div`
+    display: flex;
+    /* display: grid; */
+    width: 100%;
+    justify-content: space-between;
+    /* grid-template-columns: 0.2fr 0.8fr 0.2fr; */
+`
+
+const Spacer = styled.div`
+    min-width: 16%;
+`
+
+const CartSpacer = styled.div`
+    min-width: 10rem;
 `
 
 interface HomePageProps {
@@ -87,6 +107,8 @@ interface Category {
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const {countyFilter, categoryFilter} = useContext(HomepageContext);
+    const {cart} = useContext(CartContext);
+    const windowSize = useWindowSize();
 
     const belongsToCounty = (county: County) => {
         return county.name == countyFilter;
@@ -147,10 +169,15 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
                 </PricingChartContainer>
             </IntroductionContainer>
             <Menu />
-            <ThumbnailIndexContainer>
-                {PriorityProductThumbnails}
-                {AllProductThumbnails}
-            </ThumbnailIndexContainer>
+            <ThumbnailIndexWrapper>
+                <Spacer />
+                <ThumbnailIndexContainer>
+                    {PriorityProductThumbnails}
+                    {AllProductThumbnails}
+                </ThumbnailIndexContainer>
+                {(cart.length!=0 && (windowSize.width>=800)) ? (<SlideoutCartContainer />) : <CartSpacer />}
+                {/* {(cart.length!=0 && (windowSize.width>=800)) && <SlideoutCartContainer />} */}
+            </ThumbnailIndexWrapper>
         </>
     )
 }

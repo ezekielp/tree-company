@@ -5,7 +5,7 @@ interface UpdateNumberInputProps extends Omit<HTMLProps<HTMLInputElement>, 'as' 
 }
 
 const StyledNumberInput = styled.input`
-    width: 50%;
+    width: 100%;
 `;
 
 export const UpdateNumberInput = React.forwardRef(( { ...rest }: UpdateNumberInputProps, ref) => (

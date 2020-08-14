@@ -14,52 +14,24 @@ const MenuContainer = styled.div`
     display: flex;
     flex-direction: column;
     padding: 1rem;
-    justify-content: space-evenly;
+    justify-content: center;
+    align-items: center;
     ${`@media ${device.mobileLarge}`} {
         
     }
 `;
 
 const CountySelectContainer = styled.div`
-    width: 100%;
+    width: 20rem;
     margin: 0.5rem;
     display: flex;
     justify-content: space-between;
 `
 const CategorySelectContainer = styled.div`
-    width: 100%;
+    width: 20rem;
     margin: 0.5rem;
     display: flex;
     justify-content: space-between;
-`
-const ShoppingCartContainer = styled.div`
-    width: 100%;
-    margin: 0.5rem;
-    display: flex;
-    justify-content: center;
-`
-
-const ShoppingCartButton = styled.button`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: none;
-    color: white;
-    border: 1px solid white;
-    border-radius: 1rem;
-    font-family: 'Mulish';
-    span{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    i{
-        width: 1.5rem;
-        height: 1.5rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
 `
 
 const StyledSelect = styled.select`
@@ -119,11 +91,6 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
                     <option value="forest_conservation">Forest Conservation/Tree Protection</option>
                 </StyledSelect>
             </CategorySelectContainer>
-            <ShoppingCartContainer onClick={()=>handleClick("cart")}>
-                <ShoppingCartButton>
-                    <span>Shopping Cart</span><i className="fas fa-shopping-cart"></i>
-                </ShoppingCartButton>
-            </ShoppingCartContainer>
         </MenuContainer>
     );
 }
