@@ -71,16 +71,27 @@ const PricingChartHeaderCell = styled(PricingChartCell)`
 const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: center;
+    min-width: 310px;
     max-width: 910px;
     height: 100%;
     flex-wrap: wrap;
-    grid-column-start: 2;
+    /* grid-column-start: 2; */
 `
 
 const ThumbnailIndexWrapper = styled.div`
-    display: grid;
+    display: flex;
+    /* display: grid; */
     width: 100%;
-    grid-template-columns: 0.2fr 0.8fr 0.2fr;
+    justify-content: space-between;
+    /* grid-template-columns: 0.2fr 0.8fr 0.2fr; */
+`
+
+const Spacer = styled.div`
+    min-width: 10%;
+`
+
+const CartSpacer = styled.div`
+    min-width: 300px;
 `
 
 interface HomePageProps {
@@ -163,11 +174,13 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
             </IntroductionContainer>
             <Menu />
             <ThumbnailIndexWrapper>
+                <Spacer />
                 <ThumbnailIndexContainer>
                     {PriorityProductThumbnails}
                     {AllProductThumbnails}
                 </ThumbnailIndexContainer>
-                {(cart.length!=0 && (windowSize.width>=800)) && <SlideoutCartContainer />}
+                {(cart.length!=0 && (windowSize.width>=800)) ? (<SlideoutCartContainer />) : <CartSpacer />}
+                {/* {(cart.length!=0 && (windowSize.width>=800)) && <SlideoutCartContainer />} */}
             </ThumbnailIndexWrapper>
         </>
     )

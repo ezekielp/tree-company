@@ -6,14 +6,19 @@ import styled, { keyframes } from 'styled-components';
 import { CartContext } from '../AppContainer';
 
 const slideAnimation = keyframes`
-    from{
-        margin-left: 100%;
-        width: 300%;
+    0%{
+        width: 1px;
     }
-    to{
-        margin-left: 0%;
-        width: 100%;
+    100%{
+        /* margin-left: 0%; */
+        width: 240px;
     }
+}`;
+
+const fadeInAnimation = keyframes`
+    0%{opactiy: 0;}
+    50%{opactiy: 0;}
+    100%{opactiy: 1;}
 }`;
 
 const CartDisplayContainer = styled.div`
@@ -21,12 +26,12 @@ const CartDisplayContainer = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    max-width: 300px;
+    width: 240px;
     height: 100%;
     border: 1px solid darkgreen;
     border-radius: 1rem;
     margin-top: 1rem;
-    margin-right: 1rem;
+    /* margin-right: 1rem; */
 `;
 
 const CheckoutButton = styled.button`
@@ -49,13 +54,13 @@ const ShoppingCartLabel = styled.div`
 `;
 
 const SlideoutCartWrapper = styled.div`
-    width: 100%;
+    width: 300px;
     height: fit-content;
     display: flex;
     justify-content: flex-end;
-    grid-column-start: 3;
-    animation: ${slideAnimation} 1s ease;
-    overflow: hidden;
+    /* grid-column-start: 3; */
+    /* animation: ${slideAnimation} 1.5s ease; */
+    animation: ${slideAnimation} 5s ease;
 `
 
 interface CartContainerProps {}

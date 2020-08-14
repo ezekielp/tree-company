@@ -183,7 +183,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             <ButtonsAndPriceContainer>
                                 <ButtonsContainer>
                                     <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
-                                    <RemoveFromCartButton type="reset" disabled={isSubmitting} id="remove_from_cart" >Remove From Cart</RemoveFromCartButton>
+                                    <RemoveFromCartButton type="reset" disabled={isSubmitting}>Remove From Cart</RemoveFromCartButton>
                                 </ButtonsContainer>
                                 <PriceContainer>${totalPrice / 100}.00</PriceContainer>
                             </ButtonsAndPriceContainer>

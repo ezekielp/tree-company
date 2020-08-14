@@ -3,9 +3,14 @@ import { ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikUpdateNumberInput } from '../form/inputs';
 import { range } from 'lodash';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { CartContext } from '../AppContainer';
-import { device } from '../styles';
+
+const fadeInAnimation = keyframes`
+    0% {opactiy: 0}
+    50% {opactiy: 0}
+    100% {opactiy: 1}
+}`;
 
 const ItemContainer = styled.section`
     display: grid;
@@ -94,7 +99,6 @@ const InputFieldWrapper = styled.div`
 `
 
 export const CartProductDetails = styled.div`
-    max-width: 400px;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -193,7 +197,7 @@ export const SlideoutCartProductThumbnail: FC<CartProductThumbnailProps> = ({ pr
                             </InputFieldWrapper>
                             <ButtonsContainer>
                                 <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
-                                <RemoveFromCartButton type="reset" disabled={isSubmitting} id="remove_from_cart" >Remove From Cart</RemoveFromCartButton>
+                                <RemoveFromCartButton type="reset" disabled={isSubmitting}>Remove From Cart</RemoveFromCartButton>
                             </ButtonsContainer>
                             <PriceContainer>${totalPrice / 100}.00</PriceContainer>
                         </UpdateCartOptionsContainer>
