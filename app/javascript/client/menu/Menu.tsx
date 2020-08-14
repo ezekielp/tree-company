@@ -1,4 +1,4 @@
-import React, { FC, useContext, ChangeEvent, useRef, useEffect } from 'react';
+import React, { FC, useContext, ChangeEvent, useRef } from 'react';
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { colors } from '../styles';
 import styled from 'styled-components';
@@ -12,31 +12,41 @@ const MenuContainer = styled.div`
     height: 100%;
     color: white;
     display: flex;
-    flex-direction: column;
-    padding: 1rem;
-    justify-content: center;
+    flex-direction: row;
+    padding: 0.5rem 1rem;
+    justify-content: space-evenly;
     align-items: center;
-    ${`@media ${device.mobileLarge}`} {
-        
+
+    ${`@media ${device.mobileSmaller}`} {
+        flex-direction: column;
     }
 `;
 
-const CountySelectContainer = styled.div`
-    width: 20rem;
+const SelectLabel = styled.span`
+    margin-right: 15px;
+
+    ${`@media ${device.mobileSmaller}`} {
+        margin-right: 0;
+    }
+`;
+
+const SelectContainer = styled.div`
+    width: 15rem;
     margin: 0.5rem;
     display: flex;
-    justify-content: space-between;
-`
-const CategorySelectContainer = styled.div`
-    width: 20rem;
-    margin: 0.5rem;
-    display: flex;
-    justify-content: space-between;
+
+    ${`@media ${device.mobileSmaller}`} {
+        justify-content: space-between;
+    }
 `
 
+// margin-right: 4rem;
 const StyledSelect = styled.select`
-    width: 50%;
-    margin-right: 4rem;
+    width: 100%;
+
+    ${`@media ${device.mobileSmaller}`} {
+        width: 60%;
+    }
 `;
 
 interface MenuContainerProps extends RouteComponentProps {}
@@ -49,10 +59,6 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
     const selectCategoryRef: React.RefObject<HTMLSelectElement> = useRef(null);
     
     if (!cart) return null;
-
-    const handleClick = (path: string)=>(
-        history.push(`/${path}`)
-    );
 
     const countyOptions = countyList.map((countyName)=>{
         return (
@@ -76,21 +82,21 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
 
     return (
         <MenuContainer>
-            <CountySelectContainer>
-                <span>County</span>
+            <SelectContainer>
+                <SelectLabel>County</SelectLabel>
                 <StyledSelect name="county" id="county" onChange={handleCountyChange} ref={selectCountyRef} value={countyFilter}>
                     <option value="default">Filter by County</option>
                     {countyOptions}
                 </StyledSelect>
-            </CountySelectContainer>
-            <CategorySelectContainer>
-                <span>Category</span>
+            </SelectContainer>
+            <SelectContainer>
+                <SelectLabel>Category</SelectLabel>
                 <StyledSelect name="category" id="category" onChange={handleCategoryChange} ref={selectCategoryRef} value={categoryFilter}>
                     <option value="default">Filter by Category</option>
                     <option value="wetland_stream_buffer">Wetland Stream Buffer</option>
                     <option value="forest_conservation">Forest Conservation/Tree Protection</option>
                 </StyledSelect>
-            </CategorySelectContainer>
+            </SelectContainer>
         </MenuContainer>
     );
 }
