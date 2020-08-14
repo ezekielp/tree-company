@@ -8,11 +8,13 @@ import { CartContext } from '../AppContainer';
 const slideAnimation = keyframes`
     0%{
         margin-left: 100%;
-        width: 300%;
+        /* margin-right: 0; */
+        width: 200%;
     }
     100%{
         margin-left: 0%;
         width: 100%;
+        /* margin-right: 0.5rem; */
     }
 }`;
 
@@ -35,7 +37,7 @@ const CartDisplayContainer = styled.div`
     border: 1px solid darkgreen;
     border-radius: 1rem;
     margin-top: 1rem;
-    /* margin-right: 1rem; */
+    /* margin-right: 0.5rem; */
 `;
 
 const CheckoutButton = styled.button`
