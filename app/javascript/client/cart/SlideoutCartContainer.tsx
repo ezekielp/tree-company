@@ -18,15 +18,6 @@ const slideAnimation = keyframes`
     }
 }`;
 
-const fadeInAnimation = keyframes`
-    0%{
-        opactiy: 0;
-    }
-    100%{
-        opactiy: 1;
-    }
-}`;
-
 const CartDisplayContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -37,22 +28,18 @@ const CartDisplayContainer = styled.div`
     border: 1px solid darkgreen;
     border-radius: 1rem;
     margin-top: 1rem;
-    /* margin-right: 0.5rem; */
 `;
 
 const CheckoutButton = styled.button`
-    width: 100%;
+    width: 75%;
     height: 2rem;
-    cursor: pointer;
-    border: 1px solid black;
-    font-weight: bold;
-    margin-top: 1rem;
-    border-radius: 1rem;
+    margin: 0.5rem 0rem 0.5rem 0rem;
 `;
 
 const SubtotalContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
+    margin-top: 0.5rem;
 `;
 
 const ShoppingCartLabel = styled.div`

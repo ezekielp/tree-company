@@ -6,11 +6,7 @@ import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { HomepageContext, CartContext } from '../AppContainer';
 import { device } from '../styles';
-<<<<<<< HEAD
 import styled from 'styled-components';
-import CartContainer from '../cart/CartContainer';
-=======
->>>>>>> add slide animation and components
 import SlideoutCartContainer from '../cart/SlideoutCartContainer';
 import { useWindowSize } from './utils';
 

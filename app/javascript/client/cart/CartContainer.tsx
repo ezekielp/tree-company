@@ -16,18 +16,15 @@ const CartDisplayContainer = styled.div`
 `;
 
 const CheckoutButton = styled.button`
-    width: 100%;
+    width: 10rem;
     height: 2rem;
-    cursor: pointer;
-    border: 1px solid black;
-    font-weight: bold;
-    margin-top: 1rem;
-    border-radius: 1rem;
-`
+    margin: 0.5rem 0rem 0.5rem 0rem;
+`;
 
 const SubtotalContainer = styled.div`
     display: flex;
     justify-content: space-evenly;
+    margin-top: 0.5rem;
 `;
 
 const ShoppingCartIconContainer = styled.div`
@@ -36,7 +33,7 @@ const ShoppingCartIconContainer = styled.div`
     border: 1px solid black;
     border-radius: 0.5rem;
     padding: 0.5rem;
-    margin: 0rem 0.5rem 0rem 0.5rem;
+    margin: 1rem 0.5rem 0rem 0.5rem;
 `
 
 interface CartContainerProps {}
