@@ -1,8 +1,9 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState, useRef, useContext } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, useSendErrorMailerMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc, CreateBillingCustomerInput, CreateShippingCustomerInput } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
+import { FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
+import { CartContext } from '../AppContainer';
 import { InputWrapper, Label } from '../form/withFormik';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
@@ -342,6 +343,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     const [createOrder] = useCreateOrderMutation();
     const [clearCart] = useClearCartMutation();
     const [sendErrorMailer] = useSendErrorMailerMutation();
+    const { fetchCart } = useContext(CartContext);
 
     const productIds: string[] = [];
     const productIdToQuantityMap = {} as { [key: string]: number };
@@ -528,6 +530,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         if (!createOrderResponse.errors) {
             await clearCart();
+            // fetchCart();
 
             const orderId = createOrderResponse?.data?.createOrder.order.id;
 

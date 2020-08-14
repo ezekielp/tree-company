@@ -1,4 +1,4 @@
-import React, { FC, useContext, useRef } from 'react';
+import React, { FC, useContext } from 'react';
 import { useAddToCartMutation } from '../../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikNumberInput } from '../../form/inputs';
