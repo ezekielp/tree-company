@@ -4,6 +4,7 @@ import { CartProductThumbnailContainer } from './CartProductThumbnailContainer';
 import { determinePrice } from './utils';
 import styled from 'styled-components';
 import { CartContext } from '../AppContainer';
+import { device } from '../styles';
 
 const CartDisplayContainer = styled.div`
     display: flex;
@@ -29,6 +30,15 @@ const SubtotalContainer = styled.div`
     justify-content: space-evenly;
 `;
 
+const ShoppingCartIconContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin: 0rem 0.5rem 0rem 0.5rem;
+`
+
 interface CartContainerProps {}
 
 const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }) => {
@@ -52,7 +62,7 @@ const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }
 
     return (
         <>
-        <span>Shopping Cart</span><i className="fas fa-shopping-cart"></i>
+            <ShoppingCartIconContainer><span>Shopping Cart</span><i className="fas fa-shopping-cart"></i></ShoppingCartIconContainer>
             <CartDisplayContainer>
                 {cartItems}
                 <SubtotalContainer>

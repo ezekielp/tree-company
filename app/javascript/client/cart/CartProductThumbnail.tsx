@@ -18,6 +18,12 @@ const ItemContainer = styled.section`
     padding: 1rem;
     border-bottom: 1px solid black;
 
+    ${`@media ${device.larger}`} {
+        /* background: green; */
+        display: flex;
+        width: 95vw;
+        max-width: 100vw;
+    }
 `;
 
 const ImageContainer = styled.figure`
@@ -81,8 +87,13 @@ const ButtonsAndPriceContainer = styled.div`
 
 const PriceContainer = styled.div`
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
+    span{
+        font-size: 12px;
+        display: flex;
+        justify-content: flex-end;
+    }
 `
 
 export const CartProductDetails = styled.div`
@@ -161,6 +172,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     };
 
     return (
+        // <FormWrapper>
         <Formik initialValues={initialValues} onSubmit={handleSubmit} onReset={handleReset}>
             {({ isSubmitting }) => (
                 <Form>
@@ -179,18 +191,20 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             {counties && <div>Counties: <br />{countyList}</div>}
                         </CartProductDetails>
                         <UpdateCartOptionsContainer>
+                            <PriceContainer>Price:<br />${totalPrice / 100}.00</PriceContainer>
+                            <br />
                             <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
                             <ButtonsAndPriceContainer>
                                 <ButtonsContainer>
                                     <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>
                                     <RemoveFromCartButton type="reset" disabled={isSubmitting}>Remove From Cart</RemoveFromCartButton>
                                 </ButtonsContainer>
-                                <PriceContainer>${totalPrice / 100}.00</PriceContainer>
                             </ButtonsAndPriceContainer>
                         </UpdateCartOptionsContainer>
                     </ItemContainer>
                 </Form>
             )}
         </Formik>
+        // {/* </FormWrapper> */}
 		);
 };
