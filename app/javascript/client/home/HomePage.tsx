@@ -68,18 +68,17 @@ const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: center;
     min-width: 66%;
-    max-width: 910px;
+    max-width: 1100px;
     height: 100%;
     flex-wrap: wrap;
     /* grid-column-start: 2; */
 `
 
+/* justify-content: space-between; */
 const ThumbnailIndexWrapper = styled.div`
     display: flex;
-    /* display: grid; */
     width: 100%;
-    justify-content: space-between;
-    /* grid-template-columns: 0.2fr 0.8fr 0.2fr; */
+    justify-content: center;
 `
 
 const Spacer = styled.div`
@@ -170,12 +169,13 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
             </IntroductionContainer>
             <Menu />
             <ThumbnailIndexWrapper>
-                <Spacer />
+                {/* <Spacer /> */}
                 <ThumbnailIndexContainer>
                     {PriorityProductThumbnails}
                     {AllProductThumbnails}
                 </ThumbnailIndexContainer>
-                {(cart.length!=0 && (windowSize.width>=800)) ? (<SlideoutCartContainer />) : <CartSpacer />}
+                {(cart.length!=0 && (windowSize.width>=800)) && (<SlideoutCartContainer />)}
+                {/* {(cart.length!=0 && (windowSize.width>=800)) ? (<SlideoutCartContainer />) : <CartSpacer />} */}
                 {/* {(cart.length!=0 && (windowSize.width>=800)) && <SlideoutCartContainer />} */}
             </ThumbnailIndexWrapper>
         </>

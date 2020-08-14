@@ -18,11 +18,10 @@ const ItemContainer = styled.section`
     max-width: 800px;
     height: auto;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: 1fr auto;
     margin-top: 1rem;
     padding: 1rem;
     border-bottom: 1px solid black;
-
 `;
 
 const ImageContainer = styled.figure`
@@ -35,6 +34,7 @@ const ImageContainer = styled.figure`
     grid-column-end: 2;
     grid-row-start: 1;
     grid-row-end: 2;
+    margin-bottom: 10px;
 `;
 
 const Image = styled.img`

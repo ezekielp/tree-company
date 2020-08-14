@@ -18,16 +18,32 @@ const slideAnimation = keyframes`
     }
 }`;
 
+// width: 300px;
+// height: fit-content;
+const SlideoutCartWrapper = styled.div`
+    position: sticky;
+    width: 300px;
+    top: 10px;
+    height: 100%;
+    padding-bottom: 10px;
+    display: flex;
+    justify-content: flex-end;
+    animation: ${slideAnimation} 1.5s ease;
+    margin-right: 25px;
+`
+
+// justify-content: center;
 const CartDisplayContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 240px;
-    height: 100%;
+    width: 300px;
+    height: 90vh;
     border: 1px solid darkgreen;
     border-radius: 1rem;
     margin-top: 1rem;
+    padding-bottom: 5px;
+    overflow-y: scroll;
 `;
 
 const CheckoutButton = styled.button`
@@ -43,18 +59,16 @@ const SubtotalContainer = styled.div`
 `;
 
 const ShoppingCartLabel = styled.div`
-    margin-top: 1rem;
+    position: sticky;
+    top: 0px;
+    background: white;
+    width: 100%;
+    text-align: center;
+    /* height: 100px; */
+    padding: 20px 0;
+    /* height: 50px; */
+    border-bottom: 1px solid black;
 `;
-
-const SlideoutCartWrapper = styled.div`
-    width: 300px;
-    height: fit-content;
-    display: flex;
-    justify-content: flex-end;
-    /* grid-column-start: 3; */
-    animation: ${slideAnimation} 1.5s ease;
-    /* animation: ${slideAnimation} 5s ease; */
-`
 
 interface CartContainerProps {}
 
