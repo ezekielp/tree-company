@@ -14,7 +14,9 @@ import discover from '../assets/discover.png';
 import mastercard from '../assets/mastercard.svg';
 import { StripeBadge } from '../assets/StripeBadge';
 import visa from '../assets/visa.png';
-import { device } from '../styles';
+import BeatLoader from 'react-spinners/BeatLoader';
+import { css } from '@emotion/core';
+import { device, colors } from '../styles';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -294,6 +296,24 @@ const CheckoutButton = styled.button`
     font-size: 20px;
     margin: 0 auto;
     display: block;
+    margin-bottom: 25px;
+`;
+
+const LoaderContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const LoaderText = styled.div`
+    color: ${colors.darkGreen};
+    font-size: 24px;
+    font-variation-settings: 'wght' 700;
+    margin-bottom: 20px;
+`;
+
+const LoaderOverride = css`
+
 `;
 
 interface CheckoutProps extends RouteComponentProps {
@@ -780,6 +800,19 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                         <CheckoutButton type="submit" disabled={isSubmitting}>
                                             Place order
                                         </CheckoutButton>
+                                        {isSubmitting && (
+                                            <LoaderContainer>
+                                                <LoaderText>
+                                                    Processing order
+                                                </LoaderText>
+                                                <BeatLoader
+                                                    css={LoaderOverride}
+                                                    size={30}
+                                                    color={colors.darkGreen}
+                                                    loading={true}
+                                                />
+                                            </LoaderContainer>
+                                        )}
                                     </>
                                 )}
                             </PaymentContainer>
