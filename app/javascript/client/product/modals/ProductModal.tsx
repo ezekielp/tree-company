@@ -110,9 +110,9 @@ const AddToCartButton = styled.button`
 
 interface ProductModalProps {}
 
-interface AddToCartData {
+export interface AddToCartData {
     productId: string;
-    quantity: number;
+    quantity: string;
 }
 
 const ProductModal: FC<ProductModalProps> = () => {
@@ -120,27 +120,28 @@ const ProductModal: FC<ProductModalProps> = () => {
     const { selectedProduct, setFlashMessage, closeModal, openModal } = useContext(ModalContext);
     const { fetchCart } = useContext(CartContext);
     
-    const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
+    // const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
 
     const [addItemToCart] = useAddToCartMutation();   
 
-    const handleSubmit = async (values: AddToCartData, formikHelpers: FormikHelpers<AddToCartData>) => {
-        if (!inputRef.current) return initialValues;
+    const handleFocus = (event: FocusEvent) => event && (event.target as HTMLInputElement).select();
 
-        const productQuantity = parseInt(inputRef.current.value);
+    const handleSubmit = async (values: AddToCartData, formikHelpers: FormikHelpers<AddToCartData>) => {
+        const { quantity } = values;
         
         addItemToCart({
             variables: {
                 input: {
                     productId: selectedProduct.id,
-                    quantity: productQuantity
+                    quantity: parseInt(quantity)
                 }
             }
         }).then(
             (event)=>{
-                setFlashMessage(productQuantity.toString());
+                setFlashMessage(quantity);
                 fetchCart();
-                openModal("successModal");    
+                openModal("successModal");
+                formikHelpers.setFieldValue("quantity", "1");
             }
         );
 
@@ -150,7 +151,7 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     const initialValues = {
         productId: selectedProduct.id,
-        quantity: 1
+        quantity: "1"
     };
 
     return (
@@ -175,7 +176,7 @@ const ProductModal: FC<ProductModalProps> = () => {
                                     {selectedProduct.description != "" && <ProductDetail>Description: {selectedProduct.description}</ProductDetail>}
                                 </ProductDetails>
                                 <FieldContainer>
-                                    <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikNumberInput} alignRight />
+                                    <Field name="quantity" label="Quantity" component={FormikNumberInput} alignRight onFocus={handleFocus} />
                                 </FieldContainer>
                                 <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
                             </ProductInformation>
