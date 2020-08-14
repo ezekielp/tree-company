@@ -7,18 +7,22 @@ import { CartContext } from '../AppContainer';
 
 const slideAnimation = keyframes`
     0%{
-        width: 1px;
+        margin-left: 100%;
+        width: 300%;
     }
     100%{
-        /* margin-left: 0%; */
-        width: 240px;
+        margin-left: 0%;
+        width: 100%;
     }
 }`;
 
 const fadeInAnimation = keyframes`
-    0%{opactiy: 0;}
-    50%{opactiy: 0;}
-    100%{opactiy: 1;}
+    0%{
+        opactiy: 0;
+    }
+    100%{
+        opactiy: 1;
+    }
 }`;
 
 const CartDisplayContainer = styled.div`
@@ -59,8 +63,8 @@ const SlideoutCartWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
     /* grid-column-start: 3; */
-    /* animation: ${slideAnimation} 1.5s ease; */
-    animation: ${slideAnimation} 5s ease;
+    animation: ${slideAnimation} 1.5s ease;
+    /* animation: ${slideAnimation} 5s ease; */
 `
 
 interface CartContainerProps {}

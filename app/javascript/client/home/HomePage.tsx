@@ -71,7 +71,7 @@ const PricingChartHeaderCell = styled(PricingChartCell)`
 const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: center;
-    min-width: 310px;
+    min-width: 66%;
     max-width: 910px;
     height: 100%;
     flex-wrap: wrap;
@@ -87,11 +87,11 @@ const ThumbnailIndexWrapper = styled.div`
 `
 
 const Spacer = styled.div`
-    min-width: 10%;
+    min-width: 16%;
 `
 
 const CartSpacer = styled.div`
-    min-width: 300px;
+    min-width: 10rem;
 `
 
 interface HomePageProps {
