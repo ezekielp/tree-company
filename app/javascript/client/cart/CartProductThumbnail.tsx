@@ -96,6 +96,17 @@ const PriceContainer = styled.div`
     }
 `
 
+const ImageAndDetailContainer = styled.div`
+    display: flex;
+`
+
+const ProductCartInfo = styled.div`
+    display: flex;
+    span:nth-child(2){
+        margin-left: 5rem;
+    }
+`
+
 export const CartProductDetails = styled.div`
     max-width: 400px;
     display: flex;
@@ -172,24 +183,23 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
     };
 
     return (
-        // <FormWrapper>
         <Formik initialValues={initialValues} onSubmit={handleSubmit} onReset={handleReset}>
             {({ isSubmitting }) => (
                 <Form>
                     <ItemContainer>
-                        <ImageContainer>
-                            {imageUrl ? (<Image src={imageUrl} alt={name} />) : (<ImageStandIn>The Tree Company sign</ImageStandIn>)}
-                        </ImageContainer>
-                        <CartProductDetails>
-                            <ProductNameContainer>{name}</ProductNameContainer>
-                            <div>
-                                Size: <br />{size}
-                                <br />
-                                <br />
-                                Material: <br />{material}
-                            </div>
-                            {counties && <div>Counties: <br />{countyList}</div>}
-                        </CartProductDetails>
+                        <ImageAndDetailContainer>
+                            <ImageContainer>
+                                {imageUrl ? (<Image src={imageUrl} alt={name} />) : (<ImageStandIn>The Tree Company sign</ImageStandIn>)}
+                            </ImageContainer>
+                            <CartProductDetails>
+                                <ProductNameContainer>{name}</ProductNameContainer>
+                                <ProductCartInfo>
+                                    <span>Size: <br />{size}</span>
+                                    <span>Material: <br />{material}</span>
+                                </ProductCartInfo>
+                                {counties && <div>Counties: <br />{countyList}</div>}
+                            </CartProductDetails>
+                        </ImageAndDetailContainer>
                         <UpdateCartOptionsContainer>
                             <PriceContainer>Price:<br />${totalPrice / 100}.00</PriceContainer>
                             <br />
@@ -205,6 +215,5 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                 </Form>
             )}
         </Formik>
-        // {/* </FormWrapper> */}
 		);
 };
