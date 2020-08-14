@@ -550,7 +550,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         if (!createOrderResponse.errors) {
             await clearCart();
-            // fetchCart();
+            fetchCart();
 
             const orderId = createOrderResponse?.data?.createOrder.order.id;
 

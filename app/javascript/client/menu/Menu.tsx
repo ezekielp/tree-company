@@ -40,7 +40,6 @@ const SelectContainer = styled.div`
     }
 `
 
-// margin-right: 4rem;
 const StyledSelect = styled.select`
     width: 100%;
 
