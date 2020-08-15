@@ -54,12 +54,11 @@ const UpdateCartButton = styled.button`
 
 const RemoveFromCartButton = styled.button`
     color: gray;
-    border-radius: 1rem;
     width: 10rem;
     height: 1rem;
-    background-color: white;
-    border: 1px solid gray;
+    background-color: transparent;
     margin-top: 1rem;
+    border: none;
 `
 
 const UpdateCartOptionsContainer = styled.div`
