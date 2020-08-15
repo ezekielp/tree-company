@@ -4,6 +4,7 @@ import { CartProductThumbnailContainer } from './CartProductThumbnailContainer';
 import { determinePrice } from './utils';
 import styled from 'styled-components';
 import { CartContext } from '../AppContainer';
+import { Navbar } from '../navbar/Navbar';
 import { device } from '../styles';
 
 const CartDisplayContainer = styled.div`
@@ -71,9 +72,9 @@ const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }
 
     return (
         <>
+            <Navbar />
             <ShoppingCartIconContainer>
                 <span>Shopping Cart<i className="fas fa-shopping-cart"></i></span>
-                <button onClick={()=>handleClick("home")} >Back To Signs</button>
             </ShoppingCartIconContainer>
             <CartDisplayContainer>
                 {cartItems}
