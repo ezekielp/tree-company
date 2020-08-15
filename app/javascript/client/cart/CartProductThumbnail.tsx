@@ -19,7 +19,6 @@ const ItemContainer = styled.section`
     border-bottom: 1px solid black;
 
     ${`@media ${device.larger}`} {
-        /* background: green; */
         display: flex;
         width: 95vw;
         max-width: 100vw;
@@ -90,10 +89,20 @@ const PriceContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1rem;
+    ${`@media ${device.larger}`} {
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
     span{
-        font-size: 12px;
         display: flex;
         justify-content: flex-end;
+        ${`@media ${device.larger}`} {
+            margin-top: 1rem;
+        }
+        span{
+            font-size: 12px;
+        }
     }
 `
 
@@ -202,7 +211,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             </CartProductDetails>
                         </ImageAndDetailContainer>
                         <UpdateCartOptionsContainer>
-                            <PriceContainer><span>Unit Price: <span>${unitPrice / 100}.00</span></span><span>Price:<span>${totalPrice / 100}.00</span></span></PriceContainer>
+                            <PriceContainer><span>Unit Price: ${unitPrice / 100}.00</span><span>Price: ${totalPrice / 100}.00</span></PriceContainer>
                             <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
                             <ButtonsAndPriceContainer>
                                 <ButtonsContainer>
