@@ -26,13 +26,16 @@ const CheckoutButton = styled.button`
 const SubtotalContainer = styled.div`
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    align-items: center;
     margin-top: 0.5rem;
     width: 200px;
     padding: 1rem;
     span{
-        display: flex;
-        justify-content: space-between;
+        margin-top: 1rem;
+    }
+    strong{
+        margin-top: 1rem;
+        font-size: 24px;
     }
 `;
 
@@ -75,7 +78,7 @@ const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }
             <CartDisplayContainer>
                 {cartItems}
                 <SubtotalContainer>
-                    <span>Total Quantity: <span>{totalQuantity}</span></span><span>Subtotal: <span>${subtotal / 100}.00</span></span>
+                    <span>Total Quantity: {totalQuantity}</span><strong>Subtotal: ${subtotal / 100}.00</strong>
                 </SubtotalContainer>
                 <CheckoutButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</CheckoutButton>
             </CartDisplayContainer>
