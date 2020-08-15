@@ -1,16 +1,9 @@
-import React, { FC, useState, useRef, useContext } from 'react';
+import React, { FC, useState, useRef, useContext, useEffect } from 'react';
 import { ProductInfoFragment, useUpdateCartMutation } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
 import { FormikUpdateNumberInput } from '../form/inputs';
-import { range } from 'lodash';
 import styled, { keyframes } from 'styled-components';
 import { CartContext } from '../AppContainer';
-
-const fadeInAnimation = keyframes`
-    0% {opactiy: 0}
-    50% {opactiy: 0}
-    100% {opactiy: 1}
-}`;
 
 const ItemContainer = styled.section`
     display: grid;
@@ -127,19 +120,18 @@ interface UpdateCartData {
 
 export const SlideoutCartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, quantity, unitPrice }) => {
     const { id, name, size, material, counties, imageUrl } = product;
-    const [currentQuantity, setQuantity] = useState(quantity);
 
     const countyList = counties?.map(county => county.name).join(", ");
     const totalPrice = unitPrice * quantity;
     const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
-
-    const quantityOptions = range(1001).map(num => {
-        const selected = num === currentQuantity ? 'selected' : '';
-        return <option key={num} value={num} {...selected}>{num}</option>
-    });
+    const formikRef: React.RefObject<any> = useRef(null); 
 
     const [updateItemQuantity] = useUpdateCartMutation();  
     const {fetchCart} = useContext(CartContext);
+
+    useEffect(() => {
+        formikRef.current && formikRef.current.setFieldValue('quantity', quantity);
+    }, [quantity]);
 
     const handleSubmit = async ( values: UpdateCartData, formikeHelpers: FormikHelpers<UpdateCartData>) => {
 
@@ -170,12 +162,17 @@ export const SlideoutCartProductThumbnail: FC<CartProductThumbnailProps> = ({ pr
 
     const initialValues = {
         productId: id,
-        quantity: currentQuantity
+        quantity: quantity
     };
 
     return (
-        <Formik initialValues={initialValues} onSubmit={handleSubmit} onReset={handleReset}>
-            {({ isSubmitting }) => (
+        <Formik 
+            initialValues={initialValues}
+            onSubmit={handleSubmit}
+            onReset={handleReset}
+            innerRef={formikRef}
+        >
+            {({ isSubmitting, values }) => (
                 <Form>
                     <ItemContainer>
                         <ImageContainer>
@@ -193,7 +190,12 @@ export const SlideoutCartProductThumbnail: FC<CartProductThumbnailProps> = ({ pr
                         </CartProductDetails>
                         <UpdateCartOptionsContainer>
                             <InputFieldWrapper>
-                                <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
+                                <Field
+                                    name="quantity"
+                                    label="Quantity"
+                                    innerRef={inputRef}
+                                    component={FormikUpdateNumberInput}
+                                />
                             </InputFieldWrapper>
                             <ButtonsContainer>
                                 <UpdateCartButton type="submit" disabled={isSubmitting}>Update Cart</UpdateCartButton>

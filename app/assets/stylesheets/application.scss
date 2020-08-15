@@ -66,11 +66,21 @@ button {
 	font-weight: bold;
 	border-radius: 1rem;
 	height: 2rem;
-}
 
-button:hover {
-	background: #004e00;
-	color: white;
+	&:hover {
+		background: #004e00;
+		color: white;
+	}
+
+	&:disabled {
+		opacity: 35%;
+
+		&:hover {
+			background: white;
+			color: #004e00;
+		}
+	}
+	
 }
 
 ol, ul {

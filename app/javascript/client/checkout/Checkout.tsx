@@ -1,8 +1,9 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, useState, useRef, useContext } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { ProductInfoFragmentDoc, useGetProductsForCheckoutQuery, useCreateBillingCustomerMutation, useCreateOrderMutation, useCreateShippingCustomerMutation, useCreateStripePaymentIntentMutation, useClearCartMutation, useSendErrorMailerMutation, BillingCustomerInfoFragmentDoc, ShippingCustomerInfoFragmentDoc, OrderInfoFragmentDoc, CreateBillingCustomerInput, CreateShippingCustomerInput } from '../graphqlTypes';
 import { Field, Form, Formik, FormikHelpers } from "formik";
-import { FormikCheckbox, FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
+import { FormikTextInput, FormikSelectInput, FormikPhoneNumberInput, FormikZipCodeInput } from '../form/inputs';
+import { CartContext } from '../AppContainer';
 import { InputWrapper, Label } from '../form/withFormik';
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { CheckoutProducts } from './CheckoutProducts';
@@ -13,7 +14,9 @@ import discover from '../assets/discover.png';
 import mastercard from '../assets/mastercard.svg';
 import { StripeBadge } from '../assets/StripeBadge';
 import visa from '../assets/visa.png';
-import { device } from '../styles';
+import BeatLoader from 'react-spinners/BeatLoader';
+import { css } from '@emotion/core';
+import { device, colors } from '../styles';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
 
@@ -293,6 +296,24 @@ const CheckoutButton = styled.button`
     font-size: 20px;
     margin: 0 auto;
     display: block;
+    margin-bottom: 25px;
+`;
+
+const LoaderContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
+const LoaderText = styled.div`
+    color: ${colors.darkGreen};
+    font-size: 24px;
+    font-variation-settings: 'wght' 700;
+    margin-bottom: 20px;
+`;
+
+const LoaderOverride = css`
+
 `;
 
 interface CheckoutProps extends RouteComponentProps {
@@ -342,6 +363,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
     const [createOrder] = useCreateOrderMutation();
     const [clearCart] = useClearCartMutation();
     const [sendErrorMailer] = useSendErrorMailerMutation();
+    const { fetchCart } = useContext(CartContext);
 
     const productIds: string[] = [];
     const productIdToQuantityMap = {} as { [key: string]: number };
@@ -528,6 +550,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
 
         if (!createOrderResponse.errors) {
             await clearCart();
+            fetchCart();
 
             const orderId = createOrderResponse?.data?.createOrder.order.id;
 
@@ -777,6 +800,19 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                         <CheckoutButton type="submit" disabled={isSubmitting}>
                                             Place order
                                         </CheckoutButton>
+                                        {isSubmitting && (
+                                            <LoaderContainer>
+                                                <LoaderText>
+                                                    Processing order
+                                                </LoaderText>
+                                                <BeatLoader
+                                                    css={LoaderOverride}
+                                                    size={30}
+                                                    color={colors.darkGreen}
+                                                    loading={true}
+                                                />
+                                            </LoaderContainer>
+                                        )}
                                     </>
                                 )}
                             </PaymentContainer>

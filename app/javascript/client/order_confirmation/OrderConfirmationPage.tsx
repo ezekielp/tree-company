@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { BillingCustomerInfoFragment, ShippingCustomerInfoFragment } from '../graphqlTypes';
 import { CheckoutProducts, CheckoutItem } from '../checkout/CheckoutProducts';
+import { Navbar } from '../navbar/Navbar';
 import styled from 'styled-components';
 
 const OrderConfirmationContainer = styled.div`
@@ -74,6 +75,8 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
     const { name: billingName, address: billingAddress, city: billingCity, state: billingState, email, zipCode: billingZipCode, phoneNumber: billingPhoneNumber } = billingCustomer;
 
     return (
+        <>
+        <Navbar />
         <OrderConfirmationContainer>
             <OrderConfirmationHeader>
                 Order confirmation
@@ -224,5 +227,6 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                 </AddressContainer>
             )}
         </OrderConfirmationContainer>
+        </>
     )
 };

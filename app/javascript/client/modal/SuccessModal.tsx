@@ -6,6 +6,7 @@ import { XMark } from '../assets/XMark';
 
 const CloseButtonContainer = styled.div`
     align-self: flex-end;
+    cursor: pointer;
 `;
 
 const StyledButton = styled.button`
