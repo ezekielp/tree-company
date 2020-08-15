@@ -4,6 +4,7 @@ import { CartProductThumbnailContainer } from './CartProductThumbnailContainer';
 import { determinePrice } from './utils';
 import styled from 'styled-components';
 import { CartContext } from '../AppContainer';
+import { Navbar } from '../navbar/Navbar';
 import { device } from '../styles';
 
 const CartDisplayContainer = styled.div`
@@ -16,24 +17,36 @@ const CartDisplayContainer = styled.div`
 `;
 
 const CheckoutButton = styled.button`
-    width: 10rem;
-    height: 2rem;
+    max-width: 350px;
+    min-width: 300px;
+    height: 45px;
+    font-size: 20px;
     margin: 0.5rem 0rem 0.5rem 0rem;
 `;
 
 const SubtotalContainer = styled.div`
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
     margin-top: 0.5rem;
+    width: 200px;
+    padding: 1rem;
+    span{
+        margin-top: 1rem;
+    }
+    strong{
+        margin-top: 1rem;
+        font-size: 24px;
+    }
 `;
 
 const ShoppingCartIconContainer = styled.div`
     display: flex;
-    justify-content: center;
-    border: 1px solid black;
-    border-radius: 0.5rem;
+    justify-content: space-between;
     padding: 0.5rem;
     margin: 1rem 0.5rem 0rem 0.5rem;
+    font-size: 24px;
+    border-bottom: 1px solid black;
 `
 
 interface CartContainerProps {}
@@ -59,11 +72,14 @@ const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }
 
     return (
         <>
-            <ShoppingCartIconContainer><span>Shopping Cart</span><i className="fas fa-shopping-cart"></i></ShoppingCartIconContainer>
+            <Navbar />
+            <ShoppingCartIconContainer>
+                <span>Shopping Cart<i className="fas fa-shopping-cart"></i></span>
+            </ShoppingCartIconContainer>
             <CartDisplayContainer>
                 {cartItems}
                 <SubtotalContainer>
-                    <span>Subtotal: </span><span>${subtotal / 100}.00</span>
+                    <span>Total Quantity: {totalQuantity}</span><strong>Subtotal: ${subtotal / 100}.00</strong>
                 </SubtotalContainer>
                 <CheckoutButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</CheckoutButton>
             </CartDisplayContainer>

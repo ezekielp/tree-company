@@ -19,7 +19,6 @@ const ItemContainer = styled.section`
     border-bottom: 1px solid black;
 
     ${`@media ${device.larger}`} {
-        /* background: green; */
         display: flex;
         width: 95vw;
         max-width: 100vw;
@@ -55,12 +54,11 @@ const UpdateCartButton = styled.button`
 
 const RemoveFromCartButton = styled.button`
     color: gray;
-    border-radius: 1rem;
     width: 10rem;
     height: 1rem;
-    background-color: white;
-    border: 1px solid gray;
+    background-color: transparent;
     margin-top: 1rem;
+    border: none;
 `
 
 const UpdateCartOptionsContainer = styled.div`
@@ -87,12 +85,23 @@ const ButtonsAndPriceContainer = styled.div`
 
 const PriceContainer = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 1rem;
+    ${`@media ${device.larger}`} {
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: flex-end;
+    }
     span{
-        font-size: 12px;
         display: flex;
         justify-content: flex-end;
+        ${`@media ${device.larger}`} {
+            margin-top: 1rem;
+        }
+        span{
+            font-size: 12px;
+        }
     }
 `
 
@@ -201,8 +210,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             </CartProductDetails>
                         </ImageAndDetailContainer>
                         <UpdateCartOptionsContainer>
-                            <PriceContainer>Price:<br />${totalPrice / 100}.00</PriceContainer>
-                            <br />
+                            <PriceContainer><span>Unit Price: ${unitPrice / 100}.00</span><span>Price: ${totalPrice / 100}.00</span></PriceContainer>
                             <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
                             <ButtonsAndPriceContainer>
                                 <ButtonsContainer>
