@@ -16,24 +16,33 @@ const CartDisplayContainer = styled.div`
 `;
 
 const CheckoutButton = styled.button`
-    width: 10rem;
-    height: 2rem;
+    max-width: 350px;
+    min-width: 300px;
+    height: 45px;
+    font-size: 20px;
     margin: 0.5rem 0rem 0.5rem 0rem;
 `;
 
 const SubtotalContainer = styled.div`
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
     margin-top: 0.5rem;
+    width: 200px;
+    padding: 1rem;
+    span{
+        display: flex;
+        justify-content: space-between;
+    }
 `;
 
 const ShoppingCartIconContainer = styled.div`
     display: flex;
-    justify-content: center;
-    border: 1px solid black;
-    border-radius: 0.5rem;
+    justify-content: space-between;
     padding: 0.5rem;
     margin: 1rem 0.5rem 0rem 0.5rem;
+    font-size: 24px;
+    border-bottom: 1px solid black;
 `
 
 interface CartContainerProps {}
@@ -59,11 +68,14 @@ const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }
 
     return (
         <>
-            <ShoppingCartIconContainer><span>Shopping Cart</span><i className="fas fa-shopping-cart"></i></ShoppingCartIconContainer>
+            <ShoppingCartIconContainer>
+                <span>Shopping Cart<i className="fas fa-shopping-cart"></i></span>
+                <button onClick={()=>handleClick("home")} >Back To Signs</button>
+            </ShoppingCartIconContainer>
             <CartDisplayContainer>
                 {cartItems}
                 <SubtotalContainer>
-                    <span>Subtotal: </span><span>${subtotal / 100}.00</span>
+                    <span>Total Quantity: <span>{totalQuantity}</span></span><span>Subtotal: <span>${subtotal / 100}.00</span></span>
                 </SubtotalContainer>
                 <CheckoutButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</CheckoutButton>
             </CartDisplayContainer>

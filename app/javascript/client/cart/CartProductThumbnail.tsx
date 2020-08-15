@@ -87,8 +87,9 @@ const ButtonsAndPriceContainer = styled.div`
 
 const PriceContainer = styled.div`
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
+    margin-bottom: 1rem;
     span{
         font-size: 12px;
         display: flex;
@@ -201,8 +202,7 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                             </CartProductDetails>
                         </ImageAndDetailContainer>
                         <UpdateCartOptionsContainer>
-                            <PriceContainer>Price:<br />${totalPrice / 100}.00</PriceContainer>
-                            <br />
+                            <PriceContainer><span>Unit Price: <span>${unitPrice / 100}.00</span></span><span>Price:<span>${totalPrice / 100}.00</span></span></PriceContainer>
                             <Field name="quantity" label="Quantity" innerRef={inputRef} component={FormikUpdateNumberInput} value={currentQuantity} />
                             <ButtonsAndPriceContainer>
                                 <ButtonsContainer>
