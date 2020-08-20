@@ -14,12 +14,8 @@ const indexSlideAnimation = keyframes`
     0%{
         margin-left: 100%;
     }
-    /* 50%{
-        margin-left: 100%;
-    } */
     100%{
         margin-left: 0%;
-        /* width: 100%; */
     }
 `;
 
@@ -97,6 +93,7 @@ const ThumbnailIndexContainer = styled.div`
 
 const SlidingThumbnailIndexContainer = styled.div`
     display: flex;
+    justify-content: center;
     min-width: 66%;
     max-width: 1100px;
     height: 100%;
@@ -108,6 +105,7 @@ const ThumbnailIndexWrapper = styled.div`
     display: flex;
     width: 100%;
     justify-content: center;
+    overflow-x: hidden;
 `
 
 interface HomePageProps {

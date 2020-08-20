@@ -8,11 +8,9 @@ import { CartContext } from '../AppContainer';
 const slideAnimation = keyframes`
     0%{
         margin-left: 100%;
-        /* width: 200%; */
     }
     100%{
         margin-left: 0%;
-        /* width: 100%; */
     }
 }`;
 
