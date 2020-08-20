@@ -108,7 +108,6 @@ const ThumbnailIndexWrapper = styled.div`
     display: flex;
     width: 100%;
     justify-content: center;
-    overflow-x: hidden;
 `
 
 interface HomePageProps {
