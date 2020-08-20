@@ -6,9 +6,30 @@ import Menu from '../menu/Menu';
 import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
 import { HomepageContext, CartContext } from '../AppContainer';
 import { device } from '../styles';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import SlideoutCartContainer from '../cart/SlideoutCartContainer';
 import { useWindowSize } from './utils';
+
+const indexSlideAnimation = keyframes`
+    0%{
+        margin-left: 120%;
+        min-width: 75%;
+    }
+
+    100%{
+        margin-left: 0%;
+        min-width: 75%;
+    }
+`;
+
+const phaseIn = keyframes`
+    0%{
+        opacity: 0%;
+    }
+    100%{
+        opacity: 100%;
+    }
+`;
 
 const IntroductionContainer = styled.div`
     display: flex;
@@ -68,25 +89,25 @@ const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: center;
     min-width: 66%;
-    max-width: 1100px;
+    max-width: 1200px;
     height: 100%;
     flex-wrap: wrap;
-    /* grid-column-start: 2; */
 `
 
-/* justify-content: space-between; */
+const SlidingThumbnailIndexContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    min-width: 66%;
+    max-width: 1200px;
+    height: 100%;
+    flex-wrap: wrap;
+    animation: ${indexSlideAnimation} 1.5s ease;
+`
+
 const ThumbnailIndexWrapper = styled.div`
     display: flex;
     width: 100%;
     justify-content: center;
-`
-
-const Spacer = styled.div`
-    min-width: 16%;
-`
-
-const CartSpacer = styled.div`
-    min-width: 10rem;
 `
 
 interface HomePageProps {
@@ -169,14 +190,16 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
             </IntroductionContainer>
             <Menu />
             <ThumbnailIndexWrapper>
-                {/* <Spacer /> */}
-                <ThumbnailIndexContainer>
+                {(cart.length!=0 && (windowSize.width>=800)) ?
+                (<SlidingThumbnailIndexContainer>
                     {PriorityProductThumbnails}
                     {AllProductThumbnails}
-                </ThumbnailIndexContainer>
+                </SlidingThumbnailIndexContainer>) :
+                (<ThumbnailIndexContainer>
+                    {PriorityProductThumbnails}
+                    {AllProductThumbnails}
+                </ThumbnailIndexContainer>)}
                 {(cart.length!=0 && (windowSize.width>=800)) && (<SlideoutCartContainer />)}
-                {/* {(cart.length!=0 && (windowSize.width>=800)) ? (<SlideoutCartContainer />) : <CartSpacer />} */}
-                {/* {(cart.length!=0 && (windowSize.width>=800)) && <SlideoutCartContainer />} */}
             </ThumbnailIndexWrapper>
         </>
     )

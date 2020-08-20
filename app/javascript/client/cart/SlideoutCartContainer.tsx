@@ -8,11 +8,9 @@ import { CartContext } from '../AppContainer';
 const slideAnimation = keyframes`
     0%{
         margin-left: 100%;
-        width: 200%;
     }
     100%{
         margin-left: 0%;
-        width: 100%;
     }
 }`;
 
@@ -33,12 +31,12 @@ const CartDisplayContainer = styled.div`
     flex-direction: column;
     align-items: center;
     width: 300px;
-    height: 90vh;
+    max-height: 90vh;
     border: 1px solid darkgreen;
     border-radius: 1rem;
     margin-top: 1rem;
     padding-bottom: 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
 `;
 
 const StyledLink = styled(Link)`
