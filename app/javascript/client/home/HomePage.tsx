@@ -13,9 +13,12 @@ import { useWindowSize } from './utils';
 const indexSlideAnimation = keyframes`
     0%{
         margin-left: 100%;
+        min-width: 75%;
     }
+
     100%{
         margin-left: 0%;
+        min-width: 75%;
     }
 `;
 
@@ -86,7 +89,7 @@ const ThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: center;
     min-width: 66%;
-    max-width: 1100px;
+    max-width: 1200px;
     height: 100%;
     flex-wrap: wrap;
 `
@@ -95,7 +98,7 @@ const SlidingThumbnailIndexContainer = styled.div`
     display: flex;
     justify-content: center;
     min-width: 66%;
-    max-width: 1100px;
+    max-width: 1200px;
     height: 100%;
     flex-wrap: wrap;
     animation: ${indexSlideAnimation} 1.5s ease;
