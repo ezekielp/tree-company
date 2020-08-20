@@ -24,7 +24,7 @@ const SlideoutCartWrapper = styled.div`
     padding-bottom: 10px;
     display: flex;
     justify-content: flex-end;
-    animation: ${slideAnimation} 1.5s ease;
+    /* animation: ${slideAnimation} 1.5s ease; */
     margin-right: 25px;
 `
 
@@ -33,12 +33,12 @@ const CartDisplayContainer = styled.div`
     flex-direction: column;
     align-items: center;
     width: 300px;
-    height: 90vh;
+    max-height: 90vh;
     border: 1px solid darkgreen;
     border-radius: 1rem;
     margin-top: 1rem;
     padding-bottom: 5px;
-    overflow-y: scroll;
+    overflow-y: auto;
 `;
 
 const StyledLink = styled(Link)`
