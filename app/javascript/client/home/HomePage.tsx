@@ -12,7 +12,7 @@ import { useWindowSize } from './utils';
 
 const indexSlideAnimation = keyframes`
     0%{
-        margin-left: 100%;
+        margin-left: 120%;
         min-width: 75%;
     }
 
