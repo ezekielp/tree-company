@@ -12,22 +12,16 @@ import { useWindowSize } from './utils';
 
 const indexSlideAnimation = keyframes`
     0%{
-        display: flex;
-        justify-content: center;
-        min-width: 66%;
-        max-width: 1100px;
-        height: 100%;
-        flex-wrap: wrap;
+        margin-left: 100%;
     }
+    /* 50%{
+        margin-left: 100%;
+    } */
     100%{
-        display: flex;
-        justify-content: start;
-        min-width: 66%;
-        max-width: 1100px;
-        height: 100%;
-        flex-wrap: wrap;
+        margin-left: 0%;
+        /* width: 100%; */
     }
-}`;
+`;
 
 const phaseIn = keyframes`
     0%{
@@ -36,7 +30,7 @@ const phaseIn = keyframes`
     100%{
         opacity: 100%;
     }
-`
+`;
 
 const IntroductionContainer = styled.div`
     display: flex;
@@ -107,6 +101,7 @@ const SlidingThumbnailIndexContainer = styled.div`
     max-width: 1100px;
     height: 100%;
     flex-wrap: wrap;
+    animation: ${indexSlideAnimation} 1.5s ease;
 `
 
 const ThumbnailIndexWrapper = styled.div`

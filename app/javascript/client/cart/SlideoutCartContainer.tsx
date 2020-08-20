@@ -8,11 +8,11 @@ import { CartContext } from '../AppContainer';
 const slideAnimation = keyframes`
     0%{
         margin-left: 100%;
-        width: 200%;
+        /* width: 200%; */
     }
     100%{
         margin-left: 0%;
-        width: 100%;
+        /* width: 100%; */
     }
 }`;
 
@@ -24,7 +24,7 @@ const SlideoutCartWrapper = styled.div`
     padding-bottom: 10px;
     display: flex;
     justify-content: flex-end;
-    /* animation: ${slideAnimation} 1.5s ease; */
+    animation: ${slideAnimation} 1.5s ease;
     margin-right: 25px;
 `
 
