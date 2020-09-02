@@ -138,8 +138,11 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
         return category.name == categoryFilter;
     };
 
+    debugger;
     const PriorityProductThumbnails = Object.entries(products).map((product)=>{
-        if ((product[1].counties?.some(belongsToCounty) && categoryFilter=="default") || (countyFilter=="default" && categoryFilter=="default" && product[1].counties?.length!=0) || (categoryFilter!="default" && product[1].categories?.some(belongsToCategory))){
+        if ((product[1].counties?.some(belongsToCounty) && categoryFilter === "default") ||
+        (countyFilter == "default" && categoryFilter == "default" && product[1].counties?.length !== 0) ||
+        (categoryFilter !== "default" && product[1].categories?.some(belongsToCategory))) {
             return (
                 <ProductThumbnail key={product[0]} product={product[1]} />
             )

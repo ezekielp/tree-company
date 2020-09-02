@@ -1,6 +1,7 @@
 export const countyList = [
     "Allegany County",
-    "Arlington County",
+    "Alexandria, VA",
+    "Arlington, VA",
     "Anne Arundel County",
     "Baltimore County",
     "Baltimore City",
@@ -10,6 +11,7 @@ export const countyList = [
     "Cecil County",
     "Charles County",
     "Dorchester County",
+    "Fairfax, VA",
     "Frederick County",
     "Garrett County",
     "Harford County",

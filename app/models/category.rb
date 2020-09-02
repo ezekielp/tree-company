@@ -8,7 +8,7 @@
 #  updated_at :datetime         not null
 #
 class Category < ApplicationRecord
-    validates :name, inclusion: { in: ["wetland_stream_buffer", "forest_conservation"] }
+    validates :name, inclusion: { in: Constants::CATEGORIES }
 
     has_many :product_categories
     has_many :products, through: :product_categories

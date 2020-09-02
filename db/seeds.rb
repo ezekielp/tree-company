@@ -53,7 +53,7 @@ file_26 = URI.open('https://tree-company-seeds.s3.amazonaws.com/style26.png')
 sign_26.image.attach(io: file_26, filename: 'style26.png')
 
 
-sign_31 = Product.create(name: "Tree Preservation Area", size: "12x18", material: ".05g HDPE", description: "", style_number: "31")
+sign_31 = Product.create(name: "Tree Preservation Area", size: "12x18", material: "4mm corr", description: "", style_number: "31")
 
 file_31 = URI.open('https://tree-company-seeds.s3.amazonaws.com/style31.gif')
 
@@ -112,7 +112,7 @@ sign_61.image.attach(io: file_61, filename: 'style61.jpg')
 # Create the counties and all relevant associations
 County.destroy_all
 
-(Constants::MARYLAND_COUNTIES + Constants::VIRGINIA_COUNTIES).each do |c|
+(Constants::MARYLAND_COUNTIES + Constants::VIRGINIA_PLACES).each do |c|
     County.find_or_create_by!(name: c)
 end
 
@@ -121,7 +121,8 @@ ProductCounty.destroy_all
 baltimore = County.find_by(name: "Baltimore County")
 carroll = County.find_by(name: "Carroll County")
 montgomery = County.find_by(name: "Montgomery County")
-arlington = County.find_by(name: "Arlington County")
+arlington = County.find_by(name: "Arlington, VA")
+pg = County.find_by(name: "Prince George's County")
 
 sign_23 = Product.find_by(style_number: "23")
 sign_25 = Product.find_by(style_number: "25")
@@ -148,23 +149,24 @@ ProductCounty.create!(product_id: sign_61.id, county_id: montgomery.id)
 
 Category.destroy_all
 
-Category.create(name: "wetland_stream_buffer")
-Category.create!(name: "forest_conservation")
-c1 = Category.first
-c2 = Category.second
+Constants::CATEGORIES.each do |c|
+    Category.find_or_create_by!(name: c)
+end
 
-ProductCategory.create!(product_id: sign_23.id, category_id: c1.id)
-ProductCategory.create!(product_id: sign_25.id, category_id: c1.id)
-ProductCategory.create!(product_id: sign_26.id, category_id: c1.id)
+critical_area_buffer = Category.find_by(name: 'critical_area_buffer')
+forest_conservation = Category.find_by(name: 'forest_conservation')
+meadow_restoration = Category.find_by(name: 'meadow_restoration')
+reforestation = Category.find_by(name: 'reforestation')
+specimen_tree = Category.find_by(name: 'specimen_tree')
+stream_buffer = Category.find_by(name: 'stream_buffer')
+tree_protection = Category.find_by(name: 'tree_protection')
+wetland = Category.find_by(name: 'wetland')
 
-ProductCategory.create!(product_id: sign_19.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_21.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_22.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_31.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_35.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_47.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_48.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_49.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_50.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_51.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_61.id, category_id: c2.id)
+ProductCategory.create!(product_id: sign_21.id, category_id: forest_conservation.id)
+ProductCategory.create!(product_id: sign_31.id, category_id: tree_protection.id)
+ProductCategory.create!(product_id: sign_23.id, category_id: wetland.id)
+ProductCategory.create!(product_id: sign_25.id, category_id: stream_buffer.id)
+ProductCategory.create!(product_id: sign_26.id, category_id: critical_area_buffer.id)
+ProductCategory.create!(product_id: sign_22.id, category_id: specimen_tree.id)
+ProductCategory.create!(product_id: sign_19.id, category_id: reforestation.id)
+ProductCategory.create!(product_id: sign_35.id, category_id: meadow_restoration.id)

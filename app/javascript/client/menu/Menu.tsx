@@ -84,14 +84,14 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
             <SelectContainer>
                 <SelectLabel>County</SelectLabel>
                 <StyledSelect name="county" id="county" onChange={handleCountyChange} ref={selectCountyRef} value={countyFilter}>
-                    <option value="default">Filter by County</option>
+                    <option value="default">All counties</option>
                     {countyOptions}
                 </StyledSelect>
             </SelectContainer>
             <SelectContainer>
                 <SelectLabel>Category</SelectLabel>
                 <StyledSelect name="category" id="category" onChange={handleCategoryChange} ref={selectCategoryRef} value={categoryFilter}>
-                    <option value="default">Filter by Category</option>
+                    <option value="default">All categories</option>
                     <option value="wetland_stream_buffer">Wetland Stream Buffer</option>
                     <option value="forest_conservation">Forest Conservation/Tree Protection</option>
                 </StyledSelect>
