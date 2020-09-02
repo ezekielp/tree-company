@@ -214,7 +214,7 @@ const MailInOrderText = styled.div`
 
 const AddressTextContainer = styled.div`
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 `;
 
 const AddressLine = styled.div``;
@@ -281,7 +281,7 @@ const StripeCardContainer = styled.div`
     margin-bottom: 30px;
 `;
 
-const CheckoutButton = styled.button`
+const CheckoutFormButton = styled.button`
     max-width: 350px;
     min-width: 300px;
     height: 45px;
@@ -757,6 +757,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             <AddressLine>20 N. Beaumont Ave.</AddressLine>
                                             <AddressLine>Catonsville, MD 21228</AddressLine>
                                         </AddressTextContainer>
+                                        <CheckoutFormButton onClick={() => window.print()}>Print page</CheckoutFormButton>
                                     </MailInOrderTextContainer>
                                 )}
                                 {values.paymentMethod === "card" && (
@@ -787,9 +788,9 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                                 <StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
                                             )}
                                         </StripeCardContainer>
-                                        <CheckoutButton type="submit" disabled={isSubmitting}>
+                                        <CheckoutFormButton type="submit" disabled={isSubmitting}>
                                             Place order
-                                        </CheckoutButton>
+                                        </CheckoutFormButton>
                                         {isSubmitting && (
                                             <LoaderContainer>
                                                 <LoaderText>

@@ -1,5 +1,9 @@
 class ApplicationController < ActionController::Base
-    before_action :ensure_session_token
+    before_action :ensure_session_token, :set_instance_variables
+
+    def set_instance_variables
+        @first_sign = Product.first
+    end
 
     def ensure_session_token
         if !session[:session_token] || !session[:cart] || session_token_expired?
