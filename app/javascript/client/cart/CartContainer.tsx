@@ -17,14 +17,6 @@ const CartDisplayContainer = styled.div`
     margin-bottom: 50px;
 `;
 
-const CheckoutButton = styled.button`
-    max-width: 350px;
-    min-width: 300px;
-    height: 45px;
-    font-size: 20px;
-    margin: 0.5rem 0rem 0.5rem 0rem;
-`;
-
 const SubtotalContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -49,6 +41,24 @@ const ShoppingCartIconContainer = styled.div`
     font-size: 24px;
     border-bottom: 1px solid black;
 `
+
+const CheckoutButton = styled.button`
+    max-width: 350px;
+    min-width: 300px;
+    height: 45px;
+    font-size: 20px;
+    margin: 0.5rem 0rem 1.25rem 0rem;
+`;
+
+const ReturnToSignsButton = styled.div`
+    font-variation-settings: 'wght' 700;
+    font-size: 20px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`;
 
 interface CartContainerProps {}
 
@@ -83,6 +93,7 @@ const CartContainer: FC<CartContainerProps & RouteComponentProps> = ({ history }
                     <span>Total Quantity: {totalQuantity}</span><strong>Subtotal: ${subtotal / 100}.00</strong>
                 </SubtotalContainer>
                 <CheckoutButton onClick={()=>handleClick("checkout")}>Proceed to Checkout</CheckoutButton>
+                <ReturnToSignsButton onClick={()=>handleClick("home")}>Return to signs</ReturnToSignsButton>
             </CartDisplayContainer>
         </>
     );

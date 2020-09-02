@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 const FormContainer = styled.div`
     width: 95%;
+    height: 95%;
 
     ${`@media ${device.largest}`} {
         width: 75%;
@@ -51,6 +52,11 @@ const CloseModalButton = styled.div`
         grid-row: 1;
         grid-column: 2;
     }
+`;
+
+const StyledXMark = styled(XMark)`
+    width: 25px;
+    margin-right: 10px;
 `;
 
 const ProductName = styled.div`
@@ -103,9 +109,26 @@ const FieldContainer = styled.div`
     align-self: flex-end;
 `;
 
+const FlexEndWrapper = styled.div`
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
 const AddToCartButton = styled.button`
     width: 150px;
-    align-self: flex-end;
+    margin-bottom: 15px;
+`;
+
+const ReturnToSignsButton = styled.div`
+    font-variation-settings: 'wght' 700;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 interface ProductModalProps {}
@@ -163,7 +186,7 @@ const ProductModal: FC<ProductModalProps> = () => {
                         <ProductModalContainer onClick={(e) => e.stopPropagation()}>
                             <CloseModalButtonContainer>
                                 <CloseModalButton onClick={()=>closeModal()}>
-                                    <XMark width="15px" />
+                                    <StyledXMark />
                                 </CloseModalButton>
                             </CloseModalButtonContainer>
                             {imageUrl && (
@@ -180,7 +203,12 @@ const ProductModal: FC<ProductModalProps> = () => {
                                 <FieldContainer>
                                     <Field name="quantity" label="Quantity" component={FormikNumberInput} alignRight onFocus={handleFocus} />
                                 </FieldContainer>
-                                <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
+                                <FlexEndWrapper>
+                                    <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
+                                    <ReturnToSignsButton onClick={()=>closeModal()}>
+                                        Return to signs
+                                    </ReturnToSignsButton>
+                                </FlexEndWrapper>
                             </ProductInformation>
                         </ProductModalContainer>
                     </Form>    
