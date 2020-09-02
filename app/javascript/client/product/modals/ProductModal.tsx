@@ -119,10 +119,11 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     const { selectedProduct, setFlashMessage, closeModal, openModal } = useContext(ModalContext);
     const { fetchCart } = useContext(CartContext);
-    
-    // const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
+    const [addItemToCart] = useAddToCartMutation();
 
-    const [addItemToCart] = useAddToCartMutation();   
+    if (!selectedProduct) return null;
+
+    const { id, name, material, size, styleNumber, imageUrl, description } = selectedProduct;
 
     const handleFocus = (event: FocusEvent) => event && (event.target as HTMLInputElement).select();
 
@@ -132,7 +133,7 @@ const ProductModal: FC<ProductModalProps> = () => {
         addItemToCart({
             variables: {
                 input: {
-                    productId: selectedProduct.id,
+                    productId: id,
                     quantity: parseInt(quantity)
                 }
             }
@@ -147,10 +148,10 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     };
 
-    if (!selectedProduct.imageUrl) return null;
+    if (!imageUrl) return null;
 
     const initialValues = {
-        productId: selectedProduct.id,
+        productId: id,
         quantity: "1"
     };
 
@@ -165,15 +166,16 @@ const ProductModal: FC<ProductModalProps> = () => {
                                     <XMark width="15px" />
                                 </CloseModalButton>
                             </CloseModalButtonContainer>
-                            {selectedProduct.imageUrl && (
-                                <ProductImageContainer src={selectedProduct.imageUrl} />
+                            {imageUrl && (
+                                <ProductImageContainer src={imageUrl} />
                             )}
                             <ProductInformation>
-                                <ProductName>{selectedProduct.name}</ProductName>
+                                <ProductName>{name}</ProductName>
                                 <ProductDetails>
-                                    <ProductDetail>Material: {selectedProduct.material}</ProductDetail>
-                                    <ProductDetail>Size: {selectedProduct.size}</ProductDetail>
-                                    {selectedProduct.description != "" && <ProductDetail>Description: {selectedProduct.description}</ProductDetail>}
+                                    <ProductDetail>Style number: {styleNumber}</ProductDetail>
+                                    <ProductDetail>Material: {material}</ProductDetail>
+                                    <ProductDetail>Size: {size}</ProductDetail>
+                                    {description != "" && <ProductDetail>Description: {description}</ProductDetail>}
                                 </ProductDetails>
                                 <FieldContainer>
                                     <Field name="quantity" label="Quantity" component={FormikNumberInput} alignRight onFocus={handleFocus} />

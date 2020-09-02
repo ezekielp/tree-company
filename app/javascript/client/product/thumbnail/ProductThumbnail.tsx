@@ -87,7 +87,7 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
     const { fetchCart } = useContext(CartContext);
     const [addItemToCart] = useAddToCartMutation();
 
-    const { id, name, description, imageUrl, material, size, counties } = product.product;
+    const { id, name, description, imageUrl, material, size, styleNumber } = product.product;
 
     const handleFocus = (event: FocusEvent) => event && (event.target as HTMLInputElement).select();
 
@@ -134,6 +134,7 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
                         <ProductInformation>
                             <ProductName>{name}</ProductName>
                             <ProductDetails>
+                                <ProductDetail>Style number: {styleNumber}</ProductDetail>
                                 <ProductDetail>Material: {material}</ProductDetail>
                                 <ProductDetail>Size: {size}</ProductDetail>
                                 {description != "" && <ProductDetail>Description: {description}</ProductDetail>}

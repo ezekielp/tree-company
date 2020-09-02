@@ -39,13 +39,6 @@ file_23 = URI.open('https://tree-company-seeds.s3.amazonaws.com/style23.gif')
 sign_23.image.attach(io: file_23, filename: 'style23.gif')
 
 
-sign_24 = Product.create(name: "Streamside Forest Buffer — Chesapeake Bay", size: "11x15", material: ".05g HDPE", description: "", style_number: "24")
-
-file_24 = URI.open('https://tree-company-seeds.s3.amazonaws.com/style24.gif')
-
-sign_24.image.attach(io: file_24, filename: 'style24.gif')
-
-
 sign_25 = Product.create(name: "Streamside Forest Buffer — Generic", size: "11x15", material: ".05g HDPE", description: "", style_number: "25")
 
 file_25 = URI.open('https://tree-company-seeds.s3.amazonaws.com/style25.gif')
@@ -167,7 +160,6 @@ ProductCategory.create!(product_id: sign_26.id, category_id: c1.id)
 ProductCategory.create!(product_id: sign_19.id, category_id: c2.id)
 ProductCategory.create!(product_id: sign_21.id, category_id: c2.id)
 ProductCategory.create!(product_id: sign_22.id, category_id: c2.id)
-ProductCategory.create!(product_id: sign_24.id, category_id: c2.id)
 ProductCategory.create!(product_id: sign_31.id, category_id: c2.id)
 ProductCategory.create!(product_id: sign_35.id, category_id: c2.id)
 ProductCategory.create!(product_id: sign_47.id, category_id: c2.id)
