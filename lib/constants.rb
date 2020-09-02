@@ -1,4 +1,15 @@
 module Constants
+    CATEGORIES = [
+        "critical_area_buffer",
+        "forest_conservation",
+        "meadow_restoration",
+        "reforestation",
+        "specimen_tree",
+        "stream_buffer",
+        "tree_protection",
+        "wetland",
+    ]
+
     MARYLAND_COUNTIES = [
         "Allegany County",
         "Anne Arundel County",
@@ -26,8 +37,10 @@ module Constants
         "Worcester County",
     ]
 
-    VIRGINIA_COUNTIES = [
-        "Arlington County"
+    VIRGINIA_PLACES = [
+        "Arlington, VA",
+        "Alexandria, VA",
+        "Fairfax, VA",
     ]
 
     STATES = [

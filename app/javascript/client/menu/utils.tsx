@@ -1,6 +1,18 @@
-export const countyList = [
+export const CATEGORIES = [
+    "critical_area_buffer",
+    "forest_conservation",
+    "meadow_restoration",
+    "reforestation",
+    "specimen_tree",
+    "stream_buffer",
+    "tree_protection",
+    "wetland",
+]
+
+export const COUNTIES = [
     "Allegany County",
-    "Arlington County",
+    "Alexandria, VA",
+    "Arlington, VA",
     "Anne Arundel County",
     "Baltimore County",
     "Baltimore City",
@@ -10,6 +22,7 @@ export const countyList = [
     "Cecil County",
     "Charles County",
     "Dorchester County",
+    "Fairfax, VA",
     "Frederick County",
     "Garrett County",
     "Harford County",

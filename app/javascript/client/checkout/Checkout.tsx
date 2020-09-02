@@ -214,21 +214,13 @@ const MailInOrderText = styled.div`
 
 const AddressTextContainer = styled.div`
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
 `;
 
 const AddressLine = styled.div``;
 
 const LabelText = styled.span`
     margin-left: 8px;
-`;
-
-const RequiredLabel = styled.div`
-    font-size: 12px;
-`;
-
-const SpacedRequiredLabel = styled(RequiredLabel)`
-    margin-bottom: 15px;
 `;
 
 const PaymentMethodContainer = styled.div`
@@ -289,7 +281,7 @@ const StripeCardContainer = styled.div`
     margin-bottom: 30px;
 `;
 
-const CheckoutButton = styled.button`
+const CheckoutFormButton = styled.button`
     max-width: 350px;
     min-width: 300px;
     height: 45px;
@@ -600,13 +592,13 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                 <FormFieldsContainer>
                                     <Field
                                         name="billingName"
-                                        label="Name (individual or company)*"
+                                        label="Name (individual or company)"
                                         component={FormikTextInput}
                                         innerRef={formRefs["billing-name"]}
                                     />
                                     <Field
                                         name="email"
-                                        label="Email*"
+                                        label="Email"
                                         component={FormikTextInput}
                                         type="email"
                                         innerRef={formRefs.email}
@@ -614,20 +606,20 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                 </FormFieldsContainer>
                                 <Field
                                     name="billingAddress"
-                                    label="Address*"
+                                    label="Address"
                                     component={FormikTextInput}
                                     innerRef={formRefs["billing-address"]}
                                 />
                                 <FormFieldsContainer>
                                     <Field
                                         name="billingCity"
-                                        label="City*"
+                                        label="City"
                                         component={FormikTextInput}
                                         innerRef={formRefs["billing-city"]}
                                     />
                                     <Field
                                         name="billingState"
-                                        label="State*"
+                                        label="State"
                                         component={FormikSelectInput}
                                         options={STATE_OPTIONS}
                                     />
@@ -635,7 +627,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                 <FormFieldsContainer>
                                     <Field
                                         name="billingZipCode"
-                                        label="Zip code*"
+                                        label="Zip code"
                                         component={FormikZipCodeInput}
                                         innerRef={formRefs["billing-zip-code"]}
                                     />
@@ -646,7 +638,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                         innerRef={formRefs["billing-phone-number"]}
                                     />
                                 </FormFieldsContainer>
-                                <SpacedRequiredLabel>* Required</SpacedRequiredLabel>
                             </BillingAddressFormContainer>
                             <InputWrapper>
                                 <Label>
@@ -687,26 +678,26 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     <AddressFormHeader>Shipping address</AddressFormHeader>
                                     <Field
                                         name="shippingName"
-                                        label="Name (individual or company)*"
+                                        label="Name (individual or company)"
                                         component={FormikTextInput}
                                         innerRef={formRefs["shipping-name"]}
                                     />
                                     <Field
                                         name="shippingAddress"
-                                        label="Address*"
+                                        label="Address"
                                         component={FormikTextInput}
                                         innerRef={formRefs["shipping-address"]}
                                     />
                                     <FormFieldsContainer>
                                         <Field
                                             name="shippingCity"
-                                            label="City*"
+                                            label="City"
                                             component={FormikTextInput}
                                             innerRef={formRefs["shipping-city"]}
                                         />
                                         <Field
                                             name="shippingState"
-                                            label="State*"
+                                            label="State"
                                             component={FormikSelectInput}
                                             options={STATE_OPTIONS}
                                         />
@@ -714,7 +705,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                     <FormFieldsContainer>
                                         <Field
                                             name="shippingZipCode"
-                                            label="Zip code*"
+                                            label="Zip code"
                                             component={FormikZipCodeInput}
                                             innerRef={formRefs["shipping-zip-code"]}
                                         />
@@ -732,7 +723,6 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                         innerRef={formRefs.attn}
                                     />
                                 </ShippingAddressFormContainer>
-                                <RequiredLabel>* Required</RequiredLabel>
                                 </>
                             )}
                             <CheckoutProducts
@@ -767,6 +757,7 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                             <AddressLine>20 N. Beaumont Ave.</AddressLine>
                                             <AddressLine>Catonsville, MD 21228</AddressLine>
                                         </AddressTextContainer>
+                                        <CheckoutFormButton onClick={() => window.print()}>Print page</CheckoutFormButton>
                                     </MailInOrderTextContainer>
                                 )}
                                 {values.paymentMethod === "card" && (
@@ -797,9 +788,9 @@ const InternalCheckout: FC<CheckoutProps> = ({ history, unitPrice, cart, subtota
                                                 <StyledErrorMessage>{stripeErrorMessage}</StyledErrorMessage>
                                             )}
                                         </StripeCardContainer>
-                                        <CheckoutButton type="submit" disabled={isSubmitting}>
+                                        <CheckoutFormButton type="submit" disabled={isSubmitting}>
                                             Place order
-                                        </CheckoutButton>
+                                        </CheckoutFormButton>
                                         {isSubmitting && (
                                             <LoaderContainer>
                                                 <LoaderText>

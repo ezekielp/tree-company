@@ -20,6 +20,16 @@ const Text = styled.div`
     margin-bottom: 10px;
 `;
 
+const PrintButton = styled.button`
+    max-width: 350px;
+    min-width: 300px;
+    height: 45px;
+    font-size: 20px;
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 25px;
+`;
+
 const ThankYouText = styled(Text)``;
 
 const ShippingText = styled(Text)``;
@@ -95,6 +105,7 @@ export const OrderConfirmationPage: FC<RouteComponentProps<{}, any, OrderConfirm
                     {orderId ? orderId : "We'll contact you shortly with a confirmation number"}
                 </InfoField>
             </ConfirmationNumberContainer>
+            <PrintButton onClick={() => window.print()}>Print page</PrintButton>
             <CheckoutProducts checkoutItems={checkoutItems} unitPrice={unitPrice} shippingCost={shippingCost} taxCost={taxCost} totalCost={totalCost} />
             <AddressContainer>
                 <AddressHeader>

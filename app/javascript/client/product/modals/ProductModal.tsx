@@ -9,6 +9,7 @@ import styled from 'styled-components';
 
 const FormContainer = styled.div`
     width: 95%;
+    height: 95%;
 
     ${`@media ${device.largest}`} {
         width: 75%;
@@ -51,6 +52,11 @@ const CloseModalButton = styled.div`
         grid-row: 1;
         grid-column: 2;
     }
+`;
+
+const StyledXMark = styled(XMark)`
+    width: 25px;
+    margin-right: 10px;
 `;
 
 const ProductName = styled.div`
@@ -103,9 +109,26 @@ const FieldContainer = styled.div`
     align-self: flex-end;
 `;
 
+const FlexEndWrapper = styled.div`
+    align-self: flex-end;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`;
+
 const AddToCartButton = styled.button`
     width: 150px;
-    align-self: flex-end;
+    margin-bottom: 15px;
+`;
+
+const ReturnToSignsButton = styled.div`
+    font-variation-settings: 'wght' 700;
+    font-size: 14px;
+    cursor: pointer;
+
+    &:hover {
+        text-decoration: underline;
+    }
 `;
 
 interface ProductModalProps {}
@@ -119,10 +142,11 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     const { selectedProduct, setFlashMessage, closeModal, openModal } = useContext(ModalContext);
     const { fetchCart } = useContext(CartContext);
-    
-    // const inputRef: React.RefObject<HTMLInputElement> = useRef(null);
+    const [addItemToCart] = useAddToCartMutation();
 
-    const [addItemToCart] = useAddToCartMutation();   
+    if (!selectedProduct) return null;
+
+    const { id, name, material, size, styleNumber, imageUrl, description } = selectedProduct;
 
     const handleFocus = (event: FocusEvent) => event && (event.target as HTMLInputElement).select();
 
@@ -132,7 +156,7 @@ const ProductModal: FC<ProductModalProps> = () => {
         addItemToCart({
             variables: {
                 input: {
-                    productId: selectedProduct.id,
+                    productId: id,
                     quantity: parseInt(quantity)
                 }
             }
@@ -147,10 +171,10 @@ const ProductModal: FC<ProductModalProps> = () => {
 
     };
 
-    if (!selectedProduct.imageUrl) return null;
+    if (!imageUrl) return null;
 
     const initialValues = {
-        productId: selectedProduct.id,
+        productId: id,
         quantity: "1"
     };
 
@@ -162,23 +186,29 @@ const ProductModal: FC<ProductModalProps> = () => {
                         <ProductModalContainer onClick={(e) => e.stopPropagation()}>
                             <CloseModalButtonContainer>
                                 <CloseModalButton onClick={()=>closeModal()}>
-                                    <XMark width="15px" />
+                                    <StyledXMark />
                                 </CloseModalButton>
                             </CloseModalButtonContainer>
-                            {selectedProduct.imageUrl && (
-                                <ProductImageContainer src={selectedProduct.imageUrl} />
+                            {imageUrl && (
+                                <ProductImageContainer src={imageUrl} />
                             )}
                             <ProductInformation>
-                                <ProductName>{selectedProduct.name}</ProductName>
+                                <ProductName>{name}</ProductName>
                                 <ProductDetails>
-                                    <ProductDetail>Material: {selectedProduct.material}</ProductDetail>
-                                    <ProductDetail>Size: {selectedProduct.size}</ProductDetail>
-                                    {selectedProduct.description != "" && <ProductDetail>Description: {selectedProduct.description}</ProductDetail>}
+                                    <ProductDetail>Style number: {styleNumber}</ProductDetail>
+                                    <ProductDetail>Material: {material}</ProductDetail>
+                                    <ProductDetail>Size: {size}</ProductDetail>
+                                    {description != "" && <ProductDetail>Description: {description}</ProductDetail>}
                                 </ProductDetails>
                                 <FieldContainer>
                                     <Field name="quantity" label="Quantity" component={FormikNumberInput} alignRight onFocus={handleFocus} />
                                 </FieldContainer>
-                                <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
+                                <FlexEndWrapper>
+                                    <AddToCartButton type="submit" disabled={isSubmitting}>Add to Cart</AddToCartButton>
+                                    <ReturnToSignsButton onClick={()=>closeModal()}>
+                                        Return to signs
+                                    </ReturnToSignsButton>
+                                </FlexEndWrapper>
                             </ProductInformation>
                         </ProductModalContainer>
                     </Form>    

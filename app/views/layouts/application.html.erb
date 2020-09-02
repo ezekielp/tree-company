@@ -4,6 +4,9 @@
     <title>The Tree Company</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <meta property='og:title' content='The Tree Company' />
+    <meta property='og:image' content='<%= image_tag url_for(@first_sign.image) %>' />
+    <meta property='og:description' content='Conservation and environmental resource signage, primarily for counties in Maryland and Virginia' />
 
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>

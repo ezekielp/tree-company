@@ -17,7 +17,7 @@
 #
 class Product < ApplicationRecord
     validates :size, inclusion: { in: %w(11x15 12x18 6x8 5.5x8), message: "%{value} is not a valid size" }
-    validates :material, inclusion: { in: [".05g HDPE", ".032g aluminum"], message: "%{value} is not a valid material" }
+    validates :material, inclusion: { in: [".05g HDPE", ".032g aluminum", "4mm corr"], message: "%{value} is not a valid material" }
 
     has_many :product_categories
     has_many :categories, through: :product_categories

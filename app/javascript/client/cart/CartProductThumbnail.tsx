@@ -206,7 +206,6 @@ export const CartProductThumbnail: FC<CartProductThumbnailProps> = ({ product, q
                                     <span>Size: <br />{size}</span>
                                     <span>Material: <br />{material}</span>
                                 </ProductCartInfo>
-                                {counties && <div>Counties: <br />{countyList}</div>}
                             </CartProductDetails>
                         </ImageAndDetailContainer>
                         <UpdateCartOptionsContainer>
