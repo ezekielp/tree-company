@@ -44,8 +44,10 @@ export const validationSchema = yup.object({
 						.string()
 						.length(
 							10,
-							"Please enter a 10-digit US phone number, or leave blank"
-						)
+							"Please enter a 10-digit US phone number"
+                        )
+                        .label('Billing phone number')
+                        .required()
 						.nullable(),
 					email: yup.string().required().email().label("Email"),
 					taxExempt: yup.boolean(),
@@ -102,8 +104,10 @@ export const validationSchema = yup.object({
 						.string()
 						.length(
 							10,
-							"Please enter a 10-digit US phone number, or leave blank"
-						)
+							"Please enter a 10-digit US phone number"
+                        )
+                        .label('Shipping phone number')
+                        .required()
 						.nullable(),
 					attn: yup.string(),
 				});
