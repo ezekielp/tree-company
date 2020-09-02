@@ -3,7 +3,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { colors } from '../styles';
 import styled from 'styled-components';
 import { CartContext, HomepageContext } from '../AppContainer';
-import {countyList} from './utils';
+import { CATEGORIES, COUNTIES } from './utils';
 import { device } from '../styles';
 
 const MenuContainer = styled.div`
@@ -59,9 +59,16 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
     
     if (!cart) return null;
 
-    const countyOptions = countyList.map((countyName)=>{
+    const countyOptions = COUNTIES.map((countyName)=>{
         return (
         <option key={countyName} value={countyName}>{countyName}</option>
+        )
+    })
+
+    const categoryOptions = CATEGORIES.map((categoryName)=>{
+        const label = categoryName.split("_").map(name => name[0].toUpperCase() + name.slice(1)).join(" ");
+        return (
+        <option key={categoryName} value={categoryName}>{label}</option>
         )
     })
 
@@ -92,8 +99,9 @@ const Menu: FC<MenuContainerProps> = ({ history }) => {
                 <SelectLabel>Category</SelectLabel>
                 <StyledSelect name="category" id="category" onChange={handleCategoryChange} ref={selectCategoryRef} value={categoryFilter}>
                     <option value="default">All categories</option>
-                    <option value="wetland_stream_buffer">Wetland Stream Buffer</option>
-                    <option value="forest_conservation">Forest Conservation/Tree Protection</option>
+                    {categoryOptions}
+                    {/* <option value="wetland_stream_buffer">Wetland Stream Buffer</option>
+                    <option value="forest_conservation">Forest Conservation/Tree Protection</option> */}
                 </StyledSelect>
             </SelectContainer>
         </MenuContainer>

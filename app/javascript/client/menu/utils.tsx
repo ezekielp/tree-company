@@ -1,4 +1,15 @@
-export const countyList = [
+export const CATEGORIES = [
+    "critical_area_buffer",
+    "forest_conservation",
+    "meadow_restoration",
+    "reforestation",
+    "specimen_tree",
+    "stream_buffer",
+    "tree_protection",
+    "wetland",
+]
+
+export const COUNTIES = [
     "Allegany County",
     "Alexandria, VA",
     "Arlington, VA",

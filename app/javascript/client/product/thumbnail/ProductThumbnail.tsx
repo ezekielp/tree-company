@@ -81,7 +81,7 @@ interface AddToCartData {
     quantity: string;
 }
 
-const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
+export const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
     const {openModal, setFlashMessage, setSelectedProduct} = useContext(ModalContext);
     const { fetchCart } = useContext(CartContext);
@@ -152,5 +152,3 @@ const ProductThumbnail: FC<ProductThumbnailProps> = (product) => {
 
     )
 }
-
-export default ProductThumbnail;

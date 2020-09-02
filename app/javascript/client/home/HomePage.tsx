@@ -1,9 +1,8 @@
-
 import React, { FC, useContext } from 'react';
 import { ProductInfoFragment } from '../graphqlTypes';
 import { Navbar } from '../navbar/Navbar';
 import Menu from '../menu/Menu';
-import ProductThumbnail from '../product/thumbnail/ProductThumbnail';
+import { filterProductThumbnails } from './utils';
 import { HomepageContext, CartContext } from '../AppContainer';
 import { device } from '../styles';
 import styled, { keyframes } from 'styled-components';
@@ -114,47 +113,13 @@ interface HomePageProps {
     products: ProductInfoFragment[];
 }
 
-interface County {
-    id: string,
-    name: string
-}
-
-interface Category {
-    id: string,
-    name: string
-}
-
 export const HomePage: FC<HomePageProps> = ({ products }) => {
 
     const {countyFilter, categoryFilter} = useContext(HomepageContext);
     const {cart} = useContext(CartContext);
     const windowSize = useWindowSize();
 
-    const belongsToCounty = (county: County) => {
-        return county.name == countyFilter;
-    };
-
-    const belongsToCategory = (category: Category) => {
-        return category.name == categoryFilter;
-    };
-
-    debugger;
-    const PriorityProductThumbnails = Object.entries(products).map((product)=>{
-        if ((product[1].counties?.some(belongsToCounty) && categoryFilter === "default") ||
-        (countyFilter == "default" && categoryFilter == "default" && product[1].counties?.length !== 0) ||
-        (categoryFilter !== "default" && product[1].categories?.some(belongsToCategory))) {
-            return (
-                <ProductThumbnail key={product[0]} product={product[1]} />
-            )
-        }
-    })
-
-    const AllProductThumbnails = Object.entries(products).map((product)=>{
-        if (product[1].counties?.length == 0 && categoryFilter=="default")
-        return (
-            <ProductThumbnail key={product[0]} product={product[1]} />
-        )
-    });
+    const ProductThumbnails = filterProductThumbnails(products, countyFilter, categoryFilter);
 
     return (
         <>
@@ -195,12 +160,10 @@ export const HomePage: FC<HomePageProps> = ({ products }) => {
             <ThumbnailIndexWrapper>
                 {(cart.length!=0 && (windowSize.width>=800)) ?
                 (<SlidingThumbnailIndexContainer>
-                    {PriorityProductThumbnails}
-                    {AllProductThumbnails}
+                    {ProductThumbnails}
                 </SlidingThumbnailIndexContainer>) :
                 (<ThumbnailIndexContainer>
-                    {PriorityProductThumbnails}
-                    {AllProductThumbnails}
+                    {ProductThumbnails}
                 </ThumbnailIndexContainer>)}
                 {(cart.length!=0 && (windowSize.width>=800)) && (<SlideoutCartContainer />)}
             </ThumbnailIndexWrapper>
