@@ -20,3 +20,5 @@
 
 # Ignore MacOSX folder cache
 /**/.DS_Store
+
+*.icloud
